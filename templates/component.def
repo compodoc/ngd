@@ -1,0 +1,42 @@
+digraph dependencies {
+  node[shape="ellipse", style="filled", colorscheme={scheme}];
+
+  rankdir=TB;
+  {{~it.components :cmp}}
+  subgraph {{=cmp.name}} {
+  
+    label="{{=cmp.file}}";
+    
+    "{{=cmp.name}}" [shape="component"];
+    
+    {{~cmp.providers :provider}}
+      "{{=provider.name}}" [label="{{=provider.name}}", fillcolor=2, shape="ellipse"];
+      "{{=cmp.name}}" -> "{{=provider.name}}";
+    {{~}}
+  
+    /* providers:start */
+  
+    node[shape="{2}",style="filled", color=9, shape="ellipse"];
+    {{~cmp.providers :provider}}
+      {{~provider.deps :dep}}
+        "{{=dep}}"[label="{{=dep}}"];
+        "{{=provider.name}}" -> "{{=dep}}";
+      {{~}}
+    {{~}}
+    
+    /* providers:end */
+    
+    /* directives:start */
+    
+    node[shape="{2}",style="filled", color=9, shape="ellipse"];
+    {{~cmp.directives :directive}}
+      "{{=directive}}" [shape="component", color=1];
+      "{{=cmp.name}}" -> "{{=directive}}";
+    {{~}}
+    
+    /* directives:end */
+    
+  }
+  {{~}}
+
+}
