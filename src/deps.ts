@@ -5,6 +5,11 @@ import * as ts from "typescript";
 interface NodeObject {
     pos: Number;
     end: Number;
+    text: string;
+    initializer: {
+        elements: NodeObject[]
+    };
+    name?: {text: string};
     expression?: NodeObject;
     arguments?: NodeObject[];
     properties?: any[];
@@ -12,19 +17,19 @@ interface NodeObject {
     Component?: String;
 }
 
-export function getDependencies(program: ts.Program): void {
-    var links: any = {};
+export function getDependencies(program: ts.Program): any[] {
+    var links: any[] = [];
     program.getSourceFiles().map((file) => {
         
         let filePath = file.fileName;
         
         if(filePath.lastIndexOf('.d.ts') === -1) {
-            console.log('computing file   : ', filePath);
+            console.log('> parsing file   : ', filePath);
             getSourceFileDecorators(file, links);
             //console.log(JSON.stringify(links, null, 2));
         }
         else {
-            console.log('ignoring tsd file: ', filePath);
+            console.log('> ignoring tsd file: ', filePath);
         }
         
     });
@@ -34,7 +39,7 @@ export function getDependencies(program: ts.Program): void {
 }
 
 
-function getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: any): void {
+function getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: any[]): void {
     ts.forEachChild(srcFile, (node: ts.Node) => {
 
         if(node.decorators) {
@@ -44,18 +49,14 @@ function getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: any): vo
             let visitNode = (props, index) => {
                 
                 let componentName = getComponentName(node);
-                rawDecorators[ srcFile.fileName ] = rawDecorators[ srcFile.fileName ]||{};
-                rawDecorators[ srcFile.fileName ][ componentName ] = props;
+                let component = {
+                    name: componentName,
+                    file: srcFile.fileName,
+                    directives: getComponentDirectives(props),
+                    providers: getComponentProviders(props)
+                };
                 
-                /*
-                .map((prop) => {
-                    return {
-                        key: prop.name.text,
-                        value: prop.initializer.text 
-                            || prop.initializer.elements.map((o) => o.text)
-                    };
-                })
-                */
+                rawDecorators.push(component);
             }
             
             node.decorators
@@ -75,3 +76,29 @@ function getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: any): vo
 function getComponentName(node): string {
     return node.name.text;
 }
+
+function getComponentProviders(props: any[]): string[] {
+    return getComponentDeps(props, 'providers');
+}
+
+function getComponentDirectives(props: any[]): string[] {
+    return getComponentDeps(props, 'directives');
+}
+
+function getComponentDeps(props: any[], type: string): string[] {
+    
+    console.log(JSON.stringify(props, null, 2));
+    
+    return props.filter( (node: NodeObject) => {
+        return node.name.text === type;
+    }).map( (node: NodeObject) => {
+        return node.initializer.elements.map((o: NodeObject) => {
+            
+            if(o.arguments) {
+                return o.arguments.shift().text+'*';
+            }
+            return o.text;
+        });
+    }).pop();
+}
+

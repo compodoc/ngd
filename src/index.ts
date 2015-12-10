@@ -5,9 +5,7 @@ import * as path from "path";
 import * as lib from './lib';
 
 let fileNames = [
-	//'/Users/wchegham/Sandbox/dev/ng2-dyk/src/app/components/Fact.ts',
-	//'/Users/wchegham/Sandbox/dev/ng2-dyk/src/app/components/LoadingIndicator.ts'
-	path.join(__dirname, '../test/test.ts')
+	path.join(__dirname, '../test/demo-app/app-1/app.ts')
 ];
 
 let deps = lib.getDependencies(
@@ -19,7 +17,7 @@ let deps = lib.getDependencies(
 
 var templates = lib.preprocessTemplates({
   shapeModules: "component",
-  shapeFactories: "ellipse",
+  shapeProviders: "ellipse",
   shapeDirectives: "cds",
   colorScheme: "paired12"
 });

@@ -9,28 +9,20 @@ digraph dependencies {
     
     "{{=cmp.name}}" [shape="component"];
     
-    {{~cmp.providers :provider}}
-      "{{=provider.name}}" [label="{{=provider.name}}", fillcolor=2, shape="ellipse"];
-      "{{=cmp.name}}" -> "{{=provider.name}}";
-    {{~}}
-  
     /* providers:start */
-  
-    node[shape="{2}",style="filled", color=9, shape="ellipse"];
+    
     {{~cmp.providers :provider}}
-      {{~provider.deps :dep}}
-        "{{=dep}}"[label="{{=dep}}"];
-        "{{=provider.name}}" -> "{{=dep}}";
-      {{~}}
+      "{{=provider}}" [label="{{=provider}}", fillcolor=2, shape="ellipse"];
+      "{{=cmp.name}}" -> "{{=provider}}";
     {{~}}
-    
+  
     /* providers:end */
-    
+  
     /* directives:start */
     
-    node[shape="{2}",style="filled", color=9, shape="ellipse"];
+    node[shape="cds", style="filled", color=9];
     {{~cmp.directives :directive}}
-      "{{=directive}}" [shape="component", color=1];
+      "{{=directive}}" [];
       "{{=cmp.name}}" -> "{{=directive}}";
     {{~}}
     

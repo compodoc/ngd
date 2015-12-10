@@ -34,7 +34,7 @@ export function preprocessTemplates(options?) {
   ].forEach(function(file) {
     files[file] = files[file].toString()
       .replace(/\{1\}/g, options.shapeModules)
-      .replace(/\{2\}/g, options.shapeFactories)
+      .replace(/\{2\}/g, options.shapeProviders)
       .replace(/\{3\}/g, options.shapeDirectives)
       .replace(/\{scheme\}/g, options.colorScheme);
   });
@@ -89,84 +89,14 @@ export function generateGraph(templates, deps) {
 }
 
 function generateDot(templates, deps) {
-  //console.log(JSON.stringify(deps, null, 1));
-  //process.exit();
   
-  let tpl = `
-digraph dependencies {
-  node[shape="component",style="filled"]
-
-  "Test1"       [label="Test1", shape="component"]
-  "inputs"      [label="{input1|input2}", shape="record"]
-  "outputs"     [label="{output1|output2}", shape="record"]
-  
-  "directives.Foo"  [label="Foo", shape=ellipse]
-  "directives.Bar"  [label="Bar", shape=ellipse]
-  
-  "providers.Service1"   [label="Service1", shape=ellipse]
-  "providers.Service2"   [label="Service2", shape=ellipse]
-
-  "inputs"           -> "Test1"
-  "outputs"           -> "Test1"
-  "directives.Foo"           -> "Test1"
-  "directives.Bar"           -> "Test1"
-  "providers.Service1"           -> "Test1"
-  "providers.Service2"           -> "Test1"
- 
-}
-  `;
+  console.log(JSON.stringify(deps, null, 1))
   
   return fs.writeFileSync("./test/dot/component.dot", 
-    //tpl ||
     templates.componentTemplate({
-      components: [{
-        name: 'ApplicationRoot',
-        file: 'application.ts',
-        directives: [
-          'FooCmp3',
-          'FooCmp1'
-        ],
-        providers: []
-      }, {
-        name: 'FooCmp1',
-        file: 'fooCmp.ts',
-        directives: [
-          'FooCmp2'
-        ],
-        providers: [{
-          name: 'provider #1',
-          deps: ['Service #1', 'Service #2']
-        }, {
-          name: 'provider #2',
-          deps: ['Service #1', 'Service #3']
-        }]
-      }, {
-        name: 'FooCmp3',
-        file: 'fooCmp2.ts',
-        directives: [
-          'FooCmp2'
-        ],
-        providers: [{
-          name: 'provider #6',
-          deps: ['Service #5']
-        }, {
-          name: 'provider #7',
-          deps: []
-        }]
-      }, {
-        name: 'FooCmp2',
-        file: 'fooCmp.ts',
-        providers: [{
-          name: 'provider #2',
-          deps: ['Service #4']
-        }, {
-          name: 'provider #8',
-          deps: ['Service #2']
-        }]
-      }]
+      components: deps
     })
   );
- 
 }
 
 function generateSVG() {
@@ -176,6 +106,56 @@ function generateSVG() {
 
 function generatePNG() {
   return svg_to_png.convert("./test/dot/component.svg", "./test/dot/").then( function(){
-    console.log('png created');
+    console.log('>> png created');
   });
+}
+
+function getMocksDeps() {
+  //console.log(JSON.stringify(deps, null, 1));
+  
+  return [{
+    name: 'ApplicationRoot',
+    file: 'application.ts',
+    directives: [
+      'FooCmp3',
+      'FooCmp1'
+    ],
+    providers: []
+  }, {
+    name: 'FooCmp1',
+    file: 'fooCmp.ts',
+    directives: [
+      'FooCmp2'
+    ],
+    providers: [{
+      name: 'provider #1',
+      deps: ['Service #1', 'Service #2']
+    }, {
+      name: 'provider #2',
+      deps: ['Service #1', 'Service #3']
+    }]
+  }, {
+    name: 'FooCmp3',
+    file: 'fooCmp2.ts',
+    directives: [
+      'FooCmp2'
+    ],
+    providers: [{
+      name: 'provider #6',
+      deps: ['Service #5']
+    }, {
+      name: 'provider #7',
+      deps: []
+    }]
+  }, {
+    name: 'FooCmp2',
+    file: 'fooCmp.ts',
+    providers: [{
+      name: 'provider #2',
+      deps: ['Service #4']
+    }, {
+      name: 'provider #8',
+      deps: ['Service #2']
+    }]
+  }];
 }
