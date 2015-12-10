@@ -1,0 +1,105 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(fonts/MaterialIcons-Regular.woff2) format('woff2'),
+       url(fonts/MaterialIcons-Regular.woff) format('woff'),
+       url(fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.mdl-layout__header {
+  display: block;
+}
+
+.mdl-cell {
+  text-align: center;
+  margin: 0 auto;
+}
+
+html {
+  font-family: 'Roboto Slab', serif;
+  -webkit-user-select: none;
+}
+
+body { 
+   overflow: hidden;
+}
+
+a {
+  color: #106CC8;
+  text-decoration: none;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(64, 84, 178, 0.25);
+  transition: border-bottom 0.35s;
+}
+
+.text-primary { color: #337ab7; } 
+.text-success { color: #3c763d; }
+.text-info { color: #31708f; }
+.text-warning { color: #8a6d3b; }
+.text-danger { color: #a94442; }
+
+ng-mdl-icon.yellow-star {
+  fill: orange;
+}
+
+.mdl-card {
+  margin: 20px auto;
+  width: 500px;
+}
+
+.mdl-card .mdl-caption {
+  margin-top: -20px;
+}
+
+.mdl-card > i {
+ line-height: 54px;
+}
+
+.mdl-list-item p {
+  padding-right: 60px
+}
+
+.mdl-progress-linear {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  z-index: 2;
+}
+
+.mdl-button.mdl-fab.mdl-fab-bottom-right {
+  position: fixed;
+}
+
+pre {
+  white-space: pre-wrap;
+}
