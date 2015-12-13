@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "dot": "^1.0.3",
+    "q": "^1.4.1",
     "svg-to-png": "^2.0.1",
     "typescript": "^1.7.3",
     "viz.js": "^1.3.0"
