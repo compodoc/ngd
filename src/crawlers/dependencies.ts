@@ -1,13 +1,15 @@
-/// <reference path="../typings/tsd.d.ts" />
+/// <reference path="../../typings/tsd.d.ts" />
 
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ts from 'typescript';
+import {logger} from '../logger';
 
 let q = require('q');
 
-module Ng2Graph.Dependencies {
 
+export namespace Crawler {
+    
     interface NodeObject {
         pos: Number;
         end: Number;
@@ -23,42 +25,51 @@ module Ng2Graph.Dependencies {
         Component?: String;
     }
     
-    export class Deps {
+    interface Deps {
+        name: string;
+        file: string;
+        directives: string[];
+        providers: string[];
+    }
+    
+    export class Dependencies {
         
-        constructor() {
-            
-        }
+        private files: string[];
+        private program: ts.Program;
+        private engine: any;
         
-        getDependencies(file: string) {
-            
-            let program: ts.Program = ts.createProgram([file], {
+        constructor(file: string[]) {
+            this.files = file;
+            this.program = ts.createProgram(this.files, {
                 target: ts.ScriptTarget.ES5, 
                 module: ts.ModuleKind.CommonJS
             });
             
-            let defer = q.defer();
-            let links: any[] = [];
-            program.getSourceFiles().map((file) => {
+        }
+        
+        getDependencies() {
+            let links: Deps[] = [];
+            this.program.getSourceFiles().map((file) => {
                 
                 let filePath = file.fileName;
                 
                 if(filePath.lastIndexOf('.d.ts') === -1) {
-                    console.log('> parsing file     : ', filePath);
+                    logger.info('parsing      : ', filePath);
                     this.getSourceFileDecorators(file, links);
-                    defer.resolve(links);
-                    //console.log(JSON.stringify(links, null, 2));
                 }
                 else {
-                    console.log('> ignoring tsd file: ', filePath);
+                    logger.warn('ignoring tsd : ', filePath);
                 }
+                
+                return links;
                 
             });
             
-            return defer.promise;
+            return links;
         }
         
         
-        getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: any[]): void {
+        private getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: Deps[]): void {
             ts.forEachChild(srcFile, (node: ts.Node) => {
         
                 if(node.decorators) {
@@ -68,7 +79,7 @@ module Ng2Graph.Dependencies {
                     let visitNode = (props, index) => {
                         
                         let componentName = this.getComponentName(node);
-                        let component = {
+                        let component: Deps = {
                             name: componentName,
                             file: srcFile.fileName,
                             directives: this.getComponentDirectives(props),
@@ -92,19 +103,19 @@ module Ng2Graph.Dependencies {
             
         }
         
-        getComponentName(node): string {
+        private getComponentName(node): string {
             return node.name.text;
         }
         
-        getComponentProviders(props: any[]): string[] {
+        private getComponentProviders(props: NodeObject[]): string[] {
             return this.getComponentDeps(props, 'providers');
         }
         
-        getComponentDirectives(props: any[]): string[] {
+        private getComponentDirectives(props: NodeObject[]): string[] {
             return this.getComponentDeps(props, 'directives');
         }
         
-        getComponentDeps(props: any[], type: string): string[] {
+        private getComponentDeps(props: NodeObject[], type: string): string[] {
             return props.filter( (node: NodeObject) => {
                 return node.name.text === type;
             }).map( (node: NodeObject) => {
@@ -119,6 +130,6 @@ module Ng2Graph.Dependencies {
         }
         
     }
+
     
 }
-
