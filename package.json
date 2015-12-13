@@ -1,18 +1,22 @@
 {
-  "name": "ts-deps-graph",
-  "version": "1.0.0",
+  "name": "angular2-dependencies-graph",
+  "shortName": "ng2-deps-graph",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gen": "tsc && node built/index.js"
+    "gen": "tsc && ./index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "dot": "^1.0.3",
-    "q": "^1.4.1",
-    "svg-to-png": "^2.0.1",
-    "typescript": "^1.7.3",
-    "viz.js": "^1.3.0"
+    "colors": "1.1.2",
+    "dot": "1.0.3",
+    "fs-extra": "0.26.2",
+    "opener": "1.4.1",
+    "q": "1.4.1",
+    "svg-to-png": "2.0.1",
+    "typescript": "1.7.3",
+    "viz.js": "1.3.0"
   }
 }
