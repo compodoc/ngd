@@ -1,8 +1,0 @@
-digraph dependencies {
-  node[shape="{2}",style="filled",colorscheme={scheme}]
-
-  {{~it.components :component}}
-    "{{= component.name }}"[label="{{= component.name }}", color=1]
-  {{~}}
-  
-}
