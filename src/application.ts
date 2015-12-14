@@ -26,21 +26,23 @@ export namespace App {
 		let crawler = new Crawler.Dependencies(
 			files.map( file => path.resolve(__dirname, '../', file))
 		);
-		let engine = new Engine.Dot();
-		
 		let deps = crawler.getDependencies();
+		
+		let engine = new Engine.Dot({
+			output: options.output
+		});
 		engine
 			.generateGraph(deps)
 			.then( file => {
 				
 				if (options.open === true) {
-					let open = require("opener");
 					logger.info('openning file ', file);
+					let open = require("opener");
 					open(file);
 				}
 			})
 			.catch( e => logger.error(e) )
-			.finally( file => logger.info('done'))
+			.finally( _ => logger.info('done'))
 			
 	}
 }
