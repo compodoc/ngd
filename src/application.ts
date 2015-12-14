@@ -8,11 +8,23 @@ import {logger} from './logger';
 
 export namespace App {
 	
-	export let run = (tsconfig: any) => {
+	export let run = (options: any) => {
+			
+		let files = [];
+		if(options.tsconfig && options.tsconfig.files) {
+			files = options.tsconfig.files;
+		}
+		else if (options.files) {
+			files = options.files;
+		}
+		else {
+			logger.fatal('No files to crawl. I need a "tsconfig.json" file or a at least a list of "files"');
+			logger.fatal('abort');
+			process.exit(1);
+		}
 			
 		let crawler = new Crawler.Dependencies(
-			[path.join(__dirname, '../test/demo-app/app-1/app.ts')]
-			//tsconfig.files.map( file => path.resolve(__dirname, '../', file))
+			files.map( file => path.resolve(__dirname, '../', file))
 		);
 		let engine = new Engine.Dot();
 		
@@ -20,9 +32,12 @@ export namespace App {
 		engine
 			.generateGraph(deps)
 			.then( file => {
-				let open = require("opener");
-				logger.info('openning file ', file);
-				open(file);
+				
+				if (options.open === true) {
+					let open = require("opener");
+					logger.info('openning file ', file);
+					open(file);
+				}
 			})
 			.catch( e => logger.error(e) )
 			.finally( file => logger.info('done'))
