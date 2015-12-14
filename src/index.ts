@@ -8,9 +8,11 @@ App.run({
 	//tsconfig: require('../tsconfig.json'),
 	
 	// optional
-	//files: [path.join(__dirname, '../test/demo-app/app-1/app.ts')],
+	files: [path.join(__dirname, '../test/demo-app/app-1/app.ts')],
 	
 	// launch/view generated file
-	open: false
+	open: false,
+	
+	//output: {}
 	
 });
