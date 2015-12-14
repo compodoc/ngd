@@ -15,21 +15,27 @@ class Logger {
 		this.name = require('../package.json').shortName;
 	}
 	
+	title(...args) {
+		console.log(
+			c.magenta(...args)
+		);
+	}
+	
 	info(...args) {
 		console.log(
-			this.format(LEVEL.INFO, args)
+			this.format(LEVEL.INFO, ...args)
 		);
 	}
 	
 	warn(...args) {
 		console.warn(
-			this.format(LEVEL.WARN, args)	
+			this.format(LEVEL.WARN, ...args)	
 		);
 	}
 	
 	error(...args) {
 		console.error(
-			this.format(LEVEL.FATAL, args)
+			this.format(LEVEL.FATAL, ...args)
 		);
 	}
 	
@@ -39,26 +45,37 @@ class Logger {
 	
 	private format(level, ...args) {
 		
+		let pad = (s, l, c='') => {
+			return s + Array( Math.max(0, l - s.length + 1)).join( c )
+		};
+		
+		let msg = args.join(' ');
+		if(args.length > 1) {
+			msg = `${ pad(args.shift(), 15, ' ') }: ${ args.join(' ') }`;
+		}
+		
+		
 		switch(level) {
 			case LEVEL.INFO: 
-				args = c.green(args.join('')); 
+				msg = c.green(msg); 
 				break;
 				
 			case LEVEL.WARN: 
-				args = c.yellow(args.join('')); 
+				msg = c.yellow(msg); 
 				break;
 				
 			case LEVEL.ERROR:
 			case LEVEL.FATAL: 
-				args = c.red(args.join('')); 
+				msg = c.red(msg); 
 				break;
 		}
 		
 		return [
-			c.yellow.bgMagenta(`[${this.name}]`),
-			c.yellow.bgBlue(`[${new Date().toISOString()}]`),
-			args
-		].join(' ')
+			c.yellow.bgMagenta(` ${this.name} `),
+			c.yellow.bgBlue(` ${new Date().toISOString()} `),
+			' ',
+			msg
+		].join('')
 	}
 }
 
