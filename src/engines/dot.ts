@@ -34,7 +34,7 @@ export namespace Engine {
 		
 		options: IOptions = {};
 		
-		constructor() {
+		constructor(options: IOptions) {
 			let tpl = path.resolve(__dirname + '/../../templates/component.def');
 			if(fs.existsSync(tpl) === false) {
 				logger.fatal(`Uh oh! The file "component.def" is missing from "${ path.resolve(__dirname, '../../', './templates/') }"`);
@@ -44,13 +44,14 @@ export namespace Engine {
 			
 			this.files = {
 				component: fs.readFileSync(tpl)
-			}
+			};
+			
 			this.options = {
 				name: `${ appName }`,
 				output: {
-					dot: path.resolve(__dirname, '../../', `./${ appName }/dot`),
-					image: path.resolve(__dirname, '../../', `./${ appName }/png`),
-					html: path.resolve(__dirname, '../../', `./${ appName }/html`)
+					dot: `./samples/${ appName }/dot`,
+					image: `./samples/${ appName }/png`,
+					html: `./samples/${ appName }/html`
 				},
 				dot: {
 					shapeModules: 'component',
@@ -59,6 +60,27 @@ export namespace Engine {
 					colorScheme: 'paired12'
 				}
 			};
+			
+			if(options.output) {
+				
+				if(!this.options.output.dot) {
+					logger.fatal('Option "output" has been provided but the "dot" folder was not specified');
+					process.exit(1);
+				}
+				else if(!this.options.output.image) {
+					logger.fatal('Option "output" has been provided but the "image" folder was not specified');
+					process.exit(1);
+				}
+				else if(!this.options.output.html) {
+					logger.fatal('Option "output" has been provided but the "html" folder was not specified');
+					process.exit(1);
+				}
+				
+				this.options.output = options.output;
+			}
+			
+			// TODO this is never called????
+			this.createOutputFolders(this.options.output);
 		}
 		
 		generateGraph(deps) {
@@ -70,6 +92,14 @@ export namespace Engine {
 			.then( _ => this.generateSVG() )
 			.then( _ => this.generateHTML() );
 			//.then( _ => this.generatePNG() );
+		}
+		
+		private createOutputFolders(output) {
+			console.log(Object.keys(output))
+			Object.keys(output).forEach( (prop) => {
+				console.log(`../../samples/${ output[prop] }`)
+				return fs.mkdirpSync(`../../samples/${ output[prop] }`);
+			});
 		}
 		
 		private preprocessTemplates(options?) {
@@ -89,7 +119,7 @@ export namespace Engine {
 		}
 		
 		private generateDot(template, deps) {
-			let dotFile = `${ this.options.output.dot }/${ this.options.name }.dot`;
+			let dotFile = path.join(__dirname, `${ this.options.output.dot }/${ this.options.name }.dot`);
 			logger.info('generating DOT...', dotFile);
 			
 			let d = q.defer();
@@ -111,8 +141,8 @@ export namespace Engine {
 		}
 		
 		private generateSVG() {
-			let svgFile = `${ this.options.output.image }/${ this.options.name }.svg`;
-			logger.info('generating SVG from DOT...', svgFile);
+			let svgFile = path.join(__dirname, `${ this.options.output.image }/${ this.options.name }.svg`);
+			logger.info('generating SVG...', svgFile);
 			
 			let Viz = require('viz.js');
 			let viz_svg = Viz(
@@ -130,7 +160,7 @@ export namespace Engine {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('generating SVG from DOT...', 'done');
+					logger.info('generating SVG...', 'done');
 					d.resolve(svgFile);
 				}
 			);
@@ -138,8 +168,8 @@ export namespace Engine {
 		}
 		
 		private generateHTML() {
-			let htmlFile = `${ this.options.output.html }/${ this.options.name }.html`;
-			logger.info('generating HTML from SVG...', htmlFile);
+			let htmlFile = path.join(__dirname, `${ this.options.output.html }/${ this.options.name }.html`);
+			logger.info('generating HTML...', htmlFile);
 			
 			let svgContent = fs.readFileSync(`${ this.options.output.image }/${ this.options.name }.svg`).toString();
 			//let html = `<svg xmlns="http://www.w3.org/2000/svg" version="1.1">${ svg }</svg>`;
@@ -151,7 +181,7 @@ export namespace Engine {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('generating HTML from SVG...', 'done');
+					logger.info('generating HTML...', 'done');
 					d.resolve(htmlFile);
 				}
 			);
@@ -159,8 +189,8 @@ export namespace Engine {
 		}
 		
 		private generatePNG() {
-			let pngFile = `${ this.options.output.dot }/${ this.options.name }.png`;
-			logger.info('generating PNG from SVG...', pngFile);
+			let pngFile = path.join(__dirname, `${ this.options.output.dot }/${ this.options.name }.png`);
+			logger.info('generating PNG...', pngFile);
 			
 			let svg_to_png = require('svg-to-png');
 			let d = q.defer();
@@ -168,7 +198,7 @@ export namespace Engine {
 				`${ this.options.output.image }/${ this.options.name }.svg`, 
 				pngFile
 			).then( function(){
-				logger.info('generating PNG from SVG...', 'done');
+				logger.info('generating PNG...', 'done');
 				d.resolve(pngFile);
 			});
 			return d.promise;
