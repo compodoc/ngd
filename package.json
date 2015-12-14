@@ -5,7 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gen": "tsc && ./index.js"
+    "gen": "tsc && ./bin/index.js"
+  },
+  "bin": {
+    "ng2-deps-graph": "bin/index.js"
   },
   "author": "",
   "license": "ISC",
