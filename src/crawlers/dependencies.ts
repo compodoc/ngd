@@ -54,11 +54,11 @@ export namespace Crawler {
                 let filePath = file.fileName;
                 
                 if(filePath.lastIndexOf('.d.ts') === -1) {
-                    logger.info('parsing      : ', filePath);
+                    logger.info('parsing', filePath);
                     this.getSourceFileDecorators(file, links);
                 }
                 else {
-                    logger.warn('ignoring tsd : ', filePath);
+                    logger.warn('ignoring tsd', filePath);
                 }
                 
                 return links;
@@ -73,7 +73,7 @@ export namespace Crawler {
             ts.forEachChild(srcFile, (node: ts.Node) => {
         
                 if(node.decorators) {
-                    let filterByComponent = (node) => node.expression.expression.text === 'Component';
+                    let filterByComponent = (node) => /(Component|View)/.test(node.expression.expression.text);
                     let getComponents = (node) => node.expression.arguments.pop();
                     let getProps = (nodes) => nodes.properties;
                     let visitNode = (props, index) => {
