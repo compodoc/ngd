@@ -1,4 +1,4 @@
-import {Component} from 'angular2/angular2';
+import {Component} from 'angular2/core';
 
 @Component({
 	inputs: ['input1', 'input2'],
@@ -36,7 +36,7 @@ class Service {}
 	`,
 	directives: [Foo, Bar],
 	providers: [Service]
-	
+
 })
 export class Test2 {
 	constructor() {}
