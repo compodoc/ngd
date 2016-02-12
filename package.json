@@ -5,12 +5,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gen": "tsc && ./bin/index.js"
+    "tsc": "tsc"
   },
   "bin": {
     "ng2-deps-graph": "bin/index.js"
   },
   "author": "",
+  "private": false,
   "license": "ISC",
   "dependencies": {
     "colors": "1.1.2",
