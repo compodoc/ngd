@@ -21,6 +21,7 @@ export namespace Engine {
 
 	let appName = require('../../package.json').shortName;
 
+	// http://www.graphviz.org/Documentation/dotguide.pdf
 	export class Dot {
 
 		// http://www.graphviz.org/doc/info/shapes.html
@@ -60,7 +61,7 @@ digraph dependencies {
     node[shape="note", style="filled", color=7];
     {{~cmp.templateUrl :url}}
       "{{=url}}" [];
-      "{{=cmp.name}}" -> "{{=url}}";
+      "{{=cmp.name}}" -> "{{=url}}" [style=dotted];
     {{~}}
 
     /* templateUrl:end */
@@ -179,8 +180,7 @@ digraph dependencies {
 
 			let Viz = require('viz.js');
 			let viz_svg = Viz(
-				fs.readFileSync(this.paths.dot).toString(),
-				{
+				fs.readFileSync(this.paths.dot).toString(), {
 					format: 'svg',
 					engine: 'dot'
 				});
