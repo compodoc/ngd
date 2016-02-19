@@ -3,9 +3,13 @@ A simple tool to generate a component dependencies graph of an Angular2 applicat
 
 WIP...
 
-## Sample Graph
+## Generated Graphs (sample)
 
-![graphs](https://raw.githubusercontent.com/manekinekko/angular2-dependency-graph/master/samples/ng2-deps-graph/ng2-deps-graph.png)
+![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependency-graph/master/screenshots/ng2-deps-graph-1.png)
+
+
+![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependency-graph/master/screenshots/ng2-deps-graph-2.png)
+
 
 ## Install
 
