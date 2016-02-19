@@ -1,4 +1,10 @@
-# angular2-dependency-graph
+[![Join the chat at https://gitter.im/manekinekko/angular2-dependency-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependency-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependency-graph/badge/pr)](http://issuestats.com/github/manekinekko/angular2-dependency-graph)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependency-graph/badge/issue)](http://issuestats.com/github/manekinekko/angular2-dependency-graph)
+[![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
+
+angular2-dependency-graph
+====
 A simple tool to generate a component dependencies graph of an Angular2 application.
 
 WIP...
