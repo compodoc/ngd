@@ -1,16 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
-        "noImplicitAny": false,
-        "outDir": "built",
-        "rootDir": "./src",
-        "sourceMap": false
-    },
-    "exclude": [
-        "node_modules"
-    ],
-    "files": [
-        "src/index.ts"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": false,
+    "outDir": "built",
+    "rootDir": "./src",
+    "sourceMap": false,
+    "noResolve": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "src/index.ts"
+  ]
 }
