@@ -1,4 +1,4 @@
-/// <reference path="../typings/node/node.d.ts" />
+/// <reference path="../typings/main.d.ts"/>
 import * as path from 'path';
 import {App} from './application';
 
