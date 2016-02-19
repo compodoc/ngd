@@ -1,4 +1,6 @@
 # angular2-dependency-graph
+
+[![Join the chat at https://gitter.im/manekinekko/angular2-dependency-graph](https://badges.gitter.im/manekinekko/angular2-dependency-graph.svg)](https://gitter.im/manekinekko/angular2-dependency-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A simple tool to generate a component dependencies graph of an Angular2 application.
 
 WIP...
