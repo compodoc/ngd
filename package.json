@@ -5,7 +5,7 @@
   "description": "A simple tool to generate a component dependencies graph of an Angular2 application",
   "main": "index.js",
   "scripts": {
-    "postinstall": "/node_modules/.bin/tsc"
+    "postinstall": "tsc"
   },
   "bin": {
     "ng2-deps-graph": "bin/index.js"

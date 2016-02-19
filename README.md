@@ -19,7 +19,9 @@ WIP...
 
 ## Install
 
-Install from npm: `npm install -g angular2-dependency-graph`
+Install from npm: `npm i -g angular2-dependency-graph`
+
+Make sure you have installed typescript as well: `npm i -g typescript`
 
 ## Usage
 
