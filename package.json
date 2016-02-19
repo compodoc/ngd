@@ -1,18 +1,27 @@
 {
   "name": "angular2-dependencies-graph",
   "shortName": "ng2-deps-graph",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "A simple tool to generate a component dependencies graph of an Angular2 application",
   "main": "index.js",
   "scripts": {
-    "tsc": "tsc"
+    "postinstall": "/node_modules/.bin/tsc"
   },
   "bin": {
     "ng2-deps-graph": "bin/index.js"
   },
-  "author": "",
+  "homepage": "https://github.com/manekinekko/angular2-dependency-graph",
+  "bugs": "https://github.com/manekinekko/angular2-dependency-graph/issues",
+  "author": "Wassim CHEGHAM",
+  "engines": {
+    "node": ">= 5.4.1 < 6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manekinekko/angular2-dependency-graph.git"
+  },
   "private": false,
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "colors": "1.1.2",
     "dot": "1.0.3",
