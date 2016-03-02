@@ -10,15 +10,15 @@
   "bin": {
     "ng2-deps-graph": "bin/index.js"
   },
-  "homepage": "https://github.com/manekinekko/angular2-dependency-graph",
-  "bugs": "https://github.com/manekinekko/angular2-dependency-graph/issues",
+  "homepage": "https://github.com/manekinekko/angular2-dependencies-graph",
+  "bugs": "https://github.com/manekinekko/angular2-dependencies-graph/issues",
   "author": "Wassim CHEGHAM",
   "engines": {
     "node": ">= 5.4.1 < 6"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/manekinekko/angular2-dependency-graph.git"
+    "url": "https://github.com/manekinekko/angular2-dependencies-graph.git"
   },
   "private": false,
   "license": "MIT",
