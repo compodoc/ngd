@@ -1,7 +1,7 @@
 {
   "name": "angular2-dependencies-graph",
   "shortName": "ng2-deps-graph",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple tool to generate a component dependencies graph of an Angular2 application",
   "main": "index.js",
   "scripts": {
