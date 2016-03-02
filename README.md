@@ -1,20 +1,18 @@
-[![Join the chat at https://gitter.im/manekinekko/angular2-dependency-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependency-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependency-graph/badge/pr)](http://issuestats.com/github/manekinekko/angular2-dependency-graph)
-[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependency-graph/badge/issue)](http://issuestats.com/github/manekinekko/angular2-dependency-graph)
+[![Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/pr)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/issue)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
 [![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
 
-angular2-dependency-graph
+angular2-dependencies-graph
 ====
-A simple tool to generate a component dependencies graph of an Angular2 application.
-
-WIP...
+A tool that allows you to view your Angular2 application dependencies. (WIP...)
 
 ## Generated Graphs (sample)
 
-![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependency-graph/master/screenshots/ng2-deps-graph-1.png)
+![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/ng2-deps-graph-1.png)
 
 
-![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependency-graph/master/screenshots/ng2-deps-graph-2.png)
+![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/ng2-deps-graph-2.png)
 
 
 ## Install
@@ -43,6 +41,10 @@ $ ng2-deps-graph app.ts
 ```
 
 NOTE: The file you provide should contain your root component.
+
+## Have a PR?
+
+All contribution are welcome ;)
 
 ## License
 
