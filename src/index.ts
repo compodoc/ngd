@@ -16,6 +16,7 @@ App.run({
 	// launch/view generated file (in browser or OS specific)
 	open: true,
 
-	//output: {}
+	// where to store the generated files
+	output: `./report/${require('../package.json').shortName}`
 
 });
