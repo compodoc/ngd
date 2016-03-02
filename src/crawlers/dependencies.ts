@@ -28,10 +28,13 @@ export namespace Crawler {
 
     interface Deps {
         name: string;
-        file: string;
-        directives: string[];
-        providers: string[];
-        templateUrl: string[];
+        selector: string;
+        label: string;
+        file?: string;
+        directives?: Deps[];
+        providers?: Deps[];
+        templateUrl?: string[];
+        styleUrls?: string[];
     }
 
     export class Dependencies {
@@ -39,6 +42,7 @@ export namespace Crawler {
         private files: string[];
         private program: ts.Program;
         private engine: any;
+        private cache: any = {};
 
         constructor(file: string[]) {
             this.files = file;
@@ -73,7 +77,9 @@ export namespace Crawler {
         private getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: Deps[]): void {
             ts.forEachChild(srcFile, (node: ts.Node) => {
 
+
                 if(node.decorators) {
+
                     let filterByComponent = (node) => /(Component|View)/.test(node.expression.expression.text);
                     let getComponents = (node) => node.expression.arguments.pop();
                     let getProps = (nodes) => nodes.properties;
@@ -81,14 +87,18 @@ export namespace Crawler {
 
                         let componentName = this.getComponentName(node);
                         let component: Deps = {
+                            selector: this.getComponentSelector(props),
                             name: componentName,
-                            file: srcFile.fileName,
+                            label: '',
+                            file: srcFile.fileName.split('/').splice(-3).join('/'),
                             directives: this.getComponentDirectives(props),
                             providers: this.getComponentProviders(props),
-                            templateUrl: this.getComponentTemplateUrl(props)
+                            templateUrl: this.getComponentTemplateUrl(props),
+                            styleUrls: this.getComponentStyleUrls(props)
                         };
 
                         rawDecorators.push(component);
+                        this.cache[ componentName ] = component.selector;
                     }
 
                     node.decorators
@@ -106,19 +116,39 @@ export namespace Crawler {
         }
 
         private getComponentName(node): string {
-            return node.name.text;
+          return node.name.text;
         }
 
-        private getComponentProviders(props: NodeObject[]): string[] {
-            return this.getComponentDeps(props, 'providers');
+        private getComponentSelector(props: NodeObject[]): string {
+          return this.getComponentDeps(props, 'selector').pop();
         }
 
-        private getComponentDirectives(props: NodeObject[]): string[] {
-            return this.getComponentDeps(props, 'directives');
+        private getComponentProviders(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'providers').map( (name) => {
+            return {
+              name,
+              label: '',
+              selector: this.findComponentSelectorByName(name)
+            }
+          });
+        }
+
+        private getComponentDirectives(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'directives').map( (name) => {
+            return {
+              name,
+              label: '',
+              selector: this.findComponentSelectorByName(name)
+            }
+          });
         }
 
         private getComponentTemplateUrl(props: NodeObject[]): string[] {
           return this.getComponentDeps(props, 'templateUrl');
+        }
+
+        private getComponentStyleUrls(props: NodeObject[]): string[] {
+          return this.getComponentDeps(props, 'styleUrls');
         }
 
         private getComponentDeps(props: NodeObject[], type: string): string[] {
@@ -142,7 +172,11 @@ export namespace Crawler {
               }
               return o.text;
             });
-          }).pop();
+          }).pop() || [];
+        }
+
+        private findComponentSelectorByName(name: string) {
+          return this.cache[name];
         }
 
   }

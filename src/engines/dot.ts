@@ -28,10 +28,13 @@ export namespace Engine {
 		template = `
 digraph dependencies {
   node[shape="ellipse", style="filled", colorscheme={scheme}];
+	splines=ortho;
 
-  rankdir=TB;
+	/* Graph orientation */
+  rankdir=BT;
+
   {{~it.components :cmp}}
-  subgraph {{=cmp.name}} {
+  subgraph "{{=cmp.name}}" {
 
     label="{{=cmp.file}}";
 
@@ -40,8 +43,8 @@ digraph dependencies {
     /* providers:start */
 
     {{~cmp.providers :provider}}
-      "{{=provider}}" [label="{{=provider}}", fillcolor=1, shape="ellipse"];
-      "{{=cmp.name}}" -> "{{=provider}}";
+      "{{=provider.name}}" [fillcolor=1, shape="ellipse"];
+      "{{=provider.name}}" -> "{{=cmp.name}}" /*[label="{{=cmp.file}}"]*/;
     {{~}}
 
     /* providers:end */
@@ -50,8 +53,8 @@ digraph dependencies {
 
     node[shape="cds", style="filled", color=5];
     {{~cmp.directives :directive}}
-      "{{=directive}}" [];
-      "{{=cmp.name}}" -> "{{=directive}}";
+      "{{=directive.name}}" [];
+      "{{=directive.name}}" -> "{{=cmp.name}}" /*[label="{{=cmp.file}}"]*/;
     {{~}}
 
     /* directives:end */
@@ -65,6 +68,16 @@ digraph dependencies {
     {{~}}
 
     /* templateUrl:end */
+
+		/* styleUrls:start */
+
+    node[shape="note", style="filled", color=8];
+    {{~cmp.styleUrls :url}}
+      "{{=url}}" [];
+      "{{=cmp.name}}" -> "{{=url}}" [style=dotted];
+    {{~}}
+
+    /* styleUrls:end */
 
   }
   {{~}}
@@ -80,6 +93,7 @@ digraph dependencies {
 
 		paths = {
 			dot: null,
+			json: null,
 			png: null,
 			svg: null,
 			html: null
@@ -89,9 +103,11 @@ digraph dependencies {
 
 		constructor(options: IOptions) {
 
+			let baseDir = './angular2-dependencies-graph/';
+
 			this.options = {
 				name: `${ appName }`,
-				output: `/samples/${ appName }`,
+				output: `${baseDir}/${ appName }`,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -104,16 +120,8 @@ digraph dependencies {
 
 			if(options.output) {
 
-				if(!this.options.output) {
-					logger.fatal('Option "output" has been provided but the "dot" folder was not specified');
-					process.exit(1);
-				}
-				else if(!this.options.output) {
-					logger.fatal('Option "output" has been provided but the "image" folder was not specified');
-					process.exit(1);
-				}
-				else if(!this.options.output) {
-					logger.fatal('Option "output" has been provided but the "html" folder was not specified');
+				if(typeof this.options.output !== 'string') {
+					logger.fatal('Option "output" has been provided but it is not a valid name.');
 					process.exit(1);
 				}
 
@@ -121,10 +129,11 @@ digraph dependencies {
 			}
 
 			this.paths = {
-				dot: path.join(this.cwd, `${ this.options.output }/${ this.options.name }.dot`),
-				svg: path.join(this.cwd, `${ this.options.output }/${ this.options.name }.svg`),
-				png: path.join(this.cwd, `${ this.options.output }/${ this.options.name }.png`),
-				html: path.join(this.cwd, `${ this.options.output }/${ this.options.name }.html`)
+				dot: path.join(this.cwd, `${ this.options.output }/dependencies.dot`),
+				json: path.join(this.cwd, `${ this.options.output }/dependencies.json`),
+				svg: path.join(this.cwd, `${ this.options.output }/dependencies.svg`),
+				png: path.join(this.cwd, `${ this.options.output }/dependencies.png`),
+				html: path.join(this.cwd, `${ this.options.output }/dependencies.html`)
 			};
 			this.createOutputFolders(this.options.output);
 		}
@@ -133,6 +142,7 @@ digraph dependencies {
 			let template = this.preprocessTemplates(this.options.dot);
 
 			return this.generateDot(template, deps)
+				.then( _ => this.generateJSON(deps) )
 				.then( _ => this.generateSVG() )
 				.then( _ => this.generateHTML() )
 				//.then( _ => this.generatePNG() );
@@ -147,11 +157,24 @@ digraph dependencies {
 		private preprocessTemplates(options?) {
 			let doT = require('dot');
 			this.template = this.template
-					.replace(/\{1\}/g, options.shapeModules)
-					.replace(/\{2\}/g, options.shapeProviders)
-					.replace(/\{3\}/g, options.shapeDirectives)
 					.replace(/\{scheme\}/g, options.colorScheme);
 			return doT.template(this.template);
+		}
+
+		private generateJSON(deps) {
+			let d = q.defer();
+			fs.outputFile(
+				this.paths.json,
+				JSON.stringify(deps, null, 2),
+				(error) => {
+					if(error) {
+						d.reject(error);
+					}
+					logger.info('creating JSON', 'done');
+					d.resolve(this.paths.json);
+				}
+			);
+			return d.promise;
 		}
 
 		private generateDot(template, deps) {
