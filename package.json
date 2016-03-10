@@ -7,7 +7,7 @@
     "prepublish": "npm run typings && npm run tsc && npm run changelog",
     "typings": "./node_modules/.bin/typings install --ambiant",
     "tsc": "./node_modules/.bin/tsc",
-    "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "bin": {
     "ng2-deps-graph": "bin/index.js",
