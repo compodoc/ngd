@@ -4,10 +4,10 @@
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
   "main": "index.js",
   "scripts": {
-    "prepublish": "npm run typings && npm run tsc && npm run changelog",
+    "prepublish": "npm run typings && npm run tsc",
     "typings": "./node_modules/.bin/typings install --ambiant",
     "tsc": "./node_modules/.bin/tsc",
-    "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "bin": {
     "ng2-deps-graph": "bin/index.js",
