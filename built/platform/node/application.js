@@ -1,8 +1,8 @@
 "use strict";
 var fs = require('fs');
 var path = require('path');
-var dot_1 = require('../../engines/dot');
-var dependencies_1 = require('../../crawlers/dependencies');
+var dot_1 = require('./engines/dot');
+var dependencies_1 = require('./crawlers/dependencies');
 var logger_1 = require('../../logger');
 var pkg = require('../../../package.json');
 var program = require('commander');
