@@ -17,10 +17,7 @@ A tool that allows you to view your Angular2 application dependencies. (WIP...)
 
 ## Install
 
-Install from npm: `npm i -g angular2-dependencies-graph`
-
-Make sure you have installed typescript & typings as well:
-`npm i -g typescript typings`
+Install from npm: `npm install -g angular2-dependencies-graph`
 
 ## Usage
 
