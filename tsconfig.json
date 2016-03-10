@@ -8,10 +8,8 @@
     "sourceMap": false,
     "noResolve": false
   },
-  "exclude": [
-    "node_modules"
-  ],
   "files": [
+    "typings/main.d.ts",
     "src/index.ts"
   ]
 }
