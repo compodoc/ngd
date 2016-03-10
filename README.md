@@ -6,14 +6,17 @@
 
 angular2-dependencies-graph
 ====
-A tool that allows you to view your Angular2 application dependencies. (WIP...)
+A tool that allows you to view your Angular2 application dependencies. Currently, the tool only supports apps written in TypeScript.
 
 ## Generated Graphs (sample)
 
-![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/ng2-deps-graph-1.png)
+![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-1.png)
 
 
-![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/ng2-deps-graph-2.png)
+![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-2.png)
+
+
+![screenshots-3](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-3.gif)
 
 
 ## Install
@@ -22,27 +25,46 @@ Install from npm: `npm install -g angular2-dependencies-graph`
 
 ## Usage
 
+```
+$ ng2-dg --help
+
+Usage: ng2-dg [options]
+
+Options:
+
+  -h, --help               output usage information
+  -V, --version            output the version number
+  -f, --file [file]        Entry *.ts file
+  -t, --tsconfig [config]  A tsconfig.json
+  -l, --files [list]       A list of *.ts files
+  -o, --open               Open the generated diagram file
+  -d, --output [folder]    Where to store the generated files
+```
+
 ### 1) use a `tsconfig.json`:
 Run inside your project (where your `tsconfig.json` is located:
 
 ```bash
-$ cd project/
-$ ng2-deps-graph
+$ cd my-awesome-angular2-app/
+$ ng2-dg
+$ # or
+$ ng2-dg --tsconfig ./tsconfig.json
 ```
 
-Note: This will read the `files` entry point in your `tsconfig.json` and crawl your app.
+Note: This will read the `files` entry point in your `tsconfig.json` and crawl your app. Make sure you are using this attribute.
 
 ### 2) provide an entry file:
 
 ```bash
-$ ng2-deps-graph app.ts
+$ cd my-awesome-angular2-app/
+$ ng2-dg --file app.ts
 ```
 
 NOTE: The file you provide should contain your root component.
 
 ## Have a PR?
 
-All contribution are welcome ;)
+All contributions are welcome ;)
 
 ## License
 
