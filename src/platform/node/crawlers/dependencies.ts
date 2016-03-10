@@ -1,12 +1,11 @@
-/// <reference path="../../typings/main.d.ts" />
+/// <reference path="../../../../typings/main.d.ts" />
 
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ts from 'typescript';
-import {logger} from '../logger';
+import {logger} from '../../../logger';
 
 let q = require('q');
-
 
 export namespace Crawler {
 

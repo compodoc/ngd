@@ -2,8 +2,8 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
-import {Engine} from '../../engines/dot';
-import {Crawler} from '../../crawlers/dependencies';
+import {Engine} from './engines/dot';
+import {Crawler} from './crawlers/dependencies';
 import {logger} from '../../logger';
 
 let pkg = require('../../../package.json');
@@ -92,7 +92,7 @@ export namespace Application {
           let open = require("opener");
           open(file);
         }
-        
+
       })
       .catch( e => logger.error(e) )
       .finally( _ => logger.info('done'))

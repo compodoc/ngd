@@ -1,7 +1,7 @@
-/// <reference path="../../typings/main.d.ts" />
+/// <reference path="../../../../typings/main.d.ts" />
 
 import * as path from 'path';
-import {logger} from '../logger';
+import {logger} from '../../../logger';
 
 interface IOptions {
 	name?: string;
@@ -19,7 +19,7 @@ export namespace Engine {
 	let fs = require('fs-extra');
 	let q = require('q');
 
-	let appName = require('../../package.json').shortName;
+	let appName = require('../../../../package.json').name;
 
 	// http://www.graphviz.org/Documentation/dotguide.pdf
 	export class Dot {
@@ -103,7 +103,7 @@ digraph dependencies {
 
 		constructor(options: IOptions) {
 
-			let baseDir = './angular2-dependencies-graph/';
+			let baseDir = `./${ appName }/`;
 
 			this.options = {
 				name: `${ appName }`,
