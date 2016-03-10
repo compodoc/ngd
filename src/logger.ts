@@ -1,5 +1,7 @@
 /// <reference path="../typings/main.d.ts"/>
-let c = require('colors');
+let gutil = require('gulp-util')
+let c = gutil.colors;
+let pkg = require('../package.json');
 
 enum LEVEL {
 	INFO,
@@ -10,31 +12,35 @@ enum LEVEL {
 class Logger {
 
 	name;
+	logger;
+	version;
 
 	constructor() {
-		this.name = require('../package.json').shortName;
+		this.name = pkg.name;
+		this.version = pkg.version;
+		this.logger = gutil.log;
 	}
 
 	title(...args) {
-		console.log(
-			c.magenta(...args)
+		this.logger(
+			c.cyan(...args)
 		);
 	}
 
 	info(...args) {
-		console.log(
+		this.logger(
 			this.format(LEVEL.INFO, ...args)
 		);
 	}
 
 	warn(...args) {
-		console.warn(
+		this.logger(
 			this.format(LEVEL.WARN, ...args)
 		);
 	}
 
 	error(...args) {
-		console.error(
+		this.logger(
 			this.format(LEVEL.FATAL, ...args)
 		);
 	}
@@ -61,7 +67,7 @@ class Logger {
 				break;
 
 			case LEVEL.WARN:
-				msg = c.yellow(msg);
+				msg = c.gray(msg);
 				break;
 
 			case LEVEL.ERROR:
@@ -70,12 +76,16 @@ class Logger {
 				break;
 		}
 
+		// return [
+		// 	c.yellow.bgMagenta(` ${this.name} `),
+		// 	c.yellow.bgBlue(` ${new Date().toISOString()} `),
+		// 	' ',
+		// 	msg
+		// ].join('');
+
 		return [
-			c.yellow.bgMagenta(` ${this.name} `),
-			c.yellow.bgBlue(` ${new Date().toISOString()} `),
-			' ',
 			msg
-		].join('')
+		].join('');
 	}
 }
 
