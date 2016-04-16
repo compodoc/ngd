@@ -55,8 +55,28 @@ export namespace Application {
         files = require(program.tsconfig).files;
 
         if(!files) {
-          logger.fatal('"tsconfig.json" file does not export a "files" attriute');
-          process.exit(1);
+          let exclude = [];
+          exclude = require(program.tsconfig).exclude;
+
+          var walk = function(dir) {
+            var results = [];
+            var list = fs.readdirSync(dir);
+            list.forEach(function(file) {
+              if (exclude.indexOf(file) < 0) {
+                file = dir + '/' + file;
+                var stat = fs.statSync(file);
+                if (stat && stat.isDirectory()) {
+                  results = results.concat(walk(file));
+                }
+                else if (path.extname(file) === '.ts') {
+                  results.push(file);
+                }
+              }
+            });
+            return results;
+          };
+
+          files = walk('.');
         }
       }
 
