@@ -42,7 +42,7 @@ Options:
 ```
 
 ### 1) use a `tsconfig.json`:
-Run inside your project (where your `tsconfig.json` is located:
+Run inside your project (where your `tsconfig.json` is located):
 
 ```bash
 $ cd my-awesome-angular2-app/
@@ -51,7 +51,8 @@ $ # or
 $ ng2-dg --tsconfig ./tsconfig.json
 ```
 
-Note: This will read the `files` entry point in your `tsconfig.json` and crawl your app. Make sure you are using this attribute.
+Note: This will read the `files` entry point in your `tsconfig.json` and crawl your app. If the entry point is not
+found, all `*.ts` files will be crawled, but not those mentioned in the `exclude` property ([more details](https://www.typescriptlang.org/docs/handbook/tsconfig.json.html#details)).
 
 ### 2) provide an entry file:
 
