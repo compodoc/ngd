@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/main.d.ts" />
-"use strict";
 var path = require('path');
 var logger_1 = require('../../../logger');
 var Engine;
@@ -143,6 +142,6 @@ var Engine;
             return d.promise;
         };
         return Dot;
-    }());
+    })();
     Engine.Dot = Dot;
 })(Engine = exports.Engine || (exports.Engine = {}));

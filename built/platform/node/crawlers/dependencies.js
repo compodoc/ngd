@@ -1,5 +1,4 @@
 /// <reference path="../../../../typings/main.d.ts" />
-"use strict";
 var ts = require('typescript');
 var logger_1 = require('../../../logger');
 var q = require('q');
@@ -117,6 +116,6 @@ var Crawler;
             return this.cache[name];
         };
         return Dependencies;
-    }());
+    })();
     Crawler.Dependencies = Dependencies;
 })(Crawler = exports.Crawler || (exports.Crawler = {}));

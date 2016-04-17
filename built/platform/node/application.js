@@ -1,4 +1,3 @@
-"use strict";
 var fs = require('fs');
 var path = require('path');
 var dot_1 = require('./engines/dot');
@@ -42,8 +41,26 @@ var Application;
                 logger_1.logger.info('using tsconfig', program.tsconfig);
                 files = require(program.tsconfig).files;
                 if (!files) {
-                    logger_1.logger.fatal('"tsconfig.json" file does not export a "files" attriute');
-                    process.exit(1);
+                    var exclude = [];
+                    exclude = require(program.tsconfig).exclude;
+                    var walk = function (dir) {
+                        var results = [];
+                        var list = fs.readdirSync(dir);
+                        list.forEach(function (file) {
+                            if (exclude.indexOf(file) < 0) {
+                                file = path.join(dir, file);
+                                var stat = fs.statSync(file);
+                                if (stat && stat.isDirectory()) {
+                                    results = results.concat(walk(file));
+                                }
+                                else if (path.extname(file) === '.ts') {
+                                    results.push(file);
+                                }
+                            }
+                        });
+                        return results;
+                    };
+                    files = walk('.');
                 }
             }
         }
