@@ -149,9 +149,7 @@ digraph dependencies {
 		}
 
 		private createOutputFolders(output) {
-			Object.keys(output).forEach( (prop) => {
-				return fs.mkdirpSync(path.join(__dirname, `../../${ output[prop] }`));
-			});
+			fs.mkdirpSync(path.join(__dirname, `../../${output}`));
 		}
 
 		private preprocessTemplates(options?) {
