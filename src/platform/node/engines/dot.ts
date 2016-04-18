@@ -150,7 +150,7 @@ digraph dependencies {
 
 		private createOutputFolders(output) {
 			Object.keys(output).forEach( (prop) => {
-				return fs.mkdirpSync(path.join(this.cwd, `../../${ output[prop] }`));
+				return fs.mkdirpSync(path.join(__dirname, `../../${ output[prop] }`));
 			});
 		}
 
