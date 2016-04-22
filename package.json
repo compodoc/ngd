@@ -4,6 +4,7 @@
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
   "main": "index.js",
   "scripts": {
+    "deploy": "npm version patch && npm publish",
     "prepublish": "npm run typings && npm run tsc",
     "typings": "./node_modules/.bin/typings install --ambiant",
     "tsc": "./node_modules/.bin/tsc",
