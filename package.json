@@ -1,6 +1,6 @@
 {
   "name": "angular2-dependencies-graph",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
   "main": "index.js",
   "scripts": {
