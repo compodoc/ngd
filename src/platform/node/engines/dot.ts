@@ -135,7 +135,6 @@ digraph dependencies {
 				png: path.join(this.cwd, `${ this.options.output }/dependencies.png`),
 				html: path.join(this.cwd, `${ this.options.output }/dependencies.html`)
 			};
-			this.createOutputFolders(this.options.output);
 		}
 
 		generateGraph(deps) {
@@ -146,12 +145,6 @@ digraph dependencies {
 				.then( _ => this.generateSVG() )
 				.then( _ => this.generateHTML() )
 				//.then( _ => this.generatePNG() );
-		}
-
-		private createOutputFolders(output) {
-			Object.keys(output).forEach( (prop) => {
-				return fs.mkdirpSync(path.join(this.cwd, `../../${ output[prop] }`));
-			});
 		}
 
 		private preprocessTemplates(options?) {
