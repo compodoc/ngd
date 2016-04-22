@@ -49,7 +49,6 @@ var Engine;
                 png: path.join(this.cwd, this.options.output + "/dependencies.png"),
                 html: path.join(this.cwd, this.options.output + "/dependencies.html")
             };
-            this.createOutputFolders(this.options.output);
         }
         Dot.prototype.generateGraph = function (deps) {
             var _this = this;
@@ -59,12 +58,6 @@ var Engine;
                 .then(function (_) { return _this.generateSVG(); })
                 .then(function (_) { return _this.generateHTML(); });
             //.then( _ => this.generatePNG() );
-        };
-        Dot.prototype.createOutputFolders = function (output) {
-            var _this = this;
-            Object.keys(output).forEach(function (prop) {
-                return fs.mkdirpSync(path.join(_this.cwd, "../../" + output[prop]));
-            });
         };
         Dot.prototype.preprocessTemplates = function (options) {
             var doT = require('dot');
