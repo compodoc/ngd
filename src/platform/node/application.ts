@@ -56,7 +56,7 @@ export namespace Application {
 
         if(!files) {
           let exclude = [];
-          exclude = require(program.tsconfig).exclude;
+          exclude = require(program.tsconfig).exclude || [];
 
           var walk = (dir) => {
             let results = [];
