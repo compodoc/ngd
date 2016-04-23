@@ -1,4 +1,3 @@
-"use strict";
 /// <reference path="../typings/main.d.ts"/>
 var gutil = require('gulp-util');
 var c = gutil.colors;
@@ -87,5 +86,5 @@ var Logger = (function () {
         ].join('');
     };
     return Logger;
-}());
+})();
 exports.logger = new Logger();
