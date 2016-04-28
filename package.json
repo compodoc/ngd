@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "npm run tsc && npm version patch && npm publish",
     "install": "npm run typings && npm run tsc",
-    "typings": "./node_modules/.bin/typings install --ambiant",
+    "typings": "./node_modules/.bin/typings install --ambient",
     "tsc": "./node_modules/.bin/tsc",
     "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
