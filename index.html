@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Angular2 Dependencies Graph by manekinekko</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Angular2 Dependencies Graph</h1>
+      <h2 class="project-tagline">A simple tool to draw a component dependencies graph of an Angular2 application.</h2>
+      <a href="https://github.com/manekinekko/angular2-dependencies-graph" class="btn">View on GitHub</a>
+      <a href="https://github.com/manekinekko/angular2-dependencies-graph/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/manekinekko/angular2-dependencies-graph/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><a href="https://manekinekko-angular2-dependencies-graph.getbadges.io/?ref=shield-game"><img src="https://manekinekko-angular2-dependencies-graph.getbadges.io/shield/company/manekinekko-angular2-dependencies-graph" alt="GetBadges Game"></a>
+<a href="https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph"></a>
+<a href="http://issuestats.com/github/manekinekko/angular2-dependencies-graph"><img src="http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/pr" alt="Issue Stats"></a>
+<a href="http://issuestats.com/github/manekinekko/angular2-dependencies-graph"><img src="http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/issue" alt="Issue Stats"></a>
+<a href="https://badge.fury.io/js/angular2-dependencies-graph"><img src="https://badge.fury.io/js/angular2-dependencies-graph.svg" alt="npm version"></a></p>
+
+<h1>
+<a id="angular2-dependencies-graph" class="anchor" href="#angular2-dependencies-graph" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>angular2-dependencies-graph</h1>
+
+<p>A tool that allows you to view your Angular2 application dependencies. Currently, the tool only supports apps written in TypeScript.</p>
+
+<h2>
+<a id="generated-graphs-sample" class="anchor" href="#generated-graphs-sample" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generated Graphs (sample)</h2>
+
+<p><img src="https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-1.png" alt="screenshots-1"></p>
+
+<p><img src="https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-2.png" alt="screenshots-2"></p>
+
+<p><img src="https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-3.gif" alt="screenshots-3"></p>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h2>
+
+<p>Install from npm: <code>npm install -g angular2-dependencies-graph</code></p>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<pre><code>$ ng2-dg --help
+
+Usage: ng2-dg [options]
+
+Options:
+
+  -h, --help               output usage information
+  -V, --version            output the version number
+  -f, --file [file]        Entry *.ts file
+  -t, --tsconfig [config]  A tsconfig.json
+  -l, --files [list]       A list of *.ts files
+  -o, --open               Open the generated diagram file
+  -d, --output [folder]    Where to store the generated files
+</code></pre>
+
+<h3>
+<a id="1-use-a-tsconfigjson" class="anchor" href="#1-use-a-tsconfigjson" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1) use a <code>tsconfig.json</code>:</h3>
+
+<p>Run inside your project (where your <code>tsconfig.json</code> is located):</p>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> my-awesome-angular2-app/
+$ ng2-dg
+$ <span class="pl-c"># or</span>
+$ ng2-dg --tsconfig ./tsconfig.json</pre></div>
+
+<p>Note: This will read the <code>files</code> entry point in your <code>tsconfig.json</code> and crawl your app. If the entry point is not
+found, all <code>*.ts</code> files will be crawled, but not those mentioned in the <code>exclude</code> property (<a href="https://www.typescriptlang.org/docs/handbook/tsconfig.json.html#details">more details</a>).</p>
+
+<h3>
+<a id="2-provide-an-entry-file" class="anchor" href="#2-provide-an-entry-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2) provide an entry file:</h3>
+
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> my-awesome-angular2-app/
+$ ng2-dg --file app.ts</pre></div>
+
+<p>NOTE: The file you provide should contain your root component.</p>
+
+<h2>
+<a id="have-a-pr" class="anchor" href="#have-a-pr" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Have a PR?</h2>
+
+<p>All contributions are welcome ;)</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT)
+Copyright (c) 2016 - Wassim CHEGHAM</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/manekinekko/angular2-dependencies-graph">Angular2 Dependencies Graph</a> is maintained by <a href="https://github.com/manekinekko">manekinekko</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
