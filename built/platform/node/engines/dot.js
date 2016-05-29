@@ -1,4 +1,3 @@
-"use strict";
 var path = require('path');
 var logger_1 = require('../../../logger');
 var Engine;
@@ -67,20 +66,18 @@ var Engine;
         };
         Dot.prototype.generateJSON = function (deps) {
             var _this = this;
-            logger_1.logger.info('creating JSON', this.paths.json);
             var d = q.defer();
             fs.outputFile(this.paths.json, JSON.stringify(deps, null, 2), function (error) {
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating JSON', 'done');
+                logger_1.logger.info('creating JSON', _this.paths.json);
                 d.resolve(_this.paths.json);
             });
             return d.promise;
         };
         Dot.prototype.generateDot = function (template, deps) {
             var _this = this;
-            logger_1.logger.info('creating DOT', this.paths.dot);
             var d = q.defer();
             fs.outputFile(this.paths.dot, template({
                 components: deps
@@ -88,14 +85,13 @@ var Engine;
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating DOT', 'done');
+                logger_1.logger.info('creating DOT', _this.paths.dot);
                 d.resolve(_this.paths.dot);
             });
             return d.promise;
         };
         Dot.prototype.generateSVG = function () {
             var _this = this;
-            logger_1.logger.info('creating SVG', this.paths.svg);
             var Viz = require('viz.js');
             var viz_svg = Viz(fs.readFileSync(this.paths.dot).toString(), {
                 format: 'svg',
@@ -106,36 +102,34 @@ var Engine;
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating SVG', 'done');
+                logger_1.logger.info('creating SVG', _this.paths.svg);
                 d.resolve(_this.paths.svg);
             });
             return d.promise;
         };
         Dot.prototype.generateHTML = function () {
             var _this = this;
-            logger_1.logger.info('creating HTML', this.paths.html);
             var svgContent = fs.readFileSync(this.paths.svg).toString();
             var d = q.defer();
             fs.outputFile(this.paths.html, svgContent, function (error) {
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating HTML', 'done');
+                logger_1.logger.info('creating HTML', _this.paths.html);
                 d.resolve(_this.paths.html);
             });
             return d.promise;
         };
         Dot.prototype.generatePNG = function () {
-            logger_1.logger.info('creating PNG', this.paths.png);
             var svg_to_png = require('svg-to-png');
             var d = q.defer();
             svg_to_png.convert(this.paths.svg, path.join(this.cwd, "" + this.options.output)).then(function () {
-                logger_1.logger.info('creating PNG', 'done');
+                logger_1.logger.info('creating PNG', this.paths.png);
                 d.resolve(this.paths.image);
             });
             return d.promise;
         };
         return Dot;
-    }());
+    })();
     Engine.Dot = Dot;
 })(Engine = exports.Engine || (exports.Engine = {}));

@@ -153,8 +153,6 @@ digraph dependencies {
 		}
 
 		private generateJSON(deps) {
-			logger.info('creating JSON', this.paths.json);
-
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.json,
@@ -163,7 +161,7 @@ digraph dependencies {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('creating JSON', 'done');
+					logger.info('creating JSON', this.paths.json);
 					d.resolve(this.paths.json);
 				}
 			);
@@ -171,8 +169,6 @@ digraph dependencies {
 		}
 
 		private generateDot(template, deps) {
-			logger.info('creating DOT', this.paths.dot);
-
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.dot,
@@ -183,7 +179,7 @@ digraph dependencies {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('creating DOT', 'done');
+					logger.info('creating DOT', this.paths.dot);
 					d.resolve(this.paths.dot);
 				}
 			);
@@ -192,8 +188,6 @@ digraph dependencies {
 		}
 
 		private generateSVG() {
-			logger.info('creating SVG', this.paths.svg);
-
 			let Viz = require('viz.js');
 			let viz_svg = Viz(
 				fs.readFileSync(this.paths.dot).toString(), {
@@ -209,7 +203,7 @@ digraph dependencies {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('creating SVG', 'done');
+					logger.info('creating SVG', this.paths.svg);
 					d.resolve(this.paths.svg);
 				}
 			);
@@ -217,8 +211,6 @@ digraph dependencies {
 		}
 
 		private generateHTML() {
-			logger.info('creating HTML', this.paths.html);
-
 			let svgContent = fs.readFileSync(this.paths.svg).toString();
 			let d = q.defer();
 			fs.outputFile(
@@ -228,7 +220,7 @@ digraph dependencies {
 					if(error) {
 						d.reject(error);
 					}
-					logger.info('creating HTML', 'done');
+					logger.info('creating HTML', this.paths.html);
 					d.resolve(this.paths.html);
 				}
 			);
@@ -236,15 +228,13 @@ digraph dependencies {
 		}
 
 		private generatePNG() {
-			logger.info('creating PNG', this.paths.png);
-
 			let svg_to_png = require('svg-to-png');
 			let d = q.defer();
 			svg_to_png.convert(
 				this.paths.svg,
 				path.join(this.cwd, `${ this.options.output }`)
 			).then( function(){
-				logger.info('creating PNG', 'done');
+				logger.info('creating PNG', this.paths.png);
 				d.resolve(this.paths.image);
 			});
 			return d.promise;
