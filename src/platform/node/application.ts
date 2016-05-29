@@ -54,8 +54,7 @@ export namespace Application {
         files = require(program.tsconfig).files;
 
         if(!files) {
-          let exclude = [];
-          exclude = require(program.tsconfig).exclude || [];
+          let exclude = require(program.tsconfig).exclude || [];
 
           var walk = (dir) => {
             let results = [];
@@ -77,6 +76,11 @@ export namespace Application {
 
           files = walk('.');
         }
+
+        // normalize paths
+        files = files.map( (file) => {
+          return path.join(path.dirname(program.tsconfig), file);
+        });
       }
 
     }
@@ -87,6 +91,8 @@ export namespace Application {
     else {
       outputHelp()
     }
+
+    logger.info('including files', JSON.stringify(files));
 
     let crawler = new Crawler.Dependencies(
       files

@@ -42,8 +42,7 @@ var Application;
                 logger_1.logger.info('using tsconfig', program.tsconfig);
                 files = require(program.tsconfig).files;
                 if (!files) {
-                    var exclude_1 = [];
-                    exclude_1 = require(program.tsconfig).exclude || [];
+                    var exclude_1 = require(program.tsconfig).exclude || [];
                     var walk = function (dir) {
                         var results = [];
                         var list = fs.readdirSync(dir);
@@ -63,6 +62,10 @@ var Application;
                     };
                     files = walk('.');
                 }
+                // normalize paths
+                files = files.map(function (file) {
+                    return path.join(path.dirname(program.tsconfig), file);
+                });
             }
         }
         else if (program.files) {
@@ -72,6 +75,7 @@ var Application;
         else {
             outputHelp();
         }
+        logger_1.logger.info('including files', JSON.stringify(files));
         var crawler = new dependencies_1.Crawler.Dependencies(files);
         var deps = crawler.getDependencies();
         if (deps.length <= 0) {
