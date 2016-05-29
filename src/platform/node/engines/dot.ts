@@ -96,7 +96,8 @@ digraph dependencies {
 			json: null,
 			png: null,
 			svg: null,
-			html: null
+			html: null,
+            md: null
 		};
 
 		options: IOptions = {};
@@ -133,7 +134,8 @@ digraph dependencies {
 				json: path.join(this.cwd, `${ this.options.output }/dependencies.json`),
 				svg: path.join(this.cwd, `${ this.options.output }/dependencies.svg`),
 				png: path.join(this.cwd, `${ this.options.output }/dependencies.png`),
-				html: path.join(this.cwd, `${ this.options.output }/dependencies.html`)
+				html: path.join(this.cwd, `${ this.options.output }/dependencies.html`),
+				md: path.join(this.cwd, `${ this.options.output }/dependencies.md`)
 			};
 		}
 
@@ -144,6 +146,7 @@ digraph dependencies {
 				.then( _ => this.generateJSON(deps) )
 				.then( _ => this.generateSVG() )
 				.then( _ => this.generateHTML() )
+				.then( _ => this.generateMD() )
 				//.then( _ => this.generatePNG() );
 		}
 
@@ -230,6 +233,25 @@ digraph dependencies {
 					}
 					logger.info('creating HTML', 'done');
 					d.resolve(this.paths.html);
+				}
+			);
+			return d.promise;
+		}
+
+		private generateMD() {
+			logger.info('creating MD', this.paths.md);
+
+			let svgContent = fs.readFileSync(this.paths.svg).toString();
+			let d = q.defer();
+			fs.outputFile(
+				this.paths.md,
+				svgContent,
+				(error) => {
+					if(error) {
+						d.reject(error);
+					}
+					logger.info('creating MD', 'done');
+					d.resolve(this.paths.md);
 				}
 			);
 			return d.promise;
