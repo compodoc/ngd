@@ -1,0 +1,163 @@
+[
+  {
+    "selector": "toolbar",
+    "name": "Toolbar",
+    "label": "",
+    "file": "components/toolbar/toolbar.ts",
+    "directives": [
+      {
+        "name": "RouterOutlet",
+        "label": ""
+      },
+      {
+        "name": "RouterLink",
+        "label": ""
+      },
+      {
+        "name": "FixScrolling",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "toolbar.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "theme-card",
+    "name": "ThemeCard",
+    "label": "",
+    "file": "home/theme-card/theme-card.ts",
+    "directives": [
+      {
+        "name": "RouterLink",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "theme-card.html"
+    ],
+    "styleUrls": [
+      "./styles/card.css"
+    ]
+  },
+  {
+    "selector": "home",
+    "name": "Home",
+    "label": "",
+    "file": "components/home/home.ts",
+    "directives": [
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "ThemeCard",
+        "label": "",
+        "selector": "theme-card"
+      }
+    ],
+    "providers": [
+      {
+        "name": "TechnologiesStore",
+        "label": ""
+      }
+    ],
+    "templateUrl": [
+      "home.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "technology",
+    "name": "Technology",
+    "label": "",
+    "file": "components/technology/technology.ts",
+    "directives": [
+      {
+        "name": "QuestionCard",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      },
+      {
+        "name": "RouterLink",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "question-card",
+    "name": "QuestionCard",
+    "label": "",
+    "file": "technology/question-card/question-card.ts",
+    "directives": [
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "NgIf",
+        "label": ""
+      }
+    ],
+    "providers": [],
+    "templateUrl": [
+      "question-card.html"
+    ],
+    "styleUrls": []
+  },
+  {
+    "selector": "summary",
+    "name": "Summary",
+    "label": "",
+    "file": "components/summary/summary.ts",
+    "directives": [
+      {
+        "name": "NgFor",
+        "label": ""
+      },
+      {
+        "name": "QuestionCard",
+        "label": "",
+        "selector": "question-card"
+      }
+    ],
+    "providers": [
+      {
+        "name": "QuestionsStore*",
+        "label": ""
+      }
+    ],
+    "templateUrl": [],
+    "styleUrls": []
+  },
+  {
+    "selector": "devfest",
+    "name": "Devfest",
+    "label": "",
+    "file": "app.ts",
+    "directives": [
+      {
+        "name": "Toolbar",
+        "label": "",
+        "selector": "toolbar"
+      }
+    ],
+    "providers": [
+      {
+        "name": "QuestionsStore",
+        "label": ""
+      }
+    ],
+    "templateUrl": [],
+    "styleUrls": []
+  }
+]

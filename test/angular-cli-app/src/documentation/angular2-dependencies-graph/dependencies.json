@@ -1,0 +1,16 @@
+[
+  {
+    "selector": "angular-cli-app-app",
+    "name": "AngularCliAppAppComponent",
+    "label": "",
+    "file": "src/app/angular-cli-app.component.ts",
+    "directives": [],
+    "providers": [],
+    "templateUrl": [
+      "angular-cli-app.component.html"
+    ],
+    "styleUrls": [
+      "angular-cli-app.component.css"
+    ]
+  }
+]
