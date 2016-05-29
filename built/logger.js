@@ -1,4 +1,4 @@
-/// <reference path="../typings/main.d.ts"/>
+"use strict";
 var gutil = require('gulp-util');
 var c = gutil.colors;
 var pkg = require('../package.json');
@@ -86,5 +86,5 @@ var Logger = (function () {
         ].join('');
     };
     return Logger;
-})();
+}());
 exports.logger = new Logger();

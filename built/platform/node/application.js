@@ -1,3 +1,4 @@
+"use strict";
 var fs = require('fs');
 var path = require('path');
 var dot_1 = require('./engines/dot');
@@ -41,13 +42,13 @@ var Application;
                 logger_1.logger.info('using tsconfig', program.tsconfig);
                 files = require(program.tsconfig).files;
                 if (!files) {
-                    var exclude = [];
-                    exclude = require(program.tsconfig).exclude || [];
+                    var exclude_1 = [];
+                    exclude_1 = require(program.tsconfig).exclude || [];
                     var walk = function (dir) {
                         var results = [];
                         var list = fs.readdirSync(dir);
                         list.forEach(function (file) {
-                            if (exclude.indexOf(file) < 0) {
+                            if (exclude_1.indexOf(file) < 0) {
                                 file = path.join(dir, file);
                                 var stat = fs.statSync(file);
                                 if (stat && stat.isDirectory()) {

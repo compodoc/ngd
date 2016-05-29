@@ -1,3 +1,3 @@
-/// <reference path="../typings/main.d.ts"/>
+"use strict";
 var application_1 = require('./platform/node/application');
 application_1.Application.run();
