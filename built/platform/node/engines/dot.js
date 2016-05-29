@@ -67,6 +67,7 @@ var Engine;
         };
         Dot.prototype.generateJSON = function (deps) {
             var _this = this;
+            logger_1.logger.info('creating JSON', this.paths.json);
             var d = q.defer();
             fs.outputFile(this.paths.json, JSON.stringify(deps, null, 2), function (error) {
                 if (error) {

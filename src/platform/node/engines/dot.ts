@@ -153,6 +153,8 @@ digraph dependencies {
 		}
 
 		private generateJSON(deps) {
+			logger.info('creating JSON', this.paths.json);
+
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.json,
