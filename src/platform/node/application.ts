@@ -16,7 +16,7 @@ export namespace Application {
       .option('-t, --tsconfig [config]', 'A tsconfig.json', './tsconfig.json')
       .option('-l, --files [list]', 'A list of *.ts files')
       .option('-o, --open', 'Open the generated diagram file', true)
-      .option('-d, --output [folder]', 'Where to store the generated files', `./documentation/${pkg.name}`)
+      .option('-d, --output [folder]', 'Where to store the generated files', `./documentation/`)
       .parse(process.argv);
 
   let outputHelp = () => {
