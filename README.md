@@ -12,8 +12,9 @@ A tool that allows you to view your Angular2 application dependencies. Currently
 
 ![screenshots-1](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-1.png)
 
-
 ![screenshots-2](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-2.png)
+
+![screenshots-3](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-3.gif)
 
 ## Install
 
