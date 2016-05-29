@@ -143,7 +143,7 @@
     "selector": "devfest",
     "name": "Devfest",
     "label": "",
-    "file": "app.ts",
+    "file": "test/no-tsconfig/app.ts",
     "directives": [
       {
         "name": "Toolbar",
