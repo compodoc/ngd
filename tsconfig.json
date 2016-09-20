@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "target": "es5",
     "noImplicitAny": false,
-    "outDir": "built",
+    "outDir": "./dist",
     "rootDir": "./src",
     "sourceMap": false,
-    "noResolve": false
+    "noResolve": false,
+    "typeRoots": [
+      "../node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ]
   },
   "files": [
-    "typings/main.d.ts",
     "src/index.ts"
   ]
 }
