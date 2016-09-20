@@ -1,0 +1,16 @@
+[
+  {
+    "selector": "app-root",
+    "name": "AppComponent",
+    "label": "",
+    "file": "src/app/app.component.ts",
+    "directives": [],
+    "providers": [],
+    "templateUrl": [
+      "app.component.html"
+    ],
+    "styleUrls": [
+      "./app.component.css"
+    ]
+  }
+]

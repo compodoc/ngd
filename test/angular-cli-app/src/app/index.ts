@@ -1,2 +1,2 @@
-export {environment} from './environment';
-export {AngularCliAppAppComponent} from './angular-cli-app.component';
+export * from './app.component';
+export * from './app.module';
