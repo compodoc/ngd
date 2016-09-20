@@ -55,12 +55,13 @@ export namespace Crawler {
 
                 let filePath = file.fileName;
 
-                if(filePath.lastIndexOf('.d.ts') === -1) {
+                if (path.extname(filePath) === '.ts') {
+
+                  if (filePath.lastIndexOf('.d.ts') === -1) {
                     logger.info('parsing', filePath);
                     this.getSourceFileDecorators(file, deps);
-                }
-                else {
-                    logger.warn('ignoring tsd', filePath);
+                  }
+
                 }
 
                 return deps;
