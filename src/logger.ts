@@ -75,13 +75,6 @@ class Logger {
 				break;
 		}
 
-		// return [
-		// 	c.yellow.bgMagenta(` ${this.name} `),
-		// 	c.yellow.bgBlue(` ${new Date().toISOString()} `),
-		// 	' ',
-		// 	msg
-		// ].join('');
-
 		return [
 			msg
 		].join('');

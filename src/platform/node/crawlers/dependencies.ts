@@ -1,9 +1,14 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import * as util from 'util';
 import * as ts from 'typescript';
-import {logger} from '../../../logger';
+import { logger } from '../../../logger';
 
 let q = require('q');
+
+let d = (node) => {
+  console.log(util.inspect(node, { showHidden: true, depth: 10 }));
+};
 
 export namespace Crawler {
 
@@ -12,10 +17,10 @@ export namespace Crawler {
         end: Number;
         text: string;
         initializer: {
-          text: string;
-          elements: NodeObject[]
+            text: string;
+            elements: NodeObject[]
         };
-        name?: {text: string};
+        name?: { text: string };
         expression?: NodeObject;
         arguments?: NodeObject[];
         properties?: any[];
@@ -25,13 +30,16 @@ export namespace Crawler {
 
     interface Deps {
         name: string;
-        selector: string;
-        label: string;
+        selector?: string;
+        label?: string;
         file?: string;
-        directives?: Deps[];
-        providers?: Deps[];
+        providers?: string[];
         templateUrl?: string[];
         styleUrls?: string[];
+        imports?: string[];
+        exports?: string[];
+        declarations?: string[];
+        bootstrap?: string[];
     }
 
     export class Dependencies {
@@ -57,10 +65,10 @@ export namespace Crawler {
 
                 if (path.extname(filePath) === '.ts') {
 
-                  if (filePath.lastIndexOf('.d.ts') === -1) {
-                    logger.info('parsing', filePath);
-                    this.getSourceFileDecorators(file, deps);
-                  }
+                    if (filePath.lastIndexOf('.d.ts') === -1) {
+                        logger.info('parsing', filePath);
+                        this.getSourceFileDecorators(file, deps);
+                    }
 
                 }
 
@@ -75,34 +83,48 @@ export namespace Crawler {
         private getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: Deps[]): void {
             ts.forEachChild(srcFile, (node: ts.Node) => {
 
+                if (node.decorators) {
 
-                if(node.decorators) {
+                    let visitNode = (visitedNode, index) => {
 
-                    let filterByComponent = (node) => /(Component|View)/.test(node.expression.expression.text);
-                    let getComponents = (node) => node.expression.arguments.pop();
-                    let getProps = (nodes) => nodes.properties;
-                    let visitNode = (props, index) => {
+                        let name = this.getSymboleName(node);
+                        let deps: Deps = <Deps>{};
+                        let metadata = node.decorators.pop();
+                        let props = visitedNode.expression.arguments.pop().properties;
 
-                        let componentName = this.getComponentName(node);
-                        let component: Deps = {
-                            selector: this.getComponentSelector(props),
-                            name: componentName,
-                            label: '',
-                            file: srcFile.fileName.split('/').splice(-3).join('/'),
-                            directives: this.getComponentDirectives(props),
-                            providers: this.getComponentProviders(props),
-                            templateUrl: this.getComponentTemplateUrl(props),
-                            styleUrls: this.getComponentStyleUrls(props)
-                        };
+                        if(this.isModule(metadata)) {
+                          deps = {
+                              name,
+                              file: srcFile.fileName.split('/').splice(-3).join('/'),
+                              providers: this.getModuleProviders(props),
+                              declarations: this.getModuleDeclations(props),
+                              imports: this.getModuleImports(props),
+                              exports: this.getModuleExports(props),
+                              bootstrap: this.getModuleBootstrap(props)
+                              __raw: props
+                          };
+                          rawDecorators.push(deps);
+                        }
+                        else if (this.isComponent(metadata)) {
+                          deps = {
+                              name,
+                              file: srcFile.fileName.split('/').splice(-3).join('/'),
+                              selector: this.getComponentSelector(props),
+                              providers: this.getComponentProviders(props),
+                              templateUrl: this.getComponentTemplateUrl(props),
+                              styleUrls: this.getComponentStyleUrls(props),
+                              __raw: props
+                          };
 
-                        rawDecorators.push(component);
-                        this.cache[ componentName ] = component.selector;
+                        }
+
+                        this.cache[name] = deps;
                     }
 
+                    let filterByDecorators = (node) => /(NgModule|Component)/.test(node.expression.expression.text);
+
                     node.decorators
-                        .filter(filterByComponent)
-                        .map(getComponents)
-                        .map(getProps)
+                        .filter(filterByDecorators)
                         .forEach(visitNode);
                 }
                 else {
@@ -113,70 +135,126 @@ export namespace Crawler {
 
         }
 
-        private getComponentName(node): string {
-          return node.name.text;
+        private isComponent(metadata) {
+          return metadata.expression.expression.text === 'Component';
+        }
+
+        private isModule(metadata) {
+          return metadata.expression.expression.text === 'NgModule';
+        }
+
+        private getSymboleName(node): string {
+            return node.name.text;
         }
 
         private getComponentSelector(props: NodeObject[]): string {
-          return this.getComponentDeps(props, 'selector').pop();
+            return this.getComponentDeps(props, 'selector').pop();
+        }
+
+        private getModuleProviders(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'providers').map((name) => {
+              return {
+                  name
+              }
+          });
+        }
+
+        private getModuleDeclations(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'declarations').map((name) => {
+              let component = this.cache[name];
+
+              if(component) {
+                return component;
+              }
+
+              return {name}
+          });
+        }
+
+        private getModuleImports(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'imports').map((name) => {
+              return {
+                  name
+              }
+          });
+        }
+
+        private getModuleExports(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'exports').map((name) => {
+              return {
+                  name
+              }
+          });
+        }
+
+        private getModuleBootstrap(props: NodeObject[]): Deps[] {
+          return this.getComponentDeps(props, 'bootstrap').map((name) => {
+              return {
+                  name
+              }
+          });
         }
 
         private getComponentProviders(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'providers').map( (name) => {
-            return {
-              name,
-              label: '',
-              selector: this.findComponentSelectorByName(name)
-            }
-          });
+            return this.getComponentDeps(props, 'providers').map((name) => {
+                return {
+                    name
+                }
+            });
         }
 
         private getComponentDirectives(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'directives').map( (name) => {
-            return {
-              name,
-              label: '',
-              selector: this.findComponentSelectorByName(name)
-            }
-          });
+            return this.getComponentDeps(props, 'directives').map((name) => {
+                return {
+                    name,
+                    label: '',
+                    selector: this.findComponentSelectorByName(name)
+                }
+            });
         }
 
         private getComponentTemplateUrl(props: NodeObject[]): string[] {
-          return this.getComponentDeps(props, 'templateUrl');
+            return this.sanitizeUrls(this.getComponentDeps(props, 'templateUrl'));
         }
 
         private getComponentStyleUrls(props: NodeObject[]): string[] {
-          return this.getComponentDeps(props, 'styleUrls');
+            return this.sanitizeUrls(this.getComponentDeps(props, 'styleUrls'));
+        }
+
+        private sanitizeUrls(urls: string[]) {
+          return urls.map( url => url.replace('./', '') );
         }
 
         private getComponentDeps(props: NodeObject[], type: string): string[] {
-          return props.filter( (node: NodeObject) => {
-            return node.name.text === type;
-          }).map( (node: NodeObject) => {
 
-            let text = node.initializer.text;
-            if(text) {
+            return props.filter((node: NodeObject) => {
+                return node.name.text === type;
+            }).map((node: NodeObject) => {
 
-              if(text.indexOf('/') !== -1){
-                text = text.split('/').pop();
-              }
+                let text = node.initializer.text;
+                if (text) {
 
-              return [text];
-            }
+                    if (text.indexOf('/') !== -1) {
+                        text = text.split('/').pop();
+                    }
 
-            return node.initializer.elements.map((o: NodeObject) => {
-              if(o.arguments) {
-                return o.arguments.shift().text+'*';
-              }
-              return o.text;
-            });
-          }).pop() || [];
+                    return [text];
+                }
+
+                return node.initializer.elements.map((o: NodeObject) => {
+                    if (o.arguments) {
+                        return o.arguments.shift().text + '*';
+                    }
+                    return o.text;
+                });
+
+            }).pop() || [];
         }
 
         private findComponentSelectorByName(name: string) {
-          return this.cache[name];
+            return this.cache[name];
         }
 
-  }
+    }
 
 }

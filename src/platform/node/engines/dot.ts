@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {logger} from '../../../logger';
+import {DOT_TEMPLATE} from './dot.template';
 
 interface IOptions {
 	name?: string;
@@ -23,65 +24,7 @@ export namespace Engine {
 	export class Dot {
 
 		// http://www.graphviz.org/doc/info/shapes.html
-		template = `
-digraph dependencies {
-  node[shape="ellipse", style="filled", colorscheme={scheme}];
-	splines=ortho;
-
-	/* Graph orientation */
-  rankdir=BT;
-
-  {{~it.components :cmp}}
-  subgraph "{{=cmp.name}}" {
-
-    label="{{=cmp.file}}";
-
-    "{{=cmp.name}}" [shape="component"];
-
-    /* providers:start */
-
-    {{~cmp.providers :provider}}
-      "{{=provider.name}}" [fillcolor=1, shape="ellipse"];
-      "{{=provider.name}}" -> "{{=cmp.name}}" /*[label="{{=cmp.file}}"]*/;
-    {{~}}
-
-    /* providers:end */
-
-    /* directives:start */
-
-    node[shape="cds", style="filled", color=5];
-    {{~cmp.directives :directive}}
-      "{{=directive.name}}" [];
-      "{{=directive.name}}" -> "{{=cmp.name}}" /*[label="{{=cmp.file}}"]*/;
-    {{~}}
-
-    /* directives:end */
-
-		/* templateUrl:start */
-
-    node[shape="note", style="filled", color=7];
-    {{~cmp.templateUrl :url}}
-      "{{=url}}" [];
-      "{{=cmp.name}}" -> "{{=url}}" [style=dotted];
-    {{~}}
-
-    /* templateUrl:end */
-
-		/* styleUrls:start */
-
-    node[shape="note", style="filled", color=8];
-    {{~cmp.styleUrls :url}}
-      "{{=url}}" [];
-      "{{=cmp.name}}" -> "{{=url}}" [style=dotted];
-    {{~}}
-
-    /* styleUrls:end */
-
-  }
-  {{~}}
-
-}
-		`;
+		template = DOT_TEMPLATE;
 
 		cwd = process.cwd();
 
@@ -147,9 +90,7 @@ digraph dependencies {
 
 		private preprocessTemplates(options?) {
 			let doT = require('dot');
-			this.template = this.template
-					.replace(/\{scheme\}/g, options.colorScheme);
-			return doT.template(this.template);
+			return doT.template(this.template.replace(/###scheme###/g, options.colorScheme));
 		}
 
 		private generateJSON(deps) {
@@ -173,7 +114,7 @@ digraph dependencies {
 			fs.outputFile(
 				this.paths.dot,
 				template({
-					components: deps
+					modules: deps
 				}),
 				(error) => {
 					if(error) {
