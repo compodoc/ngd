@@ -1,20 +1,79 @@
+const LEGEND = `
+subgraph cluster_legend {
+  label="Legend";
+  "_MainModule_" [shape="folder", fillcolor=1];
+  "_SubModule_" [shape="folder", fillcolor=1];
+  "_Declarations_" [shape="rect", fillcolor=2];
+  "_Exports_" [shape="rect", fillcolor=4];
+  "_Bootstrap_" [shape="rect", fillcolor=5];
+  "_Providers_" [shape="rect", fillcolor=6];
+
+  "_MainModule_" -> "_Exports_" [style="dashed"];
+  "_MainModule_" -> "_Bootstrap_" [style="dotted"];
+  "_Providers_" -> "_MainModule_" [style="solid"];
+  "_Declarations_" -> "_MainModule_" [style="solid"];
+  "_SubModule_" -> "_MainModule_" [style="solid"];
+}
+`;
+
+const loopBlock = (symbols, attrs, edge='') => {
+  let str = '';
+
+  if (edge === '->') {
+    str = `
+    {{~mod.${symbols} :_symbol}}
+
+      {{?_symbol.alias}}
+        "{{=_symbol.alias}}" -> "{{=mod.name}}" [${attrs}];
+        {{??_symbol.name}}
+        "{{=_symbol.name}}" -> "{{=mod.name}}" [${attrs}];
+      {{?}}
+
+    {{~}}
+    `;
+  }
+  else {
+    str = `
+    {{~mod.${symbols} :_symbol}}
+
+      {{?_symbol.alias}}
+        "{{=_symbol.alias}}" [label="{{=_symbol.alias}}", ${attrs}];
+      {{??_symbol.name}}
+        "{{=_symbol.name}}" [label="{{=_symbol.name}}", ${attrs}];
+      {{?}}
+
+    {{~}}`;
+  }
+
+  return str;
+}
+
 export const DOT_TEMPLATE = `
 digraph dependencies {
-  node[shape="rect", style="filled", colorscheme=###scheme###];
-	splines=true;
-	ratio=fill;
-	rankdir=LR;
+  node [shape="rect", style="filled", colorscheme=###scheme###];
+  ranksep=0.1;
+  compound=false;
+  remincross=true;
+  splines=true;
+  splines=ortho;
+
+  rankdir=LR;
+  rankdir=TB;
+  rankdir=BT;
+
+  ratio=compress;
+  fontname="sans-serif";
 
   {{~it.modules :mod}}
-  subgraph "{{=mod.name}}" {
-    label="{{=mod.name}}";
-		node [shape="folder", fillcolor=3];
+  subgraph "cluster_{{=mod.name}}" {
+    style="dotted";
+		node [shape="folder", fillcolor=1];
 
     /* declarations:start */
 
-		subgraph cluster_declarations {
-			label="Declarations";
-			node [style=filled, shape="rect", fillcolor=2];
+		subgraph cluster_{{=mod.name}}_declarations {
+      style="solid";
+			node [style="filled", shape="rect"];
 
 	    {{~mod.declarations :declaration}}
 				node [fillcolor=2];
@@ -24,15 +83,13 @@ digraph dependencies {
 		}
 
     {{~mod.declarations :declaration}}
-      label="{{=declaration.name}}";
-      "{{=declaration.name}}" -> "{{=mod.name}}";
+      "{{=declaration.name}}" -> "{{=mod.name}}" [style="solid", lhead="cluster_{{=mod.name}}" ltail="cluster_{{=mod.name}}_declarations"];
 
-      subgraph cluster_declarations_providers {
-        label="Component Providers";
+      subgraph "cluster_{{=mod.name}}_{{=declaration.name}}_providers" {
+        style="solid";
         {{~declaration.providers :prov}}
-          label="{{=prov.name}}"
-          node [fillcolor=10, shape="rect"];
-          "{{=prov.name}}" -> "{{=declaration.name}}";
+          node [fillcolor=6, shape="oval", style="filled"];
+          "{{=prov.name}}" -> "{{=declaration.name}}" [lhead="cluster_{{=mod.name}}_declarations" ltail="cluster_{{=mod.name}}_{{=declaration.name}}_providers"];
         {{~}}
       }
 
@@ -42,176 +99,86 @@ digraph dependencies {
 
     /* imports:start */
 
-    subgraph cluster_imports {
-      label="Imports";
-      node [style=filled, fillcolor=3, shape="rect"];
-      {{~mod.imports :imp}}
-        "{{=imp.name}}" [label="{{=imp.name}}", shape="folder"]
-      {{~}}
+    subgraph cluster_{{=mod.name}}_imports {
+      style="solid";
+      node [style="filled", fillcolor=1, shape="rect"];
+
+      ${
+        loopBlock(
+          'imports',
+          'shape="folder"'
+        )
+      }
     }
 
-    {{~mod.imports :imp}}
-      "{{=imp.name}}" -> "{{=mod.name}}";
-    {{~}}
+    ${
+      loopBlock(
+        'imports',
+        'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_imports"',
+        '->'
+      )
+    }
 
     /* imports:end */
 
     /* exports:start */
 
-		subgraph cluster_exports {
-			label="Exports";
-			node [style=filled, fillcolor=4, shape="rect"];
+		subgraph cluster_{{=mod.name}}_exports {
+      style="solid";
+			node [style="filled", fillcolor=4, shape="rect"];
 			{{~mod.exports :exp}}
 				"{{=exp.name}} " [label="{{=exp.name}} ", shape="rect"]
 			{{~}}
 		}
 
     {{~mod.exports :exp}}
-      "{{=mod.name}}" -> "{{=exp.name}} " [style="dashed"];
+      "{{=mod.name}}" -> "{{=exp.name}} " [style="dashed", ltail="cluster_{{=mod.name}}" lhead="cluster_{{=mod.name}}_exports"];
     {{~}}
 
     /* exports:end */
 
     /* bootstrap:start */
 
-    subgraph cluster_bootstrap {
-      label="Bootstrap";
-      node [style=filled, fillcolor=5, shape="rect"];
+    subgraph cluster_{{=mod.name}}_bootstrap {
+      style="solid";
+      node [style="filled", fillcolor=5, shape="rect"];
       {{~mod.bootstrap :bts}}
         "{{=bts.name}} " [label="{{=bts.name}} ", shape="rect"]
       {{~}}
     }
 
     {{~mod.bootstrap :bts}}
-      "{{=mod.name}}" -> "{{=bts.name}} " [style="dotted"];
+      "{{=mod.name}}" -> "{{=bts.name}} " [style="dotted", lhead="cluster_{{=mod.name}}_bootstrap" ltail="cluster_{{=mod.name}}"];
     {{~}}
 
     /* bootstrap:end */
 
     /* providers:start */
 
-    subgraph cluster_providers {
-      label="Module Providers";
-      node [style=filled, fillcolor=7, shape="rect"];
-      {{~mod.providers :provider}}
-        "{{=provider.name}}" [label="{{=provider.name}}", shape="rect"]
-      {{~}}
+    subgraph cluster_{{=mod.name}}_providers {
+      style="solid";
+      node [style="filled", fillcolor=6, shape="rect"];
+
+      ${
+        loopBlock(
+          'providers',
+          'shape="oval"'
+        )
+      }
     }
 
-    {{~mod.providers :provider}}
-      "{{=provider.name}}" -> "{{=mod.name}}";
-    {{~}}
+    ${
+      loopBlock(
+        'providers',
+        'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_providers"',
+        '->'
+      )
+    }
 
     /* providers:end */
   }
   {{~}}
 
-}
-`;
-
-
-
-
-let xxx = `
-digraph dependencies {
-  node[shape="rect", style="filled", colorscheme=###scheme###];
-	splines=true;
-	ratio=fill;
-
-	/* Graph orientation */
-	rankdir=LR;
-
-  {{~it.modules :mod}}
-  subgraph "{{=mod.name}}" {
-    label="{{=mod.name}}";
-		node [shape="folder"];
-		color=1;
-
-    /* declarations:start */
-
-		subgraph cluster_declarations {
-			label="declarations";
-			node [style=filled, shape="rect"];
-			color=2;
-
-	    {{~mod.declarations :declaration}}
-	      label="{{=declaration.name}}";
-				node [fillcolor=2];
-	      "{{=declaration.name}}" -> "{{=mod.name}}";
-
-				{{~declaration.providers :prov}}
-					label="{{=prov.name}}"
-					node [fillcolor=10];
-					"{{=prov.name}}" -> "{{=declaration.name}}";
-				{{~}}
-
-	    {{~}}
-
-		}
-
-    /* declarations:end */
-
-    /* imports:start */
-
-		subgraph cluster_imports {
-			label="imports";
-			node [style=filled, shape="rect"];
-			color=3;
-			{{~mod.imports :imp}}
-				"{{=imp.name}}" [label="{{=imp.name}}", shape="folder"]
-				"{{=imp.name}}" -> "{{=mod.name}}";
-			{{~}}
-		}
-
-    /* imports:end */
-
-    /* exports:start */
-
-		subgraph cluster_exports {
-			label="exports";
-			node [style=filled, shape="rect"];
-			color=4;
-			{{~mod.exports :exp}}
-				"{{=exp.name}}" [label="{{=exp.name}}", shape="folder"]
-				"{{=exp.name}}" -> "{{=mod.name}}";
-			{{~}}
-		}
-
-    /* exports:end */
-
-    /* bootstrap:start */
-
-		subgraph cluster_bootstrap {
-			label="bootstrap";
-			node [style=filled, shape="rect"];
-			color=4;
-			{{~mod.bootstrap :bts}}
-				"{{=bts.name}}" [label="{{=bts.name}}", shape="folder"]
-				"{{=bts.name}}" -> "{{=mod.name}}";
-			{{~}}
-		}
-
-    /* bootstrap:end */
-
-    /* providers:start */
-
-		subgraph cluster_providers {
-			label="providers";
-			node [style=filled, shape="rect"];
-			color=6;
-
-	    {{~mod.providers :provider}}
-	      label="{{=provider.name}}";
-				node [fillcolor=6];
-	      "{{=provider.name}}" -> "{{=mod.name}}";
-	    {{~}}
-
-		}
-
-    /* providers:end */
-
-  }
-  {{~}}
-
+  /* ${LEGEND} */
 }
 `;

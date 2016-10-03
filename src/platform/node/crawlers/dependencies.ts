@@ -17,8 +17,10 @@ export namespace Crawler {
         end: Number;
         text: string;
         initializer: {
+            name: { text: string };
             text: string;
-            elements: NodeObject[]
+            elements: NodeObject[],
+            expression: NodeObject
         };
         name?: { text: string };
         expression?: NodeObject;
@@ -33,13 +35,19 @@ export namespace Crawler {
         selector?: string;
         label?: string;
         file?: string;
-        providers?: string[];
         templateUrl?: string[];
         styleUrls?: string[];
-        imports?: string[];
-        exports?: string[];
-        declarations?: string[];
-        bootstrap?: string[];
+        providers?: Deps[];
+        imports?: Deps[];
+        exports?: Deps[];
+        declarations?: Deps[];
+        bootstrap?: Deps[];
+        __raw?: any
+    }
+
+    interface SymbolDeps {
+      full: string;
+      alias: string;
     }
 
     export class Dependencies {
@@ -47,7 +55,8 @@ export namespace Crawler {
         private files: string[];
         private program: ts.Program;
         private engine: any;
-        private cache: any = {};
+        private __cache: any = {};
+        private __nsModule: any = {};
 
         constructor(file: string[]) {
             this.files = file;
@@ -59,7 +68,9 @@ export namespace Crawler {
 
         getDependencies() {
             let deps: Deps[] = [];
-            this.program.getSourceFiles().map((file) => {
+            let sourceFiles = this.program.getSourceFiles() || [];
+
+            sourceFiles.map((file) => {
 
                 let filePath = file.fileName;
 
@@ -67,7 +78,17 @@ export namespace Crawler {
 
                     if (filePath.lastIndexOf('.d.ts') === -1) {
                         logger.info('parsing', filePath);
-                        this.getSourceFileDecorators(file, deps);
+
+                        try {
+                          this.getSourceFileDecorators(file, deps);
+                        }
+                        catch(e) {
+                          logger.fatal('Ouch', filePath);
+                          logger.fatal('', e);
+                          logger.warn('ignoring', filePath);
+                          logger.warn('see error', '');
+                          console.trace(e);
+                        }
                     }
 
                 }
@@ -80,8 +101,10 @@ export namespace Crawler {
         }
 
 
-        private getSourceFileDecorators(srcFile: ts.SourceFile, rawDecorators: Deps[]): void {
+        private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Deps[]): void {
+
             ts.forEachChild(srcFile, (node: ts.Node) => {
+
 
                 if (node.decorators) {
 
@@ -100,10 +123,10 @@ export namespace Crawler {
                               declarations: this.getModuleDeclations(props),
                               imports: this.getModuleImports(props),
                               exports: this.getModuleExports(props),
-                              bootstrap: this.getModuleBootstrap(props)
+                              bootstrap: this.getModuleBootstrap(props),
                               __raw: props
                           };
-                          rawDecorators.push(deps);
+                          outputSymbols.push(deps);
                         }
                         else if (this.isComponent(metadata)) {
                           deps = {
@@ -118,7 +141,9 @@ export namespace Crawler {
 
                         }
 
-                        this.cache[name] = deps;
+                        this.debug(deps);
+
+                        this.__cache[name] = deps;
                     }
 
                     let filterByDecorators = (node) => /(NgModule|Component)/.test(node.expression.expression.text);
@@ -128,11 +153,26 @@ export namespace Crawler {
                         .forEach(visitNode);
                 }
                 else {
-                    //process.stdout.write('.');
+                    // process.stdout.write('.');
                 }
 
             });
 
+        }
+        private debug(deps: Deps) {
+          logger.debug('debug', `${deps.name}:`);
+
+          [
+            'imports', 'exports', 'declarations', 'providers', 'bootstrap'
+          ].forEach( symbols => {
+            if (deps[symbols] && deps[symbols].length > 0) {
+              logger.debug('', `- ${symbols}:`);
+              deps[symbols].map(i=>i.name).forEach( d  => {
+                logger.debug('', `\t- ${d}`);
+              });
+
+            }
+          });
         }
 
         private isComponent(metadata) {
@@ -148,111 +188,174 @@ export namespace Crawler {
         }
 
         private getComponentSelector(props: NodeObject[]): string {
-            return this.getComponentDeps(props, 'selector').pop();
+            return this.getSymbolDeps(props, 'selector').pop();
         }
 
         private getModuleProviders(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'providers').map((name) => {
-              return {
-                  name
-              }
+          return this.getSymbolDeps(props, 'providers').map((name) => {
+              return this.parseDeepIndentifier(name);
           });
         }
 
         private getModuleDeclations(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'declarations').map((name) => {
-              let component = this.cache[name];
+          return this.getSymbolDeps(props, 'declarations').map((name) => {
+              let component = this.findComponentSelectorByName(name);
 
               if(component) {
                 return component;
               }
 
-              return {name}
+              return this.parseDeepIndentifier(name);
           });
         }
 
         private getModuleImports(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'imports').map((name) => {
-              return {
-                  name
-              }
+          return this.getSymbolDeps(props, 'imports').map((name) => {
+              return this.parseDeepIndentifier(name);
           });
         }
 
         private getModuleExports(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'exports').map((name) => {
-              return {
-                  name
-              }
+          return this.getSymbolDeps(props, 'exports').map((name) => {
+              return this.parseDeepIndentifier(name);
           });
         }
 
         private getModuleBootstrap(props: NodeObject[]): Deps[] {
-          return this.getComponentDeps(props, 'bootstrap').map((name) => {
-              return {
-                  name
-              }
+          return this.getSymbolDeps(props, 'bootstrap').map((name) => {
+              return this.parseDeepIndentifier(name);
           });
         }
 
         private getComponentProviders(props: NodeObject[]): Deps[] {
-            return this.getComponentDeps(props, 'providers').map((name) => {
-                return {
-                    name
-                }
+            return this.getSymbolDeps(props, 'providers').map((name) => {
+                return this.parseDeepIndentifier(name);
             });
         }
 
         private getComponentDirectives(props: NodeObject[]): Deps[] {
-            return this.getComponentDeps(props, 'directives').map((name) => {
-                return {
-                    name,
-                    label: '',
-                    selector: this.findComponentSelectorByName(name)
-                }
+            return this.getSymbolDeps(props, 'directives').map((name) => {
+                let identifier = this.parseDeepIndentifier(name);
+                identifier.selector = this.findComponentSelectorByName(name);
+                identifier.label = '';
+                return identifier;
             });
         }
 
+        private parseDeepIndentifier(name: string): any {
+          let nsModule = name.split('.');
+          if(nsModule.length > 1) {
+
+            // cache deps with the same namespace (Shared.*)
+            if(this.__nsModule[ nsModule[0] ]) {
+              this.__nsModule[ nsModule[0] ].push(name)
+            }
+            else {
+              this.__nsModule[ nsModule[0] ] = [name];
+            }
+
+            return {
+              ns: nsModule[0],
+              name
+            }
+          }
+          return {
+              name
+          };
+        }
+
         private getComponentTemplateUrl(props: NodeObject[]): string[] {
-            return this.sanitizeUrls(this.getComponentDeps(props, 'templateUrl'));
+            return this.sanitizeUrls(this.getSymbolDeps(props, 'templateUrl'));
         }
 
         private getComponentStyleUrls(props: NodeObject[]): string[] {
-            return this.sanitizeUrls(this.getComponentDeps(props, 'styleUrls'));
+            return this.sanitizeUrls(this.getSymbolDeps(props, 'styleUrls'));
         }
 
         private sanitizeUrls(urls: string[]) {
           return urls.map( url => url.replace('./', '') );
         }
 
-        private getComponentDeps(props: NodeObject[], type: string): string[] {
+        private getSymbolDeps(props: NodeObject[], type: string): string[] {
 
-            return props.filter((node: NodeObject) => {
+            let deps = props.filter((node: NodeObject) => {
                 return node.name.text === type;
-            }).map((node: NodeObject) => {
+            });
+
+            let parseSymbolText = (text: string) => {
+              if (text.indexOf('/') !== -1) {
+                  text = text.split('/').pop();
+              }
+              return [
+                text
+              ];
+            };
+
+            let buildIdentifierName = (node: NodeObject, name='') => {
+              if (node.expression) {
+                name = name ? `.${name}` : name;
+                return `${ buildIdentifierName(node.expression, node.name.text) }${name}`
+              }
+              return `${node.text}.${name}`;
+            }
+
+            let parseSymbolElements = (o: NodeObject | any): string => {
+              // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
+              if (o.arguments) {
+                let className = o.expression.expression.text;
+                let functionName = o.expression.name.text;
+
+                // function arguments could be really complexe. There are so
+                // many use cases that we can't handle. Just print "..." to indicate
+                // that we have arguments.
+                //
+                // let functionArgs = o.arguments.map(arg => arg.text).join(',');
+
+                let functionArgs = o.arguments.length > 0 ? 'args' : '';
+                let text = `${className}.${functionName}(${functionArgs})`;
+                return text;
+              }
+
+              // parse expressions such as: Shared.Module
+              else if (o.expression) {
+                let identifier = buildIdentifierName(o);
+                return identifier;
+              }
+
+              return o.text;
+            };
+
+            let parseSymbols = (node: NodeObject) => {
 
                 let text = node.initializer.text;
                 if (text) {
-
-                    if (text.indexOf('/') !== -1) {
-                        text = text.split('/').pop();
-                    }
-
-                    return [text];
+                  return parseSymbolText(text);
                 }
 
-                return node.initializer.elements.map((o: NodeObject) => {
-                    if (o.arguments) {
-                        return o.arguments.shift().text + '*';
-                    }
-                    return o.text;
-                });
+                else if (node.initializer.expression) {
+                  let identifier = parseSymbolElements(node.initializer);
+                  return [
+                    identifier
+                  ];
+                  // if(node.initializer.expression.expression) {
+                  // }
+                  // else {
+                  //   return [
+                  //     `${node.initializer.expression.text}.${node.initializer.name.text}`
+                  //   ];
+                  // }
+                }
 
-            }).pop() || [];
+                else if (node.initializer.elements) {
+                  return node.initializer.elements.map(parseSymbolElements);
+                }
+
+            };
+            return deps.map(parseSymbols).pop() || [];
         }
 
         private findComponentSelectorByName(name: string) {
-            return this.cache[name];
+            return this.__cache[name];
         }
 
     }
