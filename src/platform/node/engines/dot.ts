@@ -153,10 +153,30 @@ export namespace Engine {
 
 		private generateHTML() {
 			let svgContent = fs.readFileSync(this.paths.svg).toString();
+			let cssContent = `
+			<style>
+				.edge {
+					transition: opacity 0.5s;
+					opacity:0.2;
+				}
+				.node {
+					transition: transform 0.1s;
+					transform-origin: center center;
+				}
+				.node:hover {
+					transform: scale(1.03);
+				}
+				.node:hover + .edge {
+					opacity:1;
+				}
+			</style>`;
+			let htmlContent = `
+				${svgContent}
+			`;
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.html,
-				svgContent,
+				htmlContent,
 				(error) => {
 					if(error) {
 						d.reject(error);

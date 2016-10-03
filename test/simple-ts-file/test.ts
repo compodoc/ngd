@@ -1,4 +1,5 @@
-import {Component} from 'angular2/core';
+import {Component, NgModule, Directive} from '@angular2/core';
+import {BrowserModule} from '@angular2/platform-browser';
 
 @Component({
 	inputs: ['input1', 'input2'],
@@ -23,7 +24,10 @@ export class Test1 {
 	constructor() {}
 }
 
+@Directive({selector:'app-foo'})
 class Foo {}
+
+@Component({selector:'app-bar'})
 class Bar {}
 class Service {}
 
@@ -49,3 +53,11 @@ export class Test2 {
 export class Test3 {
 	constructor() {}
 }
+
+
+@NgModule({
+  declarations: [Foo, Bar],
+  imports: [Browser],
+  bootstrap: [Foo]
+})
+export TestModule {}

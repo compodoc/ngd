@@ -1,5 +1,7 @@
 [![GetBadges Game](https://manekinekko-angular2-dependencies-graph.getbadges.io/shield/company/manekinekko-angular2-dependencies-graph)](https://manekinekko-angular2-dependencies-graph.getbadges.io/?ref=shield-game)
 [![Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/pr)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
+[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/issue)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
 [![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
 
 angular2-dependencies-graph
@@ -21,16 +23,16 @@ Install from npm: `npm install -g angular2-dependencies-graph`
 ## Usage
 
 ```
-$ ng2-dg --help
+$ ngd --help
 
-Usage: ng2-dg [options]
+Usage: ngd [options]
 
 Options:
 
   -h, --help               output usage information
   -V, --version            output the version number
   -f, --file [file]        Entry *.ts file
-  -t, --tsconfig [config]  A tsconfig.json
+  -p, --tsconfig [config]  A tsconfig.json
   -l, --files [list]       A list of *.ts files
   -o, --open               Open the generated diagram file
   -d, --output [folder]    Where to store the generated files
@@ -40,10 +42,10 @@ Options:
 Run inside your project (where your `tsconfig.json` is located):
 
 ```bash
-$ cd my-awesome-angular2-app/
-$ ng2-dg
+$ cd my-awesome-cli-angular2-app/
+$ ngd
 $ # or
-$ ng2-dg --tsconfig ./tsconfig.json
+$ ngd -p ./tsconfig.json
 ```
 
 Note: This will read the `files` entry point in your `tsconfig.json` and crawl your app. If the entry point is not
@@ -52,8 +54,8 @@ found, all `*.ts` files will be crawled, but not those mentioned in the `exclude
 ### 2) provide an entry file:
 
 ```bash
-$ cd my-awesome-angular2-app/
-$ ng2-dg --file app.ts
+$ cd my-awesome-cli-angular2-app/
+$ ngd -f src/main.ts
 ```
 
 NOTE: The file you provide should contain your root component.
