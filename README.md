@@ -28,13 +28,14 @@ Usage: ngd [options]
 
 Options:
 
-  -h, --help               output usage information
-  -V, --version            output the version number
-  -f, --file [file]        Entry *.ts file
-  -p, --tsconfig [config]  A tsconfig.json
-  -l, --files [list]       A list of *.ts files
-  -o, --open               Open the generated diagram file
-  -d, --output [folder]    Where to store the generated files
+  -h, --help                                output usage information
+  -V, --version                             output the version number
+  -f, --file [file]                         Entry *.ts file
+  -p, --tsconfig [config]                   A tsconfig.json
+  -l, --files [list]                        A list of *.ts files
+  -o, --open                                Open the generated diagram file
+  -t, --output-formats <output-formats>     Output formats (default: html,svg,dot,json)
+  -d, --output [folder]                     Where to store the generated files
 ```
 
 ### 1) use a `tsconfig.json`:
