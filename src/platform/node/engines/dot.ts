@@ -5,6 +5,7 @@ import {DOT_TEMPLATE} from './dot.template';
 interface IOptions {
 	name?: string;
 	output?: string;
+	outputFormats?: string;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -49,6 +50,7 @@ export namespace Engine {
 			this.options = {
 				name: `${ appName }`,
 				output: `${baseDir}/${ appName }`,
+				outputFormats: options.outputFormats,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -79,13 +81,30 @@ export namespace Engine {
 		}
 
 		generateGraph(deps) {
-			let template = this.preprocessTemplates(this.options.dot);
+			let template = this.preprocessTemplates(this.options.dot),
+				generators = [];
 
-			return this.generateDot(template, deps)
-				.then( _ => this.generateJSON(deps) )
-				.then( _ => this.generateSVG() )
-				.then( _ => this.generateHTML() )
-				//.then( _ => this.generatePNG() );
+			for (let entry of this.options.outputFormats) {
+			    switch (entry) {
+					case 'html':
+						generators.push(this.generateHTML())
+						break;
+					case 'svg':
+						generators.push(this.generateSVG())
+						break;
+					case 'json':
+						generators.push(this.generateJSON(deps))
+						break;
+					case 'png':
+						generators.push(this.generatePNG())
+						break;
+					case 'dot':
+						generators.push(this.generateDot(template, deps))
+						break;
+				}
+			}
+
+			return q.all(generators);
 		}
 
 		private preprocessTemplates(options?) {
