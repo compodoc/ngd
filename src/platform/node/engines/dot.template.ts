@@ -61,12 +61,69 @@ digraph dependencies {
   rankdir=TB;
   rankdir=BT;
 
+  label=<
+    <table BORDER="0">
+        <tr>
+            <td colspan="2"><b>Legend</b></td>
+        </tr>
+        <tr>
+            <td>
+                <table BORDER="0">
+                    <tr>
+                        <td bgcolor="#ffffb3" width="20"></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left">Declarations</td>
+        </tr>
+        <tr>
+            <td>
+                <table BORDER="0">
+                    <tr>
+                        <td bgcolor="#8dd3c7"></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left">Module</td>
+        </tr>
+        <tr>
+            <td>
+                <table BORDER="0">
+                    <tr>
+                        <td bgcolor="#80b1d3"></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left">Bootstrap</td>
+        </tr>
+        <tr>
+            <td>
+                <table BORDER="0">
+                    <tr>
+                        <td bgcolor="#fdb462"></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left">Providers</td>
+        </tr>
+        <tr>
+            <td>
+                <table BORDER="0">
+                    <tr>
+                        <td bgcolor="#fb8072"></td>
+                    </tr>
+                </table>
+            </td>
+            <td align="left">Exports</td>
+        </tr>
+    </table>>;
+
   ratio=compress;
   fontname="sans-serif";
 
   {{~it.modules :mod}}
   subgraph "cluster_{{=mod.name}}" {
-    style="dotted";
+    label="";
 		node [shape="folder", fillcolor=1];
 
     /* declarations:start */
