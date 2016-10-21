@@ -16,6 +16,7 @@ export namespace Application {
       .option('-p, --tsconfig [config]', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
       .option('-l, --files [list]', 'A list of *.ts files')
       .option('-o, --open', 'Open the generated HTML diagram file', false)
+      .option('-g, --display-legend [display-legend]', 'Display the legend of graph default(true)', true)
       .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
       .parse(process.argv);
 
@@ -112,7 +113,8 @@ export namespace Application {
     }
 
     let engine = new Engine.Dot({
-      output: program.output
+      output: program.output,
+      displayLegend: program.displayLegend
     });
     engine
       .generateGraph(deps)
