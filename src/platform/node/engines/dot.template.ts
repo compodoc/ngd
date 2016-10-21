@@ -48,6 +48,7 @@ export const LEGEND = `<
 </table>
 >`;
 
+
 const loopBlock = (symbols, attrs, edge='') => {
   let str = '';
 
