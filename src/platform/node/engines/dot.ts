@@ -5,6 +5,7 @@ import {DOT_TEMPLATE} from './dot.template';
 interface IOptions {
 	name?: string;
 	output?: string;
+	outputFormats?: string;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -17,6 +18,8 @@ export namespace Engine {
 
 	let fs = require('fs-extra');
 	let q = require('q');
+    let cleanDot:boolean = false;
+    let cleanSvg:boolean = false;
 
 	let appName = require('../../../../package.json').name;
 
@@ -49,6 +52,7 @@ export namespace Engine {
 			this.options = {
 				name: `${ appName }`,
 				output: `${baseDir}/${ appName }`,
+				outputFormats: options.outputFormats,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -79,14 +83,62 @@ export namespace Engine {
 		}
 
 		generateGraph(deps) {
-			let template = this.preprocessTemplates(this.options.dot);
+			let template = this.preprocessTemplates(this.options.dot),
+				generators = [];
 
-			return this.generateDot(template, deps)
-				.then( _ => this.generateJSON(deps) )
-				.then( _ => this.generateSVG() )
-				.then( _ => this.generateHTML() )
-				//.then( _ => this.generatePNG() );
+            // Handle svg dependency with dot, and html with svg
+            if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps));
+            }
+            if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ));
+                if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
+
+            if (this.options.outputFormats.indexOf('json') > -1) {
+                generators.push(this.generateJSON(deps));
+            }
+
+            if (this.options.outputFormats.indexOf('html') > -1) {
+                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ).then( _ => this.generateHTML() ));
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
+                    cleanSvg = true;
+                }
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
+            /*if (this.options.outputFormats.indexOf('png') > -1) {
+                generators.push(this.generatePNG());
+            }*/
+
+            return q.all(generators).then(_ => this.cleanGeneratedFiles());
 		}
+
+        private cleanGeneratedFiles() {
+            let d = q.defer(),
+                removeFile = (path) => {
+                    let p = q.defer();
+                    fs.unlink(path, (error) => {
+                        if (error) {
+                            p.reject(error);
+                        } else {
+                            p.resolve();
+                        }
+                    });
+                    return p.promise;
+                },
+                cleaners = [];
+            if (cleanDot) {
+                cleaners.push(removeFile(this.paths.dot));
+            }
+            if (cleanSvg) {
+                cleaners.push(removeFile(this.paths.svg));
+            }
+			return q.all(cleaners);
+        }
 
 		private preprocessTemplates(options?) {
 			let doT = require('dot');
