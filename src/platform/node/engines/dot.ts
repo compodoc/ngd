@@ -1,11 +1,12 @@
 import * as path from 'path';
 import {logger} from '../../../logger';
-import {DOT_TEMPLATE} from './dot.template';
+import {DOT_TEMPLATE, LEGEND} from './dot.template';
 
 interface IOptions {
 	name?: string;
 	output?: string;
 	outputFormats?: string;
+	displayLegend?: boolean;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -53,6 +54,7 @@ export namespace Engine {
 				name: `${ appName }`,
 				output: `${baseDir}/${ appName }`,
 				outputFormats: options.outputFormats,
+				displayLegend: options.displayLegend,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -83,7 +85,7 @@ export namespace Engine {
 		}
 
 		generateGraph(deps) {
-			let template = this.preprocessTemplates(this.options.dot),
+			let template = this.preprocessTemplates(this.options),
 				generators = [];
 
             // Handle svg dependency with dot, and html with svg
@@ -141,8 +143,14 @@ export namespace Engine {
         }
 
 		private preprocessTemplates(options?) {
-			let doT = require('dot');
-			return doT.template(this.template.replace(/###scheme###/g, options.colorScheme));
+			let doT = require('dot'),
+				_result;
+			if(options.displayLegend === 'true') {
+				_result = this.template.replace(/###legend###/g, LEGEND);
+			} else {
+				_result = this.template.replace(/###legend###/g, '""');
+			}
+			return doT.template(_result.replace(/###scheme###/g, options.dot.colorScheme));
 		}
 
 		private generateJSON(deps) {
