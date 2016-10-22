@@ -93,7 +93,7 @@ export namespace Engine {
 		private preprocessTemplates(options?) {
 			let doT = require('dot'),
 			   _result;
-			 if(options.displayLegend === 'true') {
+			 if(options.displayLegend === 'true' || options.displayLegend) {
 			   _result = this.template.replace(/###legend###/g, LEGEND);
 			 } else {
 			   _result = this.template.replace(/###legend###/g, '""');

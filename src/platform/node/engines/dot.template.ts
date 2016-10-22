@@ -8,7 +8,7 @@ export const LEGEND = `<
             <table BORDER="0">
                 <tr>
                     <td bgcolor="#ffffb3" width="20"></td>
-                    <td>&nbsp;Declarations</td>
+                    <td>  Declarations</td>
                 </tr>
             </table>
         </td>
@@ -16,7 +16,7 @@ export const LEGEND = `<
             <table BORDER="0">
                 <tr>
                     <td bgcolor="#8dd3c7" width="20"></td>
-                    <td>&nbsp;Module</td>
+                    <td>  Module</td>
                 </tr>
             </table>
         </td>
@@ -24,7 +24,7 @@ export const LEGEND = `<
             <table BORDER="0">
                 <tr>
                     <td bgcolor="#80b1d3" width="20"></td>
-                    <td>&nbsp;Bootstrap</td>
+                    <td>  Bootstrap</td>
                 </tr>
             </table>
         </td>
@@ -32,7 +32,7 @@ export const LEGEND = `<
             <table BORDER="0">
                 <tr>
                     <td bgcolor="#fdb462" width="20"></td>
-                    <td>&nbsp;Providers</td>
+                    <td>  Providers</td>
                 </tr>
             </table>
         </td>
@@ -40,7 +40,7 @@ export const LEGEND = `<
             <table BORDER="0">
                 <tr>
                     <td bgcolor="#fb8072" width="20"></td>
-                    <td>&nbsp;Exports</td>
+                    <td>  Exports</td>
                 </tr>
             </table>
         </td>
