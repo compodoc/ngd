@@ -1,10 +1,11 @@
 import * as path from 'path';
 import {logger} from '../../../logger';
-import {DOT_TEMPLATE} from './dot.template';
+import {DOT_TEMPLATE, LEGEND} from './dot.template';
 
 interface IOptions {
 	name?: string;
 	output?: string;
+	displayLegend?: boolean;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -49,6 +50,7 @@ export namespace Engine {
 			this.options = {
 				name: `${ appName }`,
 				output: `${baseDir}/${ appName }`,
+				displayLegend: options.displayLegend,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -79,7 +81,7 @@ export namespace Engine {
 		}
 
 		generateGraph(deps) {
-			let template = this.preprocessTemplates(this.options.dot);
+			let template = this.preprocessTemplates(this.options);
 
 			return this.generateDot(template, deps)
 				.then( _ => this.generateJSON(deps) )
@@ -89,8 +91,14 @@ export namespace Engine {
 		}
 
 		private preprocessTemplates(options?) {
-			let doT = require('dot');
-			return doT.template(this.template.replace(/###scheme###/g, options.colorScheme));
+			let doT = require('dot'),
+			   _result;
+			 if(options.displayLegend === 'true' || options.displayLegend) {
+			   _result = this.template.replace(/###legend###/g, LEGEND);
+			 } else {
+			   _result = this.template.replace(/###legend###/g, '""');
+			 }
+			 return doT.template(_result.replace(/###scheme###/g, options.dot.colorScheme));
 		}
 
 		private generateJSON(deps) {

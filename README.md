@@ -34,6 +34,7 @@ Options:
   -p, --tsconfig [config]  A tsconfig.json
   -l, --files [list]       A list of *.ts files
   -o, --open               Open the generated diagram file
+  -g, --display-legend     Display the legend of graph (default: true)
   -d, --output [folder]    Where to store the generated files
 ```
 

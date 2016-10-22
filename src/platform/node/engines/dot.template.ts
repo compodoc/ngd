@@ -1,20 +1,52 @@
-const LEGEND = `
-subgraph cluster_legend {
-  label="Legend";
-  "_MainModule_" [shape="folder", fillcolor=1];
-  "_SubModule_" [shape="folder", fillcolor=1];
-  "_Declarations_" [shape="rect", fillcolor=2];
-  "_Exports_" [shape="rect", fillcolor=4];
-  "_Bootstrap_" [shape="rect", fillcolor=5];
-  "_Providers_" [shape="rect", fillcolor=6];
-
-  "_MainModule_" -> "_Exports_" [style="dashed"];
-  "_MainModule_" -> "_Bootstrap_" [style="dotted"];
-  "_Providers_" -> "_MainModule_" [style="solid"];
-  "_Declarations_" -> "_MainModule_" [style="solid"];
-  "_SubModule_" -> "_MainModule_" [style="solid"];
-}
-`;
+export const LEGEND = `<
+<table BORDER="0">
+    <tr>
+        <td colspan="5" align="center"><b>Legend</b></td>
+    </tr>
+    <tr>
+        <td>
+            <table BORDER="0">
+                <tr>
+                    <td bgcolor="#ffffb3" width="20"></td>
+                    <td>  Declarations</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table BORDER="0">
+                <tr>
+                    <td bgcolor="#8dd3c7" width="20"></td>
+                    <td>  Module</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table BORDER="0">
+                <tr>
+                    <td bgcolor="#80b1d3" width="20"></td>
+                    <td>  Bootstrap</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table BORDER="0">
+                <tr>
+                    <td bgcolor="#fdb462" width="20"></td>
+                    <td>  Providers</td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table BORDER="0">
+                <tr>
+                    <td bgcolor="#fb8072" width="20"></td>
+                    <td>  Exports</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+>`;
 
 const loopBlock = (symbols, attrs, edge='') => {
   let str = '';
@@ -61,11 +93,14 @@ digraph dependencies {
   rankdir=TB;
   rankdir=BT;
 
+  label=###legend###;
+
   ratio=compress;
   fontname="sans-serif";
 
   {{~it.modules :mod}}
   subgraph "cluster_{{=mod.name}}" {
+    label="";
     style="dotted";
 		node [shape="folder", fillcolor=1];
 
@@ -178,7 +213,5 @@ digraph dependencies {
     /* providers:end */
   }
   {{~}}
-
-  /* ${LEGEND} */
 }
 `;
