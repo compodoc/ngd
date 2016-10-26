@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { FooDirective } from './shared/foo.directive';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { AppComponent } from './app.component';
     'Component1'
     'Component2',
     'Component3',
-    'Component4'
+    'Component4',
+    FooDirective
   ],
   imports: [
     BrowserModule,
