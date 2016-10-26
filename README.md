@@ -24,7 +24,6 @@ Install from Yarn:
 yarn global add angular2-dependencies-graph
 ```
 
-
 ## Usage
 
 ```
