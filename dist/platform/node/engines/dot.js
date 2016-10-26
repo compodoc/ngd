@@ -58,6 +58,7 @@ var Engine;
                 .then(function (_) { return _this.generateJSON(deps); })
                 .then(function (_) { return _this.generateSVG(); })
                 .then(function (_) { return _this.generateHTML(); });
+            // todo(WCH): disabling SVG to PNG due to some errors with phantomjs
             //.then( _ => this.generatePNG() );
         };
         Dot.prototype.preprocessTemplates = function (options) {

@@ -85,6 +85,8 @@ export namespace Engine {
 				.then( _ => this.generateJSON(deps) )
 				.then( _ => this.generateSVG() )
 				.then( _ => this.generateHTML() )
+
+				// todo(WCH): disabling SVG to PNG due to some errors with phantomjs
 				//.then( _ => this.generatePNG() );
 		}
 
