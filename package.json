@@ -7,8 +7,7 @@
     "start": "npm run tsc",
     "deploy": "npm run tsc && npm version patch && npm publish",
     "install": "npm run tsc",
-    "tsc": "./node_modules/.bin/tsc --newLine LF",
-    "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "tsc": "./node_modules/.bin/tsc --newLine LF"
   },
   "bin": {
     "ngd": "bin/index.js"
@@ -34,7 +33,6 @@
     "@types/typescript": "0.4.29",
     "colors": "1.1.2",
     "commander": "2.9.0",
-    "conventional-changelog-cli": "1.1.1",
     "dot": "1.0.3",
     "fs-extra": "0.26.2",
     "gulp-util": "3.0.7",
