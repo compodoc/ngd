@@ -35,6 +35,7 @@ Options:
   -l, --files [list]       A list of *.ts files
   -o, --open               Open the generated diagram file
   -g, --display-legend     Display the legend of graph (default: true)
+  -s, --silent             In silent mode, log messages aren't logged in the console
   -d, --output [folder]    Where to store the generated files
 ```
 
