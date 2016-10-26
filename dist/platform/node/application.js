@@ -1,9 +1,9 @@
 "use strict";
-var fs = require('fs');
-var path = require('path');
-var dot_1 = require('./engines/dot');
-var dependencies_1 = require('./crawlers/dependencies');
-var logger_1 = require('../../logger');
+var fs = require("fs");
+var path = require("path");
+var dot_1 = require("./engines/dot");
+var dependencies_1 = require("./crawlers/dependencies");
+var logger_1 = require("../../logger");
 var pkg = require('../../../package.json');
 var program = require('commander');
 var Application;
@@ -23,7 +23,7 @@ var Application;
     };
     Application.run = function () {
         if (program.silent) {
-            logger_1.logger.enabled = false;
+            logger_1.logger.silent = false;
         }
         var files = [];
         if (program.file) {
@@ -71,7 +71,6 @@ var Application;
                     };
                     files = walk('.');
                 }
-                // normalize paths
                 files = files.map(function (file) {
                     return path.join(path.dirname(program.tsconfig), file);
                 });
@@ -84,7 +83,6 @@ var Application;
         else {
             outputHelp();
         }
-        // logger.info('including files', JSON.stringify(files));
         var crawler = new dependencies_1.Crawler.Dependencies(files);
         var deps = crawler.getDependencies();
         if (deps.length <= 0) {

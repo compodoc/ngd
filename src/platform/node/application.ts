@@ -28,7 +28,7 @@ export namespace Application {
   export let run = () => {
 
     if(program.silent) {
-        logger.enabled = false;
+        logger.silent = false;
     }
 
     let files = [];
