@@ -28,6 +28,7 @@ var Engine;
             this.options = {
                 name: "" + appName,
                 output: baseDir + "/" + appName,
+                displayLegend: options.displayLegend,
                 dot: {
                     shapeModules: 'component',
                     shapeProviders: 'ellipse',
@@ -53,7 +54,7 @@ var Engine;
         }
         Dot.prototype.generateGraph = function (deps) {
             var _this = this;
-            var template = this.preprocessTemplates(this.options.dot);
+            var template = this.preprocessTemplates(this.options);
             return this.generateDot(template, deps)
                 .then(function (_) { return _this.generateJSON(deps); })
                 .then(function (_) { return _this.generateSVG(); })
@@ -63,7 +64,14 @@ var Engine;
         };
         Dot.prototype.preprocessTemplates = function (options) {
             var doT = require('dot');
-            return doT.template(this.template.replace(/###scheme###/g, options.colorScheme));
+            var _result;
+            if (options.displayLegend === 'true' || options.displayLegend) {
+                _result = this.template.replace(/###legend###/g, dot_template_1.LEGEND);
+            }
+            else {
+                _result = this.template.replace(/###legend###/g, '""');
+            }
+            return doT.template(_result.replace(/###scheme###/g, options.dot.colorScheme));
         };
         Dot.prototype.generateJSON = function (deps) {
             var _this = this;

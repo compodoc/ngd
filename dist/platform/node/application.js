@@ -14,6 +14,7 @@ var Application;
         .option('-p, --tsconfig [config]', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
         .option('-l, --files [list]', 'A list of *.ts files')
         .option('-o, --open', 'Open the generated HTML diagram file', false)
+        .option('-g, --display-legend [display-legend]', 'Display the legend of graph default(true)', true)
         .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
         .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', "./documentation/")
         .parse(process.argv);
@@ -93,7 +94,8 @@ var Application;
             process.exit(0);
         }
         var engine = new dot_1.Engine.Dot({
-            output: program.output
+            output: program.output,
+            displayLegend: program.displayLegend
         });
         engine
             .generateGraph(deps)
