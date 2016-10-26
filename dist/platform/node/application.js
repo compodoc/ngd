@@ -1,9 +1,9 @@
 "use strict";
-var fs = require('fs');
-var path = require('path');
-var dot_1 = require('./engines/dot');
-var dependencies_1 = require('./crawlers/dependencies');
-var logger_1 = require('../../logger');
+var fs = require("fs");
+var path = require("path");
+var dot_1 = require("./engines/dot");
+var dependencies_1 = require("./crawlers/dependencies");
+var logger_1 = require("../../logger");
 var pkg = require('../../../package.json');
 var program = require('commander');
 var Application;
@@ -14,6 +14,7 @@ var Application;
         .option('-p, --tsconfig [config]', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
         .option('-l, --files [list]', 'A list of *.ts files')
         .option('-o, --open', 'Open the generated HTML diagram file', false)
+        .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
         .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', "./documentation/")
         .parse(process.argv);
     var outputHelp = function () {
@@ -21,6 +22,9 @@ var Application;
         process.exit(1);
     };
     Application.run = function () {
+        if (program.silent) {
+            logger_1.logger.silent = false;
+        }
         var files = [];
         if (program.file) {
             logger_1.logger.info('using entry', program.file);
@@ -67,7 +71,6 @@ var Application;
                     };
                     files = walk('.');
                 }
-                // normalize paths
                 files = files.map(function (file) {
                     return path.join(path.dirname(program.tsconfig), file);
                 });
@@ -80,7 +83,6 @@ var Application;
         else {
             outputHelp();
         }
-        // logger.info('including files', JSON.stringify(files));
         var crawler = new dependencies_1.Crawler.Dependencies(files);
         var deps = crawler.getDependencies();
         if (deps.length <= 0) {
