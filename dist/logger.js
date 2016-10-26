@@ -15,12 +15,15 @@ var Logger = (function () {
         this.name = pkg.name;
         this.version = pkg.version;
         this.logger = gutil.log;
+        this.enabled = true;
     }
     Logger.prototype.title = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.logger(c.cyan.apply(c, args));
     };
     Logger.prototype.info = function () {
@@ -28,6 +31,8 @@ var Logger = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.logger(this.format.apply(this, [LEVEL.INFO].concat(args)));
     };
     Logger.prototype.warn = function () {
@@ -35,6 +40,8 @@ var Logger = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.logger(this.format.apply(this, [LEVEL.WARN].concat(args)));
     };
     Logger.prototype.error = function () {
@@ -42,6 +49,8 @@ var Logger = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.logger(this.format.apply(this, [LEVEL.FATAL].concat(args)));
     };
     Logger.prototype.fatal = function () {
@@ -49,6 +58,8 @@ var Logger = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.error.apply(this, args);
     };
     Logger.prototype.debug = function () {
@@ -56,6 +67,8 @@ var Logger = (function () {
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i - 0] = arguments[_i];
         }
+        if (!this.enabled)
+            return;
         this.logger(this.format.apply(this, [LEVEL.DEBUG].concat(args)));
     };
     Logger.prototype.format = function (level) {
