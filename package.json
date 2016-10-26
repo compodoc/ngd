@@ -19,6 +19,9 @@
   "engines": {
     "node": ">= 5.4.1 < 6"
   },
+  "contributors": [
+    "vogloblinsky"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/manekinekko/angular2-dependencies-graph.git"
