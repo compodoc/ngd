@@ -12,7 +12,18 @@ A tool that allows you to view your Angular2 application dependencies. Currently
 
 ## Install
 
-Install from npm: `npm install -g angular2-dependencies-graph`
+Install from npm: 
+
+```
+npm install -g angular2-dependencies-graph
+```
+
+Install from Yarn: 
+
+```
+yarn global add angular2-dependencies-graph
+```
+
 
 ## Usage
 
