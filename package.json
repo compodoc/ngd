@@ -34,7 +34,6 @@
     "@types/typescript": "0.4.29",
     "colors": "1.1.2",
     "commander": "2.9.0",
-    "conventional-changelog-cli": "1.1.1",
     "dot": "1.0.3",
     "fs-extra": "0.26.2",
     "gulp-util": "3.0.7",
