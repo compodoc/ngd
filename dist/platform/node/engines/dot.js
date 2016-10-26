@@ -6,6 +6,8 @@ var Engine;
 (function (Engine) {
     var fs = require('fs-extra');
     var q = require('q');
+    var cleanDot = false;
+    var cleanSvg = false;
     var appName = require('../../../../package.json').name;
     // http://www.graphviz.org/Documentation/dotguide.pdf
     var Dot = (function () {
@@ -29,6 +31,7 @@ var Engine;
                 name: "" + appName,
                 output: baseDir + "/" + appName,
                 displayLegend: options.displayLegend,
+                outputFormats: options.outputFormats,
                 dot: {
                     shapeModules: 'component',
                     shapeProviders: 'ellipse',
@@ -55,23 +58,70 @@ var Engine;
         Dot.prototype.generateGraph = function (deps) {
             var _this = this;
             var template = this.preprocessTemplates(this.options);
-            return this.generateDot(template, deps)
-                .then(function (_) { return _this.generateJSON(deps); })
-                .then(function (_) { return _this.generateSVG(); })
-                .then(function (_) { return _this.generateHTML(); });
-            // todo(WCH): disabling SVG to PNG due to some errors with phantomjs
-            //.then( _ => this.generatePNG() );
+            var generators = [];
+            // Handle svg dependency with dot, and html with svg
+            if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps));
+            }
+            if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }));
+                if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
+            if (this.options.outputFormats.indexOf('json') > -1) {
+                generators.push(this.generateJSON(deps));
+            }
+            if (this.options.outputFormats.indexOf('html') > -1) {
+                generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }).then(function (_) { return _this.generateHTML(); }));
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
+                    cleanSvg = true;
+                }
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
+            // todo(WCH): disable PNG creation due to some errors with phantomjs
+            /*
+            if (this.options.outputFormats.indexOf('png') > -1) {
+                generators.push(this.generatePNG());
+            }
+            */
+            return q.all(generators).then(function (_) { return _this.cleanGeneratedFiles(); });
+        };
+        Dot.prototype.cleanGeneratedFiles = function () {
+            var d = q.defer();
+            var removeFile = function (path) {
+                var p = q.defer();
+                fs.unlink(path, function (error) {
+                    if (error) {
+                        p.reject(error);
+                    }
+                    else {
+                        p.resolve();
+                    }
+                });
+                return p.promise;
+            };
+            var cleaners = [];
+            if (cleanDot) {
+                cleaners.push(removeFile(this.paths.dot));
+            }
+            if (cleanSvg) {
+                cleaners.push(removeFile(this.paths.svg));
+            }
+            return q.all(cleaners);
         };
         Dot.prototype.preprocessTemplates = function (options) {
             var doT = require('dot');
-            var _result;
+            var result;
             if (options.displayLegend === 'true' || options.displayLegend) {
-                _result = this.template.replace(/###legend###/g, dot_template_1.LEGEND);
+                result = this.template.replace(/###legend###/g, dot_template_1.LEGEND);
             }
             else {
-                _result = this.template.replace(/###legend###/g, '""');
+                result = this.template.replace(/###legend###/g, '""');
             }
-            return doT.template(_result.replace(/###scheme###/g, options.dot.colorScheme));
+            return doT.template(result.replace(/###scheme###/g, options.dot.colorScheme));
         };
         Dot.prototype.generateJSON = function (deps) {
             var _this = this;
@@ -102,12 +152,12 @@ var Engine;
         Dot.prototype.generateSVG = function () {
             var _this = this;
             var Viz = require('viz.js');
-            var viz_svg = Viz(fs.readFileSync(this.paths.dot).toString(), {
+            var vizSvg = Viz(fs.readFileSync(this.paths.dot).toString(), {
                 format: 'svg',
                 engine: 'dot'
             });
             var d = q.defer();
-            fs.outputFile(this.paths.svg, viz_svg, function (error) {
+            fs.outputFile(this.paths.svg, vizSvg, function (error) {
                 if (error) {
                     d.reject(error);
                 }
@@ -132,9 +182,9 @@ var Engine;
             return d.promise;
         };
         Dot.prototype.generatePNG = function () {
-            var svg_to_png = require('svg-to-png');
+            var svgToPng = require('svg-to-png');
             var d = q.defer();
-            svg_to_png.convert(this.paths.svg, path.join(this.cwd, "" + this.options.output)).then(function () {
+            svgToPng.convert(this.paths.svg, path.join(this.cwd, "" + this.options.output)).then(function () {
                 logger_1.logger.info('creating PNG', this.paths.png);
                 d.resolve(this.paths.image);
             });

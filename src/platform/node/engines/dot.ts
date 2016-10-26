@@ -6,6 +6,7 @@ interface IOptions {
 	name?: string;
 	output?: string;
 	displayLegend?: boolean;
+	outputFormats?: string;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -18,6 +19,8 @@ export namespace Engine {
 
 	let fs = require('fs-extra');
 	let q = require('q');
+	let cleanDot:boolean = false;
+ 	let cleanSvg:boolean = false;
 
 	let appName = require('../../../../package.json').name;
 
@@ -51,6 +54,7 @@ export namespace Engine {
 				name: `${ appName }`,
 				output: `${baseDir}/${ appName }`,
 				displayLegend: options.displayLegend,
+				outputFormats: options.outputFormats,
 				dot: {
 					shapeModules: 'component',
 					shapeProviders: 'ellipse',
@@ -82,25 +86,76 @@ export namespace Engine {
 
 		generateGraph(deps) {
 			let template = this.preprocessTemplates(this.options);
+			let generators = [];
 
-			return this.generateDot(template, deps)
-				.then( _ => this.generateJSON(deps) )
-				.then( _ => this.generateSVG() )
-				.then( _ => this.generateHTML() )
+            // Handle svg dependency with dot, and html with svg
+            if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps));
+            }
+            if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
+                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ));
+                if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
 
-				// todo(WCH): disabling SVG to PNG due to some errors with phantomjs
-				//.then( _ => this.generatePNG() );
+            if (this.options.outputFormats.indexOf('json') > -1) {
+                generators.push(this.generateJSON(deps));
+            }
+
+            if (this.options.outputFormats.indexOf('html') > -1) {
+                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ).then( _ => this.generateHTML() ));
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
+                    cleanSvg = true;
+                }
+                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+                    cleanDot = true;
+                }
+            }
+
+            
+			// todo(WCH): disable PNG creation due to some errors with phantomjs
+			/*
+			if (this.options.outputFormats.indexOf('png') > -1) {
+                generators.push(this.generatePNG());
+            }
+			*/
+
+            return q.all(generators).then(_ => this.cleanGeneratedFiles());
 		}
+
+        private cleanGeneratedFiles() {
+            let d = q.defer();
+			let removeFile = (path) => {
+				let p = q.defer();
+				fs.unlink(path, (error) => {
+					if (error) {
+						p.reject(error);
+					} else {
+						p.resolve();
+					}
+				});
+				return p.promise;
+			};
+			let cleaners = [];
+            if (cleanDot) {
+                cleaners.push(removeFile(this.paths.dot));
+            }
+            if (cleanSvg) {
+                cleaners.push(removeFile(this.paths.svg));
+            }
+			return q.all(cleaners);
+        }
 
 		private preprocessTemplates(options?) {
 			let doT = require('dot');
-			let _result;
+			let result;
 			 if(options.displayLegend === 'true' || options.displayLegend) {
-			   _result = this.template.replace(/###legend###/g, LEGEND);
+			   result = this.template.replace(/###legend###/g, LEGEND);
 			 } else {
-			   _result = this.template.replace(/###legend###/g, '""');
+			   result = this.template.replace(/###legend###/g, '""');
 			 }
-			 return doT.template(_result.replace(/###scheme###/g, options.dot.colorScheme));
+			 return doT.template(result.replace(/###scheme###/g, options.dot.colorScheme));
 		}
 
 		private generateJSON(deps) {
@@ -140,7 +195,7 @@ export namespace Engine {
 
 		private generateSVG() {
 			let Viz = require('viz.js');
-			let viz_svg = Viz(
+			let vizSvg = Viz(
 				fs.readFileSync(this.paths.dot).toString(), {
 					format: 'svg',
 					engine: 'dot'
@@ -149,7 +204,7 @@ export namespace Engine {
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.svg,
-				viz_svg,
+				vizSvg,
 				(error) => {
 					if(error) {
 						d.reject(error);
@@ -199,9 +254,9 @@ export namespace Engine {
 		}
 
 		private generatePNG() {
-			let svg_to_png = require('svg-to-png');
+			let svgToPng = require('svg-to-png');
 			let d = q.defer();
-			svg_to_png.convert(
+			svgToPng.convert(
 				this.paths.svg,
 				path.join(this.cwd, `${ this.options.output }`)
 			).then( function(){

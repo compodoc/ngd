@@ -18,6 +18,7 @@ export namespace Application {
       .option('-o, --open', 'Open the generated HTML diagram file', false)
       .option('-g, --display-legend [display-legend]', 'Display the legend of graph default(true)', true)
       .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
+      .option('-t, --output-formats [output-formats]', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
       .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
       .parse(process.argv);
 
@@ -119,17 +120,20 @@ export namespace Application {
 
     let engine = new Engine.Dot({
       output: program.output,
-      displayLegend: program.displayLegend
+      displayLegend: program.displayLegend,
+      outputFormats: program.outputFormats.split(',')
     });
     engine
       .generateGraph(deps)
       .then( file => {
 
+        /*
         if (program.open === true) {
           logger.info('openning file ', file);
           let open = require("opener");
           open(file);
         }
+        */
 
       })
       .catch( e => logger.error(e) )

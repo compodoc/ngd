@@ -16,6 +16,7 @@ var Application;
         .option('-o, --open', 'Open the generated HTML diagram file', false)
         .option('-g, --display-legend [display-legend]', 'Display the legend of graph default(true)', true)
         .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
+        .option('-t, --output-formats [output-formats]', 'Output formats (default: html,svg,dot,json)', "html,svg,dot,json")
         .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', "./documentation/")
         .parse(process.argv);
     var outputHelp = function () {
@@ -95,16 +96,19 @@ var Application;
         }
         var engine = new dot_1.Engine.Dot({
             output: program.output,
-            displayLegend: program.displayLegend
+            displayLegend: program.displayLegend,
+            outputFormats: program.outputFormats.split(',')
         });
         engine
             .generateGraph(deps)
             .then(function (file) {
+            /*
             if (program.open === true) {
-                logger_1.logger.info('openning file ', file);
-                var open_1 = require("opener");
-                open_1(file);
+              logger.info('openning file ', file);
+              let open = require("opener");
+              open(file);
             }
+            */
         })
             .catch(function (e) { return logger_1.logger.error(e); })
             .finally(function (_) { return logger_1.logger.info('done'); });
