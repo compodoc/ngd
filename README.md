@@ -1,6 +1,4 @@
 [![Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/pr)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
-[![Issue Stats](http://issuestats.com/github/manekinekko/angular2-dependencies-graph/badge/issue)](http://issuestats.com/github/manekinekko/angular2-dependencies-graph)
 [![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
 
 angular2-dependencies-graph
