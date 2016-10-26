@@ -2,7 +2,7 @@
   "name": "angular2-dependencies-graph",
   "version": "1.0.0-alpha.1",
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "npm run tsc",
     "deploy": "npm run tsc && npm version patch && npm publish",
@@ -11,7 +11,7 @@
     "changelog": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "bin": {
-    "ngd": "bin/index.js"
+    "ngd": "bin/index-cli.js"
   },
   "homepage": "https://github.com/manekinekko/angular2-dependencies-graph",
   "bugs": "https://github.com/manekinekko/angular2-dependencies-graph/issues",
