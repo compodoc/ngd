@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/wlla9cm0vcie4lur/branch/master?svg=true)](https://ci.appveyor.com/project/manekinekko/angular2-dependencies-graph/branch/master)
 [![CircleCI](https://circleci.com/gh/manekinekko/angular2-dependencies-graph/tree/master.svg?style=svg)](https://circleci.com/gh/manekinekko/angular2-dependencies-graph/tree/master)
 [![Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
