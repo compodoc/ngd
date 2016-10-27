@@ -34,15 +34,15 @@ Usage: ngd [options]
 
 Options:
 
-  -h, --help               output usage information
-  -V, --version            output the version number
-  -f, --file [file]        Entry *.ts file
-  -p, --tsconfig [config]  A tsconfig.json
-  -l, --files [list]       A list of *.ts files
-  -g, --display-legend     Display the legend of graph (default: true)
-  -s, --silent             In silent mode, log messages aren't logged in the console
-  -t, --output-formats     Output formats (default: html,svg,dot,json)
-  -d, --output [folder]    Where to store the generated files
+  -h, --help                    Output usage information
+  -V, --version                 Output the version number
+  -f, --file [file]             Entry *.ts file
+  -p, --tsconfig [config]       A tsconfig.json
+  -l, --files [list]            A list of *.ts files
+  -g, --display-legend          Display the legend in the generated graph (default: true)
+  -s, --silent                  In silent mode, log messages aren't logged in the console
+  -t, --output-formats [formats] Output formats (default: html,svg,dot,json)
+  -d, --output [folder]         Where to store the generated files
 ```
 
 ### 1) use a `tsconfig.json`:
