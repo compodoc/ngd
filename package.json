@@ -16,7 +16,7 @@
   "bugs": "https://github.com/manekinekko/angular2-dependencies-graph/issues",
   "author": "Wassim CHEGHAM",
   "engines": {
-    "node": ">= 5.4.1 < 6"
+    "node": ">= 5.4.1 < 7"
   },
   "contributors": [
     "vogloblinsky"
