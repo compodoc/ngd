@@ -82,17 +82,17 @@ var Logger = (function () {
         };
         var msg = args.join(' ');
         if (args.length > 1) {
-            msg = pad(args.shift(), 15, ' ') + ": " + args.join(' ');
+            msg = pad(args.shift(), 13, ' ') + ": " + args.join(' ');
         }
         switch (level) {
             case LEVEL.INFO:
                 msg = c.green(msg);
                 break;
             case LEVEL.WARN:
-                msg = c.gray(msg);
+                msg = c.yellow(msg);
                 break;
             case LEVEL.DEBUG:
-                msg = c.cyan(msg);
+                msg = c.gray(msg);
                 break;
             case LEVEL.ERROR:
             case LEVEL.FATAL:

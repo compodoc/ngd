@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  },
+  "files": [
+      "app.module.ts"
+  ],
+  "exclude": [
+    "**/*/foo.module.ts"
+  ]
+}

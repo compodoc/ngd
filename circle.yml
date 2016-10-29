@@ -4,4 +4,4 @@ machine:
 
 test:
   override:
-    - echo "skip test"
+    - npm test

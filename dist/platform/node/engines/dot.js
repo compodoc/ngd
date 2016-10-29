@@ -62,15 +62,18 @@ var Engine;
             // Handle svg dependency with dot, and html with svg
             if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
                 generators.push(this.generateDot(template, deps));
+                console.log('push dot');
             }
             if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
                 generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }));
                 if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
                     cleanDot = true;
                 }
+                console.log('push dot svg');
             }
             if (this.options.outputFormats.indexOf('json') > -1) {
                 generators.push(this.generateJSON(deps));
+                console.log('push json');
             }
             if (this.options.outputFormats.indexOf('html') > -1) {
                 generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }).then(function (_) { return _this.generateHTML(); }));
@@ -80,6 +83,7 @@ var Engine;
                 if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
                     cleanDot = true;
                 }
+                console.log('push dot svg html');
             }
             // todo(WCH): disable PNG creation due to some errors with phantomjs
             /*
@@ -115,7 +119,7 @@ var Engine;
         Dot.prototype.preprocessTemplates = function (options) {
             var doT = require('dot');
             var result;
-            if (options.displayLegend === 'true' || options.displayLegend) {
+            if (options.displayLegend === 'true' || options.displayLegend === true) {
                 result = this.template.replace(/###legend###/g, dot_template_1.LEGEND);
             }
             else {

@@ -12,15 +12,14 @@ export namespace Application {
 
   program
     .version(pkg.version)
-      .option('-f, --file [file]', 'Entry *.ts file')
-      .option('-p, --tsconfig [config]', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
-      .option('-l, --files [list]', 'A list of *.ts files')
-      .option('-o, --open', 'Open the generated HTML diagram file', false)
-      .option('-g, --display-legend [display-legend]', 'Display the legend of graph default(true)', true)
-      .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
-      .option('-t, --output-formats [output-formats]', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
-      .option('-d, --output [folder]', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
-      .parse(process.argv);
+    .option('-f, --file <file>', 'Entry *.ts file')
+    .option('-p, --tsconfig <config>', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
+    .option('-o, --open', 'Open the generated HTML diagram file', false)
+    .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
+    .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
+    .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
+    .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
+    .parse(process.argv);
 
   let outputHelp = () => {
     program.outputHelp()
@@ -35,7 +34,6 @@ export namespace Application {
 
     let files = [];
     if(program.file) {
-      logger.info('using entry', program.file);
       if(
         !fs.existsSync(program.file) ||
         !fs.existsSync(path.join(process.cwd(), program.file))
@@ -43,7 +41,13 @@ export namespace Application {
         logger.fatal(`"${ program.file }" file was not found`);
         process.exit(1);
       }
+      else if (path.extname(program.file) !== '.ts') {
+        logger.fatal(`"${ program.file }" is not a TypeScript file`);
+        process.exit(1);
+      }
       else {
+        logger.info('using entry', program.file);
+      
         files = [program.file];
       }
     }
@@ -75,10 +79,10 @@ export namespace Application {
                   results = results.concat(walk(file));
                 }
                 else if(/(spec|\.d)\.ts/.test(file)) {
-                  logger.warn('ignoring', file);
+                  logger.debug('ignoring', file);
                 }
                 else if (path.extname(file) === '.ts') {
-                  logger.info('including', file);
+                  logger.debug('including', file);
                   results.push(file);
                 }
               }
@@ -96,10 +100,6 @@ export namespace Application {
       }
 
     }
-    else if (program.files) {
-      logger.info('using files', program.files.length, 'file(s) found');
-      files = program.files;
-    }
     else {
       outputHelp()
     }
@@ -113,7 +113,7 @@ export namespace Application {
     let deps = crawler.getDependencies();
 
     if(deps.length <= 0) {
-      logger.info('Could not figure out a dependencies graph. May be you should consider providing an entry file: ngd -f src/main.ts');
+      logger.warn('no deps', 'May be you should consider providing another entry file. See -h');
       logger.info('Done');
       process.exit(0);
     }

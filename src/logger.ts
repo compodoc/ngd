@@ -71,7 +71,7 @@ class Logger {
 
 		let msg = args.join(' ');
 		if(args.length > 1) {
-			msg = `${ pad(args.shift(), 15, ' ') }: ${ args.join(' ') }`;
+			msg = `${ pad(args.shift(), 13, ' ') }: ${ args.join(' ') }`;
 		}
 
 
@@ -81,11 +81,11 @@ class Logger {
 				break;
 
 			case LEVEL.WARN:
-				msg = c.gray(msg);
+				msg = c.yellow(msg);
 				break;
 
 			case LEVEL.DEBUG:
-				msg = c.cyan(msg);
+				msg = c.gray(msg);
 				break;
 
 			case LEVEL.ERROR:

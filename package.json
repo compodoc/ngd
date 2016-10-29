@@ -2,12 +2,13 @@
   "name": "angular2-dependencies-graph",
   "version": "1.0.0-alpha.6",
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "npm run tsc",
+    "pretest": "tsc -p test/tsconfig-test.json",
+    "test": "mocha --opts test/mocha.opts",
+    "prepublish": "npm run tsc",
     "deploy": "npm run tsc && npm version patch && npm publish",
-    "install": "npm run tsc",
-    "tsc": "./node_modules/.bin/tsc --newLine LF"
+    "tsc": "tsc --newLine LF"
   },
   "bin": {
     "ngd": "bin/index.js"
@@ -28,9 +29,6 @@
   "private": false,
   "license": "MIT",
   "dependencies": {
-    "@types/dot": "1.0.29",
-    "@types/node": "6.0.39",
-    "@types/typescript": "0.4.29",
     "colors": "1.1.2",
     "commander": "2.9.0",
     "dot": "1.0.3",
@@ -41,5 +39,14 @@
     "svg-to-png": "2.0.1",
     "typescript": "2.0.0",
     "viz.js": "1.3.0"
+  },
+  "devDependencies": {
+    "@types/dot": "1.0.29",
+    "@types/typescript": "0.4.29",
+    "@types/chai": "3.4.34",
+    "@types/mocha": "2.2.32",
+    "@types/node": "6.0.39",
+    "chai": "3.5.0",
+    "mocha": "3.1.2"
   }
 }
