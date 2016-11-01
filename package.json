@@ -11,7 +11,7 @@
     "tsc": "tsc --newLine LF"
   },
   "bin": {
-    "ngd": "bin/index.js"
+    "ngd": "bin/index-cli.js"
   },
   "homepage": "https://github.com/manekinekko/angular2-dependencies-graph",
   "bugs": "https://github.com/manekinekko/angular2-dependencies-graph/issues",

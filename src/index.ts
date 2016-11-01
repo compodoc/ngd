@@ -1,3 +1,3 @@
-import {Application} from './platform/node/application';
+import * as application from './platform/node/application';
 
-Application.run();
+export let Application = application.Application;

@@ -8,6 +8,10 @@ import {logger} from '../../logger';
 let pkg = require('../../../package.json');
 let program = require('commander');
 
+interface IMainOptions {
+	file?: string;
+}
+
 export namespace Application {
 
   program
@@ -139,5 +143,13 @@ export namespace Application {
       .catch( e => logger.error(e) )
       .finally( _ => logger.info('done'))
 
+  }
+
+  export let getDependencies = (options:IMainOptions) => {
+      let files = [options.file];
+      let crawler = new Crawler.Dependencies(
+        files
+      );
+      return crawler.getDependencies();
   }
 }
