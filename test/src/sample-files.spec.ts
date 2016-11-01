@@ -5,7 +5,7 @@ import { temporaryDir, shell, shellAsync, exists, read } from './helpers';
 const tmp = temporaryDir();
 
 let check = {
-    _(type, child, expected = true) {
+    _(type: string, child, expected = true) {
         it(`should${expected ? '' : ' not'} generate a "${type}" file`, () => {
             expect(exists(`${tmp.name}/documentation/dependencies.${type}`)).to.be[`${expected}`];
         });
@@ -26,15 +26,17 @@ let check = {
 
 describe('In the sample files,', () => {
 
-    before(() => tmp.create());
-    after(() => tmp.clean());
+    // before(() => tmp.create());
+    // afterEach(() => tmp.clean());
 
     describe('when no tsconfig.json is found in cwd', () => {
 
         let command = null;
-        before(() => {
+        beforeEach(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js'], { cwd: tmp.name });
         });
+        afterEach(() => tmp.clean());
 
         it('should display error message', () => {
             expect(command.stdout.toString()).to.contain('"tsconfig.json" file was not found in the current directory');
@@ -49,9 +51,11 @@ describe('In the sample files,', () => {
     describe('when given a wrong TypeScript file', () => {
 
         let command = null;
-        before(() => {
+        beforeEach(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/tsconfig.entry.json'], { cwd: tmp.name });
         });
+        afterEach(() => tmp.clean());
 
         it('should display error message', () => {
             expect(command.stdout.toString()).to.contain('is not a TypeScript file');
@@ -62,9 +66,11 @@ describe('In the sample files,', () => {
     describe('when given a 404 file', () => {
 
         let command = null;
-        before(() => {
+        beforeEach(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/no-file.ts'], { cwd: tmp.name });
         });
+        afterEach(() => tmp.clean());
 
         it('should display error message', () => {
             expect(command.stdout.toString()).to.contain('file was not found');
@@ -76,8 +82,10 @@ describe('In the sample files,', () => {
 
         let command = null;
         before(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts'], { cwd: tmp.name });
         });
+        after(() => tmp.clean());
 
         check.json(command);
         check.dot(command);
@@ -89,8 +97,10 @@ describe('In the sample files,', () => {
 
         let command = null;
         before(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js', '-p', '../test/src/sample-files/tsconfig.entry.json'], { cwd: tmp.name });
         });
+        //after(() => tmp.clean());
 
         check.json(command);
         check.dot(command);
@@ -102,9 +112,11 @@ describe('In the sample files,', () => {
     xdescribe(`when given a tsconfig.json (-p) with "exclude" entry,`, () => {
 
         let command = null;
-        before(() => {
+        beforeEach(() => {
+            tmp.create();
             command = shell('node', ['../bin/index.js', '-p', '../test/src/sample-files/tsconfig.exclude.json'], { cwd: tmp.name });
         });
+        afterEach(() => tmp.clean());
 
         it('should not generate foo.module.ts', () => {
             expect(command.stdout.toString()).not.to.contain('');
@@ -116,9 +128,11 @@ describe('In the sample files,', () => {
 
         describe(`if "-g true",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
+                tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts'], { cwd: tmp.name });
             });
+            afterEach(() => tmp.clean());
 
             it('should generate a legend', () => {
                 const content = read(`${tmp.name}/documentation/dependencies.svg`);
@@ -128,9 +142,11 @@ describe('In the sample files,', () => {
 
         describe(`if -g is not provided (default),`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
+                tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-g', 'true'], { cwd: tmp.name });
             });
+            afterEach(() => tmp.clean());
 
             it('should generate a legend', () => {
                 const content = read(`${tmp.name}/documentation/dependencies.svg`);
@@ -140,9 +156,11 @@ describe('In the sample files,', () => {
 
         describe(`if "-g false",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
+                tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-g', 'false'], { cwd: tmp.name });
             });
+            afterEach(() => tmp.clean());
 
             it('should not generate', () => {
                 const content = read(`${tmp.name}/documentation/dependencies.svg`);
@@ -154,18 +172,18 @@ describe('In the sample files,', () => {
 
     describe(`when given an output formats (-t),`, () => {
 
-        xdescribe(`if "-t html",`, () => {
+        describe(`if "-t html",`, () => {
 
             let command = null;
-            beforeEach(() => {
+            before(() => {
                 tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'html'], { cwd: tmp.name });
             });
-            afterEach(() => tmp.clean());
+            after(() => tmp.clean());
 
             check.json(command, false);
-            check.dot(command, true);
-            check.svg(command, true);
+            check.dot(command, false);
+            check.svg(command, false);
             check.html(command, true);
 
         });
@@ -173,11 +191,11 @@ describe('In the sample files,', () => {
         describe(`if "-t json",`, () => {
 
             let command = null;
-            beforeEach(() => {
+            before(() => {
                 tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'json'], { cwd: tmp.name });
             });
-            afterEach(() => tmp.clean());
+            after(() => tmp.clean());
 
             check.json(command, true);
             check.dot(command, false);
@@ -189,11 +207,11 @@ describe('In the sample files,', () => {
         describe(`if "-t dot",`, () => {
 
             let command = null;
-            beforeEach(() => {
+            before(() => {
                 tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'dot'], { cwd: tmp.name });
             });
-            afterEach(() => tmp.clean());
+            after(() => tmp.clean());
 
             check.json(command, false);
             check.dot(command, true);
@@ -202,17 +220,17 @@ describe('In the sample files,', () => {
 
         });
 
-        xdescribe(`if "-t svg",`, () => {
+        describe(`if "-t svg",`, () => {
 
             let command = null;
-            beforeEach(() => {
+            before(() => {
                 tmp.create();
                 command = shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'svg'], { cwd: tmp.name });
             });
-            afterEach(() => tmp.clean());
+            after(() => tmp.clean());
 
             check.json(command, false);
-            check.dot(command, true);
+            check.dot(command, false);
             check.svg(command, true);
             check.html(command, false);
 

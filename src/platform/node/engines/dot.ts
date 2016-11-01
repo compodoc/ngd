@@ -52,7 +52,7 @@ export namespace Engine {
 
 			this.options = {
 				name: `${appName}`,
-				output: `${baseDir}/${appName}`,
+				output: options.output,
 				displayLegend: options.displayLegend,
 				outputFormats: options.outputFormats,
 				dot: {
@@ -71,16 +71,14 @@ export namespace Engine {
 					logger.fatal('Option "output" has been provided but it is not a valid name.');
 					process.exit(1);
 				}
-
-				this.options.output = options.output;
 			}
 
 			this.paths = {
-				dot: path.join(this.cwd, `${this.options.output}/dependencies.dot`),
-				json: path.join(this.cwd, `${this.options.output}/dependencies.json`),
-				svg: path.join(this.cwd, `${this.options.output}/dependencies.svg`),
-				png: path.join(this.cwd, `${this.options.output}/dependencies.png`),
-				html: path.join(this.cwd, `${this.options.output}/dependencies.html`)
+				dot: path.join(this.options.output, '/dependencies.dot'),
+				json: path.join(this.options.output, '/dependencies.json'),
+				svg: path.join(this.options.output, '/dependencies.svg'),
+				png: path.join(this.options.output, '/dependencies.png'),
+				html: path.join(this.options.output, '/dependencies.html')
 			};
 		}
 
@@ -176,6 +174,7 @@ export namespace Engine {
 			return d.promise;
 		}
 
+		// @not-used
 		private escape(deps) {
 			return deps.map(d => {
 				for (let prop in d) {
@@ -191,8 +190,6 @@ export namespace Engine {
 							a = a.replace(/'/g, "\'");
 							a = a.replace(/\{/g, "\{");
 							a = a.replace(/\)/g, "\)");
-
-
 						}
 					}
 				}
@@ -216,7 +213,11 @@ export namespace Engine {
 					if (error) {
 						d.reject(error);
 					}
-					logger.info('creating DOT', this.paths.dot);
+
+					if (cleanDot === false) {
+						logger.info('creating DOT', this.paths.dot);
+					}
+
 					d.resolve(this.paths.dot);
 				}
 			);
@@ -240,7 +241,11 @@ export namespace Engine {
 					if (error) {
 						d.reject(error);
 					}
-					logger.info('creating SVG', this.paths.svg);
+
+					if (cleanSvg === false) {
+						logger.info('creating SVG', this.paths.svg);
+					}
+					
 					d.resolve(this.paths.svg);
 				}
 			);
@@ -289,7 +294,7 @@ export namespace Engine {
 			let d = q.defer();
 			svgToPng.convert(
 				this.paths.svg,
-				path.join(this.cwd, `${this.options.output}`)
+				this.paths.png
 			).then(function () {
 				logger.info('creating PNG', this.paths.png);
 				d.resolve(this.paths.image);

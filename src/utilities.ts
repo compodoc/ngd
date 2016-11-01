@@ -1,5 +1,6 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
+import * as path from 'path';
 import * as util from 'util';
 
 export function d(node) {
@@ -32,6 +33,12 @@ export function compilerHost(transpileOptions: any): ts.CompilerHost {
                 if (fileName === 'lib.d.ts') {
                     return undefined;
                 }
+
+                if (path.isAbsolute(fileName) === false) {
+                    fileName = path.join(transpileOptions.tsconfigDirectory, fileName);
+                }
+                console.log('reading...', fileName);
+
                 const libSource = fs.readFileSync(fileName).toString();
                 return ts.createSourceFile(fileName, libSource, transpileOptions.target, false);
             }

@@ -29,7 +29,7 @@ var Engine;
             var baseDir = "./" + appName + "/";
             this.options = {
                 name: "" + appName,
-                output: baseDir + "/" + appName,
+                output: options.output,
                 displayLegend: options.displayLegend,
                 outputFormats: options.outputFormats,
                 dot: {
@@ -45,14 +45,13 @@ var Engine;
                     logger_1.logger.fatal('Option "output" has been provided but it is not a valid name.');
                     process.exit(1);
                 }
-                this.options.output = options.output;
             }
             this.paths = {
-                dot: path.join(this.cwd, this.options.output + "/dependencies.dot"),
-                json: path.join(this.cwd, this.options.output + "/dependencies.json"),
-                svg: path.join(this.cwd, this.options.output + "/dependencies.svg"),
-                png: path.join(this.cwd, this.options.output + "/dependencies.png"),
-                html: path.join(this.cwd, this.options.output + "/dependencies.html")
+                dot: path.join(this.options.output, '/dependencies.dot'),
+                json: path.join(this.options.output, '/dependencies.json'),
+                svg: path.join(this.options.output, '/dependencies.svg'),
+                png: path.join(this.options.output, '/dependencies.png'),
+                html: path.join(this.options.output, '/dependencies.html')
             };
         }
         Dot.prototype.generateGraph = function (deps) {
@@ -135,6 +134,7 @@ var Engine;
             });
             return d.promise;
         };
+        // @not-used
         Dot.prototype.escape = function (deps) {
             var _this = this;
             return deps.map(function (d) {
@@ -167,7 +167,9 @@ var Engine;
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating DOT', _this.paths.dot);
+                if (cleanDot === false) {
+                    logger_1.logger.info('creating DOT', _this.paths.dot);
+                }
                 d.resolve(_this.paths.dot);
             });
             return d.promise;
@@ -184,7 +186,9 @@ var Engine;
                 if (error) {
                     d.reject(error);
                 }
-                logger_1.logger.info('creating SVG', _this.paths.svg);
+                if (cleanSvg === false) {
+                    logger_1.logger.info('creating SVG', _this.paths.svg);
+                }
                 d.resolve(_this.paths.svg);
             });
             return d.promise;
@@ -207,7 +211,7 @@ var Engine;
         Dot.prototype.generatePNG = function () {
             var svgToPng = require('svg-to-png');
             var d = q.defer();
-            svgToPng.convert(this.paths.svg, path.join(this.cwd, "" + this.options.output)).then(function () {
+            svgToPng.convert(this.paths.svg, this.paths.png).then(function () {
                 logger_1.logger.info('creating PNG', this.paths.png);
                 d.resolve(this.paths.image);
             });

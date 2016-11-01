@@ -1,6 +1,7 @@
 "use strict";
 var ts = require('typescript');
 var fs = require('fs');
+var path = require('path');
 var util = require('util');
 function d(node) {
     console.log(util.inspect(node, { showHidden: true, depth: 10 }));
@@ -28,6 +29,10 @@ function compilerHost(transpileOptions) {
                 if (fileName === 'lib.d.ts') {
                     return undefined;
                 }
+                if (path.isAbsolute(fileName) === false) {
+                    fileName = path.join(transpileOptions.tsconfigDirectory, fileName);
+                }
+                console.log('reading...', fileName);
                 var libSource = fs.readFileSync(fileName).toString();
                 return ts.createSourceFile(fileName, libSource, transpileOptions.target, false);
             }

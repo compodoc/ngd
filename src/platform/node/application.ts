@@ -7,6 +7,7 @@ import { logger } from '../../logger';
 
 let pkg = require('../../../package.json');
 let program = require('commander');
+let cwd = process.cwd();
 
 export namespace Application {
 
@@ -65,6 +66,9 @@ export namespace Application {
         logger.info('using tsconfig', program.tsconfig);
         files = require(program.tsconfig).files;
 
+        // use the current directory of tsconfig.json as a working directory
+        cwd = program.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
+
         if (!files) {
           let exclude = require(program.tsconfig).exclude || [];
 
@@ -90,14 +94,9 @@ export namespace Application {
             return results;
           };
 
-          let cwd = program.tsconfig.replace('/tsconfig.json', '');
           files = walk( cwd || '.' );
         }
 
-        // normalize paths
-        // files = files.map((file) => {
-        //   return path.join(path.dirname(program.tsconfig), file);
-        // });
       }
 
     }
@@ -105,10 +104,17 @@ export namespace Application {
       outputHelp()
     }
 
-    // logger.info('including files', JSON.stringify(files));
+    if (path.isAbsolute(program.output)) {
+      program.output = program.output;
+    }
+    else {
+      program.output = path.resolve(process.cwd(), program.output);
+    }
 
     let crawler = new Crawler.Dependencies(
-      files
+      files, {
+        tsconfigDirectory: cwd
+      }
     );
 
     let deps = crawler.getDependencies();

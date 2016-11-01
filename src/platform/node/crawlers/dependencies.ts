@@ -57,11 +57,12 @@ export namespace Crawler {
         private __cache: any = {};
         private __nsModule: any = {};
 
-        constructor(files: string[]) {
+        constructor(files: string[], options: any) {
             this.files = files;
             const transpileOptions = {
                 target: ts.ScriptTarget.ES5, 
-                module: ts.ModuleKind.CommonJS
+                module: ts.ModuleKind.CommonJS,
+                tsconfigDirectory: options.tsconfigDirectory
             };
             this.program = ts.createProgram(this.files, transpileOptions, compilerHost(transpileOptions));
         }

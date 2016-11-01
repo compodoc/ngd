@@ -17,7 +17,7 @@ describe('In the soundcloud-ngrx app,', () => {
         json = JSON.parse(json);
         topLevelModules = json.map(m => m.name);
     });
-    //after(() => tmp.clean());
+    after(() => tmp.clean());
     it('should not fail on parsing', () => {
         expect(command.stderr.toString()).to.be.empty;
     });

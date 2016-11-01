@@ -13,13 +13,16 @@ describe('In the soundcloud-ngrx app,', () => {
         tmp.create()
         //command = shell('node', ['../bin/index.js', '-f', '../test/src/soundcloud-ngrx/src/main.ts'], { cwd: tmp.name });
         command = shell('node', ['../bin/index.js', '-p', '../test/src/soundcloud-ngrx/tsconfig.json'], { cwd: tmp.name });
+        
         // console.log(command.stdout.toString());
         // console.log(command.stderr.toString());
+        
         json = read(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
+        
         topLevelModules = json.map( m => m.name );
     });
-    //after(() => tmp.clean());
+    after(() => tmp.clean());
 
     it('should not fail on parsing', () => {
         expect(command.stderr.toString()).to.be.empty;

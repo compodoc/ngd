@@ -7,13 +7,14 @@ var q = require('q');
 var Crawler;
 (function (Crawler) {
     var Dependencies = (function () {
-        function Dependencies(files) {
+        function Dependencies(files, options) {
             this.__cache = {};
             this.__nsModule = {};
             this.files = files;
             var transpileOptions = {
                 target: ts.ScriptTarget.ES5,
-                module: ts.ModuleKind.CommonJS
+                module: ts.ModuleKind.CommonJS,
+                tsconfigDirectory: options.tsconfigDirectory
             };
             this.program = ts.createProgram(this.files, transpileOptions, utilities_1.compilerHost(transpileOptions));
         }

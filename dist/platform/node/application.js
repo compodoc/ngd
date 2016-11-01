@@ -6,6 +6,7 @@ var dependencies_1 = require('./crawlers/dependencies');
 var logger_1 = require('../../logger');
 var pkg = require('../../../package.json');
 var program = require('commander');
+var cwd = process.cwd();
 var Application;
 (function (Application) {
     program
@@ -51,6 +52,8 @@ var Application;
                 program.tsconfig = path.join(path.join(process.cwd(), path.dirname(program.tsconfig)), path.basename(program.tsconfig));
                 logger_1.logger.info('using tsconfig', program.tsconfig);
                 files = require(program.tsconfig).files;
+                // use the current directory of tsconfig.json as a working directory
+                cwd = program.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
                 if (!files) {
                     var exclude_1 = require(program.tsconfig).exclude || [];
                     var walk = function (dir) {
@@ -74,7 +77,6 @@ var Application;
                         });
                         return results;
                     };
-                    var cwd = program.tsconfig.replace('/tsconfig.json', '');
                     files = walk(cwd || '.');
                 }
             }
@@ -82,8 +84,15 @@ var Application;
         else {
             outputHelp();
         }
-        // logger.info('including files', JSON.stringify(files));
-        var crawler = new dependencies_1.Crawler.Dependencies(files);
+        if (path.isAbsolute(program.output)) {
+            program.output = program.output;
+        }
+        else {
+            program.output = path.resolve(process.cwd(), program.output);
+        }
+        var crawler = new dependencies_1.Crawler.Dependencies(files, {
+            tsconfigDirectory: cwd
+        });
         var deps = crawler.getDependencies();
         if (deps.length <= 0) {
             logger_1.logger.warn('no deps', 'May be you should consider providing another entry file. See -h');

@@ -83,7 +83,7 @@ const loopBlock = (symbols, attrs, edge = '') => {
 export const DOT_TEMPLATE = `
 digraph dependencies {
   node [shape="rect", style="filled", colorscheme=###scheme###];
-  ranksep=4;
+  ranksep=0.4;
   compound=false;
   remincross=true;
   splines=true;
