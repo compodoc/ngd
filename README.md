@@ -11,6 +11,9 @@ A tool that allows you to view your Angular2 application dependencies. Currently
 ## Generated Graphs (sample)
 
 ![screenshots-4](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-4.png)
+![dependencies.material2.svg](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.material2.svg)
+![dependencies.ng-bootstrap.svg](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.ng-bootstrap.svg)
+![dependencies.soundcloud-ngrx.svg](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.soundcloud-ngrx.svg)
 
 ## Install
 
