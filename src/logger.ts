@@ -63,6 +63,14 @@ class Logger {
 		);
 	}
 
+	trace(error, file) {
+		this.fatal('Ouch', file);
+		this.fatal('', error);
+		this.warn('ignoring', file);
+		this.warn('see error', '');
+		console.trace(error);
+	}
+
 	private format(level, ...args) {
 
 		let pad = (s, l, c='') => {

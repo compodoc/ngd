@@ -10,6 +10,7 @@ var Crawler;
         function Dependencies(files, options) {
             this.__cache = {};
             this.__nsModule = {};
+            this.unknown = '???';
             this.files = files;
             var transpileOptions = {
                 target: ts.ScriptTarget.ES5,
@@ -31,11 +32,7 @@ var Crawler;
                             _this.getSourceFileDecorators(file, deps);
                         }
                         catch (e) {
-                            logger_1.logger.fatal('Ouch', filePath);
-                            logger_1.logger.fatal('', e);
-                            logger_1.logger.warn('ignoring', filePath);
-                            logger_1.logger.warn('see error', '');
-                            console.trace(e);
+                            logger_1.logger.trace(e, file);
                         }
                     }
                 }
@@ -79,7 +76,12 @@ var Crawler;
                         _this.debug(deps);
                         _this.__cache[name] = deps;
                     };
-                    var filterByDecorators = function (node) { return /(NgModule|Component)/.test(node.expression.expression.text); };
+                    var filterByDecorators = function (node) {
+                        if (node.expression && node.expression.expression) {
+                            return /(NgModule|Component)/.test(node.expression.expression.text);
+                        }
+                        return false;
+                    };
                     node.decorators
                         .filter(filterByDecorators)
                         .forEach(visitNode);
@@ -194,6 +196,7 @@ var Crawler;
             return urls.map(function (url) { return url.replace('./', ''); });
         };
         Dependencies.prototype.getSymbolDeps = function (props, type) {
+            var _this = this;
             var deps = props.filter(function (node) {
                 return node.name.text === type;
             });
@@ -209,7 +212,20 @@ var Crawler;
                 if (name === void 0) { name = ''; }
                 if (node.expression) {
                     name = name ? "." + name : name;
-                    return "" + buildIdentifierName(node.expression, node.name.text) + name;
+                    var nodeName = _this.unknown;
+                    if (node.name) {
+                        nodeName = node.name.text;
+                    }
+                    else if (node.text) {
+                        nodeName = node.text;
+                    }
+                    else if (node.expression) {
+                        nodeName = node.expression.text;
+                    }
+                    if (node.kind === ts.SyntaxKind.SpreadElementExpression) {
+                        return "..." + nodeName;
+                    }
+                    return "" + buildIdentifierName(node.expression, nodeName) + name;
                 }
                 return node.text + "." + name;
             };
@@ -218,7 +234,6 @@ var Crawler;
                 // { provide: APP_BASE_HREF, useValue: '/' },
                 // or
                 // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
-                var unknown = '???';
                 var _genProviderName = [];
                 var _providerProps = [];
                 o.properties.forEach(function (prop) {

@@ -71,6 +71,13 @@ var Logger = (function () {
             return;
         this.logger(this.format.apply(this, [LEVEL.DEBUG].concat(args)));
     };
+    Logger.prototype.trace = function (error, file) {
+        this.fatal('Ouch', file);
+        this.fatal('', error);
+        this.warn('ignoring', file);
+        this.warn('see error', '');
+        console.trace(error);
+    };
     Logger.prototype.format = function (level) {
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {

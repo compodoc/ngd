@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 
+import { logger } from './logger';
+
 export function d(node) {
     console.log(util.inspect(node, { showHidden: true, depth: 10 }));
 }
@@ -37,9 +39,16 @@ export function compilerHost(transpileOptions: any): ts.CompilerHost {
                 if (path.isAbsolute(fileName) === false) {
                     fileName = path.join(transpileOptions.tsconfigDirectory, fileName);
                 }
-                console.log('reading...', fileName);
 
-                const libSource = fs.readFileSync(fileName).toString();
+                let libSource = '';
+
+                try {
+                    libSource = fs.readFileSync(fileName).toString();
+                }
+                catch(e) {
+                    logger.trace(e, fileName);
+                }
+
                 return ts.createSourceFile(fileName, libSource, transpileOptions.target, false);
             }
             return undefined;

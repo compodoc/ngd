@@ -3,6 +3,7 @@ var ts = require('typescript');
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
+var logger_1 = require('./logger');
 function d(node) {
     console.log(util.inspect(node, { showHidden: true, depth: 10 }));
 }
@@ -32,8 +33,13 @@ function compilerHost(transpileOptions) {
                 if (path.isAbsolute(fileName) === false) {
                     fileName = path.join(transpileOptions.tsconfigDirectory, fileName);
                 }
-                console.log('reading...', fileName);
-                var libSource = fs.readFileSync(fileName).toString();
+                var libSource = '';
+                try {
+                    libSource = fs.readFileSync(fileName).toString();
+                }
+                catch (e) {
+                    logger_1.logger.trace(e, fileName);
+                }
                 return ts.createSourceFile(fileName, libSource, transpileOptions.target, false);
             }
             return undefined;

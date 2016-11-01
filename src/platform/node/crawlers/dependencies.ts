@@ -56,6 +56,7 @@ export namespace Crawler {
         private engine: any;
         private __cache: any = {};
         private __nsModule: any = {};
+        private unknown = '???';
 
         constructor(files: string[], options: any) {
             this.files = files;
@@ -84,11 +85,7 @@ export namespace Crawler {
                             this.getSourceFileDecorators(file, deps);
                         }
                         catch (e) {
-                            logger.fatal('Ouch', filePath);
-                            logger.fatal('', e);
-                            logger.warn('ignoring', filePath);
-                            logger.warn('see error', '');
-                            console.trace(e);
+                            logger.trace(e, file);
                         }
                     }
 
@@ -147,7 +144,12 @@ export namespace Crawler {
                         this.__cache[name] = deps;
                     }
 
-                    let filterByDecorators = (node) => /(NgModule|Component)/.test(node.expression.expression.text);
+                    let filterByDecorators = (node) => {
+                        if (node.expression && node.expression.expression) {
+                            return /(NgModule|Component)/.test(node.expression.expression.text)
+                        }
+                        return false;
+                    };
 
                     node.decorators
                         .filter(filterByDecorators)
@@ -297,10 +299,27 @@ export namespace Crawler {
             };
 
             let buildIdentifierName = (node: NodeObject, name = '') => {
+                
                 if (node.expression) {
                     name = name ? `.${name}` : name;
-                    return `${buildIdentifierName(node.expression, node.name.text)}${name}`
+
+                    let nodeName = this.unknown;
+                    if (node.name) {
+                        nodeName = node.name.text;
+                    }
+                    else if (node.text) {
+                        nodeName = node.text;
+                    }
+                    else if (node.expression) {
+                        nodeName = node.expression.text;
+                    }
+
+                    if (node.kind ===  ts.SyntaxKind.SpreadElementExpression) {
+                        return `...${nodeName}`;
+                    }
+                    return `${buildIdentifierName(node.expression, nodeName)}${name}`
                 }
+
                 return `${node.text}.${name}`;
             }
 
@@ -310,7 +329,6 @@ export namespace Crawler {
                 // or
                 // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
 
-                let unknown = '???';
                 let _genProviderName: string[] = [];
                 let _providerProps: string[] = [];
 
