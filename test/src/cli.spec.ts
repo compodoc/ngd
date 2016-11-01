@@ -1,18 +1,18 @@
 import * as chai from 'chai';
 const expect = chai.expect;
 
-import {temporaryDir, shell, pkg, fs, exists} from './helpers';
+import { temporaryDir, shell, pkg, fs, exists } from './helpers';
 const tmp = temporaryDir();
 
 describe('CLI', () => {
 
     let runHelp = null;
 
-    before( () => {
+    before(() => {
         tmp.create();
-        runHelp = shell('node', ['./bin/index.js', '-h']); 
+        runHelp = shell('node', ['./bin/index.js', '-h']);
     });
-    after( () => tmp.clean() );
+    after(() => tmp.clean());
 
 
     it(`should display correct version ${pkg.version}`, () => {
@@ -25,7 +25,7 @@ describe('CLI', () => {
     });
 
     describe('should display options in help', () => {
-        
+
         it(`-f`, () => {
             expect(runHelp.stdout.toString()).to.contain('-f, --file <file>');
             expect(runHelp.stdout.toString()).to.contain('Entry *.ts file');
@@ -35,7 +35,7 @@ describe('CLI', () => {
             expect(runHelp.stdout.toString()).to.contain('-p, --tsconfig <config>');
             expect(runHelp.stdout.toString()).to.contain('A tsconfig.json (default: ./tsconfig.json)');
         });
-        
+
         it(`-o`, () => {
             expect(runHelp.stdout.toString()).to.contain('-o, --open');
             expect(runHelp.stdout.toString()).to.contain('Open the generated HTML diagram file');

@@ -81,7 +81,7 @@ describe('In the sample files,', () => {
         before(() => {
             command = helpers_1.shell('node', ['../bin/index.js', '-p', '../test/src/sample-files/tsconfig.exclude.json'], { cwd: tmp.name });
         });
-        it('[TODO] should not generate foo.module.ts', () => {
+        it('should not generate foo.module.ts', () => {
             expect(command.stdout.toString()).not.to.contain('');
         });
     });
@@ -117,14 +117,14 @@ describe('In the sample files,', () => {
             });
         });
     });
-    xdescribe(`when given an output formats (-t),`, () => {
-        describe(`if "-t html",`, () => {
+    describe(`when given an output formats (-t),`, () => {
+        xdescribe(`if "-t html",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
                 tmp.create();
                 command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'html'], { cwd: tmp.name });
             });
-            after(() => tmp.clean());
+            afterEach(() => tmp.clean());
             check.json(command, false);
             check.dot(command, true);
             check.svg(command, true);
@@ -132,11 +132,11 @@ describe('In the sample files,', () => {
         });
         describe(`if "-t json",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
                 tmp.create();
                 command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'json'], { cwd: tmp.name });
             });
-            after(() => tmp.clean());
+            afterEach(() => tmp.clean());
             check.json(command, true);
             check.dot(command, false);
             check.svg(command, false);
@@ -144,23 +144,23 @@ describe('In the sample files,', () => {
         });
         describe(`if "-t dot",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
                 tmp.create();
                 command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'dot'], { cwd: tmp.name });
             });
-            after(() => tmp.clean());
+            afterEach(() => tmp.clean());
             check.json(command, false);
             check.dot(command, true);
             check.svg(command, false);
             check.html(command, false);
         });
-        describe(`if "-t svg",`, () => {
+        xdescribe(`if "-t svg",`, () => {
             let command = null;
-            before(() => {
+            beforeEach(() => {
                 tmp.create();
                 command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/app.module.ts', '-t', 'svg'], { cwd: tmp.name });
             });
-            after(() => tmp.clean());
+            afterEach(() => tmp.clean());
             check.json(command, false);
             check.dot(command, true);
             check.svg(command, true);

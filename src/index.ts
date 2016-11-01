@@ -1,3 +1,3 @@
-import {Application} from './platform/node/application';
+import { Application } from './platform/node/application';
 
 Application.run();

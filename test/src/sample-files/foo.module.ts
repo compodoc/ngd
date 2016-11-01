@@ -1,14 +1,14 @@
-import {NgModule, BrowserModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {HttpModule} from '@angular/http';
-import {FomsModule} from '@angular/forms';
+import { NgModule, BrowserModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { HttpModule } from '@angular/http';
+import { FomsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [ 
+  imports: [
     BrowserModule, FomsModule
   ],
-  exports: [ 
+  exports: [
     RouterModule, HttpModule
   ]
 })
-export class FooModule {}
+export class FooModule { }

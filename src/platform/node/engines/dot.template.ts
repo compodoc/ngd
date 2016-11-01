@@ -48,7 +48,7 @@ export const LEGEND = `<
 </table>
 >`;
 
-const loopBlock = (symbols, attrs, edge='') => {
+const loopBlock = (symbols, attrs, edge = '') => {
   let str = '';
 
   if (edge === '->') {
@@ -139,20 +139,20 @@ digraph dependencies {
       node [style="filled", fillcolor=1, shape="rect"];
 
       ${
-        loopBlock(
-          'imports',
-          'shape="folder"'
-        )
-      }
+  loopBlock(
+    'imports',
+    'shape="folder"'
+  )
+  }
     }
 
     ${
-      loopBlock(
-        'imports',
-        'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_imports"',
-        '->'
-      )
-    }
+  loopBlock(
+    'imports',
+    'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_imports"',
+    '->'
+  )
+  }
 
     /* imports:end */
 
@@ -195,20 +195,20 @@ digraph dependencies {
       node [style="filled", fillcolor=6, shape="rect"];
 
       ${
-        loopBlock(
-          'providers',
-          'shape="oval"'
-        )
-      }
+  loopBlock(
+    'providers',
+    'shape="oval"'
+  )
+  }
     }
 
     ${
-      loopBlock(
-        'providers',
-        'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_providers"',
-        '->'
-      )
-    }
+  loopBlock(
+    'providers',
+    'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_providers"',
+    '->'
+  )
+  }
 
     /* providers:end */
   }

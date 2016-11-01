@@ -16,10 +16,10 @@ export function exists(file: string): boolean {
 export function temporaryDir() {
     let name = '.tmp-angular2-dependencies-graph-test';
     let cleanUp = (name) => {
-        if( fs.existsSync(name) ) {
+        if (fs.existsSync(name)) {
             fs.readdirSync(name).forEach((file) => {
                 var curdir = path.join(name, file);
-                if(fs.statSync(curdir).isDirectory()) {
+                if (fs.statSync(curdir).isDirectory()) {
                     cleanUp(curdir);
                 } else {
                     fs.unlinkSync(curdir);
@@ -32,8 +32,8 @@ export function temporaryDir() {
     return {
         name,
         create() {
-            if (!fs.existsSync(name)){
-                fs.mkdirSync(name);            
+            if (!fs.existsSync(name)) {
+                fs.mkdirSync(name);
             }
         },
         clean() {

@@ -1,6 +1,6 @@
 import * as path from 'path';
-import {logger} from '../../../logger';
-import {DOT_TEMPLATE, LEGEND} from './dot.template';
+import { logger } from '../../../logger';
+import { DOT_TEMPLATE, LEGEND } from './dot.template';
 
 interface IOptions {
 	name?: string;
@@ -19,8 +19,8 @@ export namespace Engine {
 
 	let fs = require('fs-extra');
 	let q = require('q');
-	let cleanDot:boolean = false;
- 	let cleanSvg:boolean = false;
+	let cleanDot: boolean = false;
+	let cleanSvg: boolean = false;
 
 	let appName = require('../../../../package.json').name;
 
@@ -48,11 +48,11 @@ export namespace Engine {
 
 		constructor(options: IOptions) {
 
-			let baseDir = `./${ appName }/`;
+			let baseDir = `./${appName}/`;
 
 			this.options = {
-				name: `${ appName }`,
-				output: `${baseDir}/${ appName }`,
+				name: `${appName}`,
+				output: `${baseDir}/${appName}`,
 				displayLegend: options.displayLegend,
 				outputFormats: options.outputFormats,
 				dot: {
@@ -65,9 +65,9 @@ export namespace Engine {
 				}
 			};
 
-			if(options.output) {
+			if (options.output) {
 
-				if(typeof this.options.output !== 'string') {
+				if (typeof this.options.output !== 'string') {
 					logger.fatal('Option "output" has been provided but it is not a valid name.');
 					process.exit(1);
 				}
@@ -76,11 +76,11 @@ export namespace Engine {
 			}
 
 			this.paths = {
-				dot: path.join(this.cwd, `${ this.options.output }/dependencies.dot`),
-				json: path.join(this.cwd, `${ this.options.output }/dependencies.json`),
-				svg: path.join(this.cwd, `${ this.options.output }/dependencies.svg`),
-				png: path.join(this.cwd, `${ this.options.output }/dependencies.png`),
-				html: path.join(this.cwd, `${ this.options.output }/dependencies.html`)
+				dot: path.join(this.cwd, `${this.options.output}/dependencies.dot`),
+				json: path.join(this.cwd, `${this.options.output}/dependencies.json`),
+				svg: path.join(this.cwd, `${this.options.output}/dependencies.svg`),
+				png: path.join(this.cwd, `${this.options.output}/dependencies.png`),
+				html: path.join(this.cwd, `${this.options.output}/dependencies.html`)
 			};
 		}
 
@@ -88,38 +88,34 @@ export namespace Engine {
 			let template = this.preprocessTemplates(this.options);
 			let generators = [];
 
-            // Handle svg dependency with dot, and html with svg
-            if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
-                generators.push(this.generateDot(template, deps));
-				console.log('push dot');
-            }
+			// Handle svg dependency with dot, and html with svg
+			if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
+				generators.push(this.generateDot(template, deps));
+			}
 
-            if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
-                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ));
-                if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
-                    cleanDot = true;
-                }
-				console.log('push dot svg');
-            }
+			if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
+				generators.push(this.generateDot(template, deps).then(_ => this.generateSVG()));
+				if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+					cleanDot = true;
+				}
+			}
 
-            if (this.options.outputFormats.indexOf('json') > -1) {
-                generators.push(this.generateJSON(deps));
-				console.log('push json');
-            }
+			if (this.options.outputFormats.indexOf('json') > -1) {
+				generators.push(this.generateJSON(deps));
+			}
 
-            if (this.options.outputFormats.indexOf('html') > -1) {
-                generators.push(this.generateDot(template, deps).then( _ => this.generateSVG() ).then( _ => this.generateHTML() ));
-                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
-                    cleanSvg = true;
-                }
-                if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
-                    cleanDot = true;
-                }
-				console.log('push dot svg html');
-            }
+			if (this.options.outputFormats.indexOf('html') > -1) {
+				generators.push(this.generateDot(template, deps).then(_ => this.generateSVG()).then(_ => this.generateHTML()));
+				if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
+					cleanSvg = true;
+				}
+				if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
+					cleanDot = true;
+				}
+			}
 
-			
-            
+
+
 			// todo(WCH): disable PNG creation due to some errors with phantomjs
 			/*
 			if (this.options.outputFormats.indexOf('png') > -1) {
@@ -127,11 +123,11 @@ export namespace Engine {
             }
 			*/
 
-            return q.all(generators).then(_ => this.cleanGeneratedFiles());
+			return q.all(generators).then(_ => this.cleanGeneratedFiles());
 		}
 
-        private cleanGeneratedFiles() {
-            let d = q.defer();
+		private cleanGeneratedFiles() {
+			let d = q.defer();
 			let removeFile = (path) => {
 				let p = q.defer();
 				fs.unlink(path, (error) => {
@@ -144,24 +140,24 @@ export namespace Engine {
 				return p.promise;
 			};
 			let cleaners = [];
-            if (cleanDot) {
-                cleaners.push(removeFile(this.paths.dot));
-            }
-            if (cleanSvg) {
-                cleaners.push(removeFile(this.paths.svg));
-            }
+			if (cleanDot) {
+				cleaners.push(removeFile(this.paths.dot));
+			}
+			if (cleanSvg) {
+				cleaners.push(removeFile(this.paths.svg));
+			}
 			return q.all(cleaners);
-        }
+		}
 
 		private preprocessTemplates(options?) {
 			let doT = require('dot');
 			let result;
-			 if(options.displayLegend === 'true' || options.displayLegend === true) {
-			   result = this.template.replace(/###legend###/g, LEGEND);
-			 } else {
-			   result = this.template.replace(/###legend###/g, '""');
-			 }
-			 return doT.template(result.replace(/###scheme###/g, options.dot.colorScheme));
+			if (options.displayLegend === 'true' || options.displayLegend === true) {
+				result = this.template.replace(/###legend###/g, LEGEND);
+			} else {
+				result = this.template.replace(/###legend###/g, '""');
+			}
+			return doT.template(result.replace(/###scheme###/g, options.dot.colorScheme));
 		}
 
 		private generateJSON(deps) {
@@ -170,7 +166,7 @@ export namespace Engine {
 				this.paths.json,
 				JSON.stringify(deps, null, 2),
 				(error) => {
-					if(error) {
+					if (error) {
 						d.reject(error);
 					}
 					logger.info('creating JSON', this.paths.json);
@@ -180,7 +176,36 @@ export namespace Engine {
 			return d.promise;
 		}
 
+		private escape(deps) {
+			return deps.map(d => {
+				for (let prop in d) {
+					if (d.hasOwnProperty(prop)) {
+						let a = d[prop];
+						console.log(a);
+
+						if (Array.isArray(a)) {
+							return this.escape(a);
+						}
+						else if (typeof a === 'string') {
+							a = a.replace(/"/g, '\"');
+							a = a.replace(/'/g, "\'");
+							a = a.replace(/\{/g, "\{");
+							a = a.replace(/\)/g, "\)");
+
+
+						}
+					}
+				}
+
+				return d;
+			});
+		}
+
 		private generateDot(template, deps) {
+
+			// todo(wch)
+			//deps = this.escape(deps);
+
 			let d = q.defer();
 			fs.outputFile(
 				this.paths.dot,
@@ -188,7 +213,7 @@ export namespace Engine {
 					modules: deps
 				}),
 				(error) => {
-					if(error) {
+					if (error) {
 						d.reject(error);
 					}
 					logger.info('creating DOT', this.paths.dot);
@@ -212,7 +237,7 @@ export namespace Engine {
 				this.paths.svg,
 				vizSvg,
 				(error) => {
-					if(error) {
+					if (error) {
 						d.reject(error);
 					}
 					logger.info('creating SVG', this.paths.svg);
@@ -249,7 +274,7 @@ export namespace Engine {
 				this.paths.html,
 				htmlContent,
 				(error) => {
-					if(error) {
+					if (error) {
 						d.reject(error);
 					}
 					logger.info('creating HTML', this.paths.html);
@@ -264,8 +289,8 @@ export namespace Engine {
 			let d = q.defer();
 			svgToPng.convert(
 				this.paths.svg,
-				path.join(this.cwd, `${ this.options.output }`)
-			).then( function(){
+				path.join(this.cwd, `${this.options.output}`)
+			).then(function () {
 				logger.info('creating PNG', this.paths.png);
 				d.resolve(this.paths.image);
 			});

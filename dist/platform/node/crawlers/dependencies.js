@@ -52,7 +52,7 @@ var Crawler;
                         var name = _this.getSymboleName(node);
                         var deps = {};
                         var metadata = node.decorators.pop();
-                        var props = visitedNode.expression.arguments.pop().properties;
+                        var props = _this.findProps(visitedNode);
                         if (_this.isModule(metadata)) {
                             deps = {
                                 name: name,
@@ -116,9 +116,12 @@ var Crawler;
         };
         Dependencies.prototype.getModuleProviders = function (props) {
             var _this = this;
-            return this.getSymbolDeps(props, 'providers').map(function (name) {
-                return _this.parseDeepIndentifier(name);
+            return this.getSymbolDeps(props, 'providers').map(function (providerName) {
+                return _this.parseDeepIndentifier(providerName);
             });
+        };
+        Dependencies.prototype.findProps = function (visitedNode) {
+            return visitedNode.expression.arguments.pop().properties;
         };
         Dependencies.prototype.getModuleDeclations = function (props) {
             var _this = this;
@@ -166,7 +169,7 @@ var Crawler;
         Dependencies.prototype.parseDeepIndentifier = function (name) {
             var nsModule = name.split('.');
             if (nsModule.length > 1) {
-                // cache deps with the same namespace (Shared.*)
+                // cache deps with the same namespace (i.e Shared.*)
                 if (this.__nsModule[nsModule[0]]) {
                     this.__nsModule[nsModule[0]].push(name);
                 }
@@ -211,25 +214,58 @@ var Crawler;
                 }
                 return node.text + "." + name;
             };
+            var parseProviderConfiguration = function (o) {
+                // parse expressions such as: 
+                // { provide: APP_BASE_HREF, useValue: '/' },
+                // or
+                // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
+                var unknown = '???';
+                var _genProviderName = [];
+                var _providerProps = [];
+                o.properties.forEach(function (prop) {
+                    var identifier = prop.initializer.text;
+                    if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {
+                        identifier = "'" + identifier + "'";
+                    }
+                    // lambda function (i.e useFactory)
+                    if (prop.initializer.body) {
+                        var params = (prop.initializer.parameters || []).map(function (params) { return params.name.text; });
+                        identifier = "(" + params.join(', ') + ") => {}";
+                    }
+                    else if (prop.initializer.elements) {
+                        var elements = (prop.initializer.elements || []).map(function (n) {
+                            if (n.kind === ts.SyntaxKind.StringLiteral) {
+                                return "'" + n.text + "'";
+                            }
+                            return n.text;
+                        });
+                        identifier = "[" + elements.join(', ') + "]";
+                    }
+                    _providerProps.push([
+                        // i.e provide
+                        prop.name.text,
+                        // i.e OpaqueToken or 'StringToken'
+                        identifier
+                    ].join(': '));
+                });
+                return "{ " + _providerProps.join(', ') + " }";
+            };
             var parseSymbolElements = function (o) {
                 // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
                 if (o.arguments) {
-                    var className = o.expression.expression.text;
-                    var functionName = o.expression.name.text;
+                    var className = buildIdentifierName(o.expression);
                     // function arguments could be really complexe. There are so
-                    // many use cases that we can't handle. Just print "..." to indicate
+                    // many use cases that we can't handle. Just print "args" to indicate
                     // that we have arguments.
-                    //
-                    // let functionArgs = o.arguments.map(arg => arg.text).join(',');
                     var functionArgs = o.arguments.length > 0 ? 'args' : '';
-                    var text = className + "." + functionName + "(" + functionArgs + ")";
+                    var text = className + "(" + functionArgs + ")";
                     return text;
                 }
                 else if (o.expression) {
                     var identifier = buildIdentifierName(o);
                     return identifier;
                 }
-                return o.text;
+                return o.text ? o.text : parseProviderConfiguration(o);
             };
             var parseSymbols = function (node) {
                 var text = node.initializer.text;

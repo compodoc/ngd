@@ -1,17 +1,17 @@
-import {NgModule} from '@angular/core';
-import {BarDirective} from './bar.directive';
-import {BarComponent} from './bar.component';
-import {BarService} from './bar.service';
+import { NgModule } from '@angular/core';
+import { BarDirective } from './bar.directive';
+import { BarComponent } from './bar.component';
+import { BarService } from './bar.service';
 
 @NgModule({
-  declarations: [ 
+  declarations: [
     BarDirective, BarComponent
   ],
-  exports: [ 
+  exports: [
     BarDirective, BarComponent
   ],
   providers: [
-      BarService
+    BarService
   ]
 })
-export class BarModule {}
+export class BarModule { }

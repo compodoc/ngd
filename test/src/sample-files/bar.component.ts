@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {BarService} from './bar.service';
+import { Component } from '@angular/core';
+import { BarService } from './bar.service';
 
 @Component({
 	selector: 'app-bar',
@@ -7,4 +7,4 @@ import {BarService} from './bar.service';
 	providers: [BarService]
 
 })
-export class BarComponent {}
+export class BarComponent { }

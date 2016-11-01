@@ -3,7 +3,7 @@
     "module": "commonjs"
   },
   "files": [
-      "app.module.ts"
+    "app.module.ts"
   ],
   "exclude": [
     "**/*/foo.module.ts"

@@ -62,18 +62,15 @@ var Engine;
             // Handle svg dependency with dot, and html with svg
             if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
                 generators.push(this.generateDot(template, deps));
-                console.log('push dot');
             }
             if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
                 generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }));
                 if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
                     cleanDot = true;
                 }
-                console.log('push dot svg');
             }
             if (this.options.outputFormats.indexOf('json') > -1) {
                 generators.push(this.generateJSON(deps));
-                console.log('push json');
             }
             if (this.options.outputFormats.indexOf('html') > -1) {
                 generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }).then(function (_) { return _this.generateHTML(); }));
@@ -83,7 +80,6 @@ var Engine;
                 if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('dot') === -1) {
                     cleanDot = true;
                 }
-                console.log('push dot svg html');
             }
             // todo(WCH): disable PNG creation due to some errors with phantomjs
             /*
@@ -139,7 +135,30 @@ var Engine;
             });
             return d.promise;
         };
+        Dot.prototype.escape = function (deps) {
+            var _this = this;
+            return deps.map(function (d) {
+                for (var prop in d) {
+                    if (d.hasOwnProperty(prop)) {
+                        var a = d[prop];
+                        console.log(a);
+                        if (Array.isArray(a)) {
+                            return _this.escape(a);
+                        }
+                        else if (typeof a === 'string') {
+                            a = a.replace(/"/g, '\"');
+                            a = a.replace(/'/g, "\'");
+                            a = a.replace(/\{/g, "\{");
+                            a = a.replace(/\)/g, "\)");
+                        }
+                    }
+                }
+                return d;
+            });
+        };
         Dot.prototype.generateDot = function (template, deps) {
+            // todo(wch)
+            //deps = this.escape(deps);
             var _this = this;
             var d = q.defer();
             fs.outputFile(this.paths.dot, template({

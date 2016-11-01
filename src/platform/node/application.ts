@@ -1,9 +1,9 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
-import {Engine} from './engines/dot';
-import {Crawler} from './crawlers/dependencies';
-import {logger} from '../../logger';
+import { Engine } from './engines/dot';
+import { Crawler } from './crawlers/dependencies';
+import { logger } from '../../logger';
 
 let pkg = require('../../../package.json');
 let program = require('commander');
@@ -28,32 +28,32 @@ export namespace Application {
 
   export let run = () => {
 
-    if(program.silent) {
-        logger.silent = false;
+    if (program.silent) {
+      logger.silent = false;
     }
 
     let files = [];
-    if(program.file) {
-      if(
+    if (program.file) {
+      if (
         !fs.existsSync(program.file) ||
         !fs.existsSync(path.join(process.cwd(), program.file))
       ) {
-        logger.fatal(`"${ program.file }" file was not found`);
+        logger.fatal(`"${program.file}" file was not found`);
         process.exit(1);
       }
       else if (path.extname(program.file) !== '.ts') {
-        logger.fatal(`"${ program.file }" is not a TypeScript file`);
+        logger.fatal(`"${program.file}" is not a TypeScript file`);
         process.exit(1);
       }
       else {
         logger.info('using entry', program.file);
-      
+
         files = [program.file];
       }
     }
-    else if(program.tsconfig) {
+    else if (program.tsconfig) {
 
-      if(!fs.existsSync(program.tsconfig)) {
+      if (!fs.existsSync(program.tsconfig)) {
         logger.fatal('"tsconfig.json" file was not found in the current directory');
         process.exit(1);
       }
@@ -65,20 +65,20 @@ export namespace Application {
         logger.info('using tsconfig', program.tsconfig);
         files = require(program.tsconfig).files;
 
-        if(!files) {
+        if (!files) {
           let exclude = require(program.tsconfig).exclude || [];
 
           var walk = (dir) => {
             let results = [];
             let list = fs.readdirSync(dir);
-            list.forEach( (file) => {
+            list.forEach((file) => {
               if (exclude.indexOf(file) < 0) {
                 file = path.join(dir, file);
                 let stat = fs.statSync(file);
                 if (stat && stat.isDirectory()) {
                   results = results.concat(walk(file));
                 }
-                else if(/(spec|\.d)\.ts/.test(file)) {
+                else if (/(spec|\.d)\.ts/.test(file)) {
                   logger.debug('ignoring', file);
                 }
                 else if (path.extname(file) === '.ts') {
@@ -94,7 +94,7 @@ export namespace Application {
         }
 
         // normalize paths
-        files = files.map( (file) => {
+        files = files.map((file) => {
           return path.join(path.dirname(program.tsconfig), file);
         });
       }
@@ -112,7 +112,7 @@ export namespace Application {
 
     let deps = crawler.getDependencies();
 
-    if(deps.length <= 0) {
+    if (deps.length <= 0) {
       logger.warn('no deps', 'May be you should consider providing another entry file. See -h');
       logger.info('Done');
       process.exit(0);
@@ -125,7 +125,7 @@ export namespace Application {
     });
     engine
       .generateGraph(deps)
-      .then( file => {
+      .then(file => {
 
         /*
         if (program.open === true) {
@@ -136,8 +136,8 @@ export namespace Application {
         */
 
       })
-      .catch( e => logger.error(e) )
-      .finally( _ => logger.info('done'))
+      .catch(e => logger.error(e))
+      .finally(_ => logger.info('done'))
 
   }
 }

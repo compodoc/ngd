@@ -7,27 +7,31 @@ import { logger } from '../../../logger';
 let q = require('q');
 
 let d = (node) => {
-  console.log(util.inspect(node, { showHidden: true, depth: 10 }));
+    console.log(util.inspect(node, { showHidden: true, depth: 10 }));
 };
 
 export namespace Crawler {
 
     interface NodeObject {
+        kind: Number;
         pos: Number;
         end: Number;
         text: string;
-        initializer: {
-            name: { text: string };
-            text: string;
-            elements: NodeObject[],
-            expression: NodeObject
-        };
+        initializer: NodeObject,
         name?: { text: string };
         expression?: NodeObject;
+        elements?: NodeObject[];
         arguments?: NodeObject[];
         properties?: any[];
         parserContextFlags?: Number;
+        equalsGreaterThanToken?: NodeObject[];
+        parameters?: NodeObject[];
         Component?: String;
+        body?: {
+            pos: Number;
+            end: Number;
+            statements: NodeObject[];
+        }
     }
 
     interface Deps {
@@ -46,8 +50,8 @@ export namespace Crawler {
     }
 
     interface SymbolDeps {
-      full: string;
-      alias: string;
+        full: string;
+        alias: string;
     }
 
     export class Dependencies {
@@ -80,14 +84,14 @@ export namespace Crawler {
                         logger.info('parsing', filePath);
 
                         try {
-                          this.getSourceFileDecorators(file, deps);
+                            this.getSourceFileDecorators(file, deps);
                         }
-                        catch(e) {
-                          logger.fatal('Ouch', filePath);
-                          logger.fatal('', e);
-                          logger.warn('ignoring', filePath);
-                          logger.warn('see error', '');
-                          console.trace(e);
+                        catch (e) {
+                            logger.fatal('Ouch', filePath);
+                            logger.fatal('', e);
+                            logger.warn('ignoring', filePath);
+                            logger.warn('see error', '');
+                            console.trace(e);
                         }
                     }
 
@@ -113,31 +117,31 @@ export namespace Crawler {
                         let name = this.getSymboleName(node);
                         let deps: Deps = <Deps>{};
                         let metadata = node.decorators.pop();
-                        let props = visitedNode.expression.arguments.pop().properties;
+                        let props = this.findProps(visitedNode);
 
-                        if(this.isModule(metadata)) {
-                          deps = {
-                              name,
-                              file: srcFile.fileName.split('/').splice(-3).join('/'),
-                              providers: this.getModuleProviders(props),
-                              declarations: this.getModuleDeclations(props),
-                              imports: this.getModuleImports(props),
-                              exports: this.getModuleExports(props),
-                              bootstrap: this.getModuleBootstrap(props),
-                              __raw: props
-                          };
-                          outputSymbols.push(deps);
+                        if (this.isModule(metadata)) {
+                            deps = {
+                                name,
+                                file: srcFile.fileName.split('/').splice(-3).join('/'),
+                                providers: this.getModuleProviders(props),
+                                declarations: this.getModuleDeclations(props),
+                                imports: this.getModuleImports(props),
+                                exports: this.getModuleExports(props),
+                                bootstrap: this.getModuleBootstrap(props),
+                                __raw: props
+                            };
+                            outputSymbols.push(deps);
                         }
                         else if (this.isComponent(metadata)) {
-                          deps = {
-                              name,
-                              file: srcFile.fileName.split('/').splice(-3).join('/'),
-                              selector: this.getComponentSelector(props),
-                              providers: this.getComponentProviders(props),
-                              templateUrl: this.getComponentTemplateUrl(props),
-                              styleUrls: this.getComponentStyleUrls(props),
-                              __raw: props
-                          };
+                            deps = {
+                                name,
+                                file: srcFile.fileName.split('/').splice(-3).join('/'),
+                                selector: this.getComponentSelector(props),
+                                providers: this.getComponentProviders(props),
+                                templateUrl: this.getComponentTemplateUrl(props),
+                                styleUrls: this.getComponentStyleUrls(props),
+                                __raw: props
+                            };
 
                         }
 
@@ -160,27 +164,27 @@ export namespace Crawler {
 
         }
         private debug(deps: Deps) {
-          logger.debug('debug', `${deps.name}:`);
+            logger.debug('debug', `${deps.name}:`);
 
-          [
-            'imports', 'exports', 'declarations', 'providers', 'bootstrap'
-          ].forEach( symbols => {
-            if (deps[symbols] && deps[symbols].length > 0) {
-              logger.debug('', `- ${symbols}:`);
-              deps[symbols].map(i=>i.name).forEach( d  => {
-                logger.debug('', `\t- ${d}`);
-              });
+            [
+                'imports', 'exports', 'declarations', 'providers', 'bootstrap'
+            ].forEach(symbols => {
+                if (deps[symbols] && deps[symbols].length > 0) {
+                    logger.debug('', `- ${symbols}:`);
+                    deps[symbols].map(i => i.name).forEach(d => {
+                        logger.debug('', `\t- ${d}`);
+                    });
 
-            }
-          });
+                }
+            });
         }
 
         private isComponent(metadata) {
-          return metadata.expression.expression.text === 'Component';
+            return metadata.expression.expression.text === 'Component';
         }
 
         private isModule(metadata) {
-          return metadata.expression.expression.text === 'NgModule';
+            return metadata.expression.expression.text === 'NgModule';
         }
 
         private getSymboleName(node): string {
@@ -192,39 +196,43 @@ export namespace Crawler {
         }
 
         private getModuleProviders(props: NodeObject[]): Deps[] {
-          return this.getSymbolDeps(props, 'providers').map((name) => {
-              return this.parseDeepIndentifier(name);
-          });
+            return this.getSymbolDeps(props, 'providers').map((providerName) => {
+                return this.parseDeepIndentifier(providerName);
+            });
+        }
+
+        private findProps(visitedNode) {
+            return visitedNode.expression.arguments.pop().properties;
         }
 
         private getModuleDeclations(props: NodeObject[]): Deps[] {
-          return this.getSymbolDeps(props, 'declarations').map((name) => {
-              let component = this.findComponentSelectorByName(name);
+            return this.getSymbolDeps(props, 'declarations').map((name) => {
+                let component = this.findComponentSelectorByName(name);
 
-              if(component) {
-                return component;
-              }
+                if (component) {
+                    return component;
+                }
 
-              return this.parseDeepIndentifier(name);
-          });
+                return this.parseDeepIndentifier(name);
+            });
         }
 
         private getModuleImports(props: NodeObject[]): Deps[] {
-          return this.getSymbolDeps(props, 'imports').map((name) => {
-              return this.parseDeepIndentifier(name);
-          });
+            return this.getSymbolDeps(props, 'imports').map((name) => {
+                return this.parseDeepIndentifier(name);
+            });
         }
 
         private getModuleExports(props: NodeObject[]): Deps[] {
-          return this.getSymbolDeps(props, 'exports').map((name) => {
-              return this.parseDeepIndentifier(name);
-          });
+            return this.getSymbolDeps(props, 'exports').map((name) => {
+                return this.parseDeepIndentifier(name);
+            });
         }
 
         private getModuleBootstrap(props: NodeObject[]): Deps[] {
-          return this.getSymbolDeps(props, 'bootstrap').map((name) => {
-              return this.parseDeepIndentifier(name);
-          });
+            return this.getSymbolDeps(props, 'bootstrap').map((name) => {
+                return this.parseDeepIndentifier(name);
+            });
         }
 
         private getComponentProviders(props: NodeObject[]): Deps[] {
@@ -243,25 +251,25 @@ export namespace Crawler {
         }
 
         private parseDeepIndentifier(name: string): any {
-          let nsModule = name.split('.');
-          if(nsModule.length > 1) {
+            let nsModule = name.split('.');
+            if (nsModule.length > 1) {
 
-            // cache deps with the same namespace (Shared.*)
-            if(this.__nsModule[ nsModule[0] ]) {
-              this.__nsModule[ nsModule[0] ].push(name)
-            }
-            else {
-              this.__nsModule[ nsModule[0] ] = [name];
-            }
+                // cache deps with the same namespace (i.e Shared.*)
+                if (this.__nsModule[nsModule[0]]) {
+                    this.__nsModule[nsModule[0]].push(name)
+                }
+                else {
+                    this.__nsModule[nsModule[0]] = [name];
+                }
 
+                return {
+                    ns: nsModule[0],
+                    name
+                }
+            }
             return {
-              ns: nsModule[0],
-              name
-            }
-          }
-          return {
-              name
-          };
+                name
+            };
         }
 
         private getComponentTemplateUrl(props: NodeObject[]): string[] {
@@ -273,7 +281,7 @@ export namespace Crawler {
         }
 
         private sanitizeUrls(urls: string[]) {
-          return urls.map( url => url.replace('./', '') );
+            return urls.map(url => url.replace('./', ''));
         }
 
         private getSymbolDeps(props: NodeObject[], type: string): string[] {
@@ -283,71 +291,112 @@ export namespace Crawler {
             });
 
             let parseSymbolText = (text: string) => {
-              if (text.indexOf('/') !== -1) {
-                  text = text.split('/').pop();
-              }
-              return [
-                text
-              ];
+                if (text.indexOf('/') !== -1) {
+                    text = text.split('/').pop();
+                }
+                return [
+                    text
+                ];
             };
 
-            let buildIdentifierName = (node: NodeObject, name='') => {
-              if (node.expression) {
-                name = name ? `.${name}` : name;
-                return `${ buildIdentifierName(node.expression, node.name.text) }${name}`
-              }
-              return `${node.text}.${name}`;
+            let buildIdentifierName = (node: NodeObject, name = '') => {
+                if (node.expression) {
+                    name = name ? `.${name}` : name;
+                    return `${buildIdentifierName(node.expression, node.name.text)}${name}`
+                }
+                return `${node.text}.${name}`;
+            }
+
+            let parseProviderConfiguration = (o: NodeObject): string => {
+                // parse expressions such as: 
+                // { provide: APP_BASE_HREF, useValue: '/' },
+                // or
+                // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
+
+                let unknown = '???';
+                let _genProviderName: string[] = [];
+                let _providerProps: string[] = [];
+
+                o.properties.forEach((prop: NodeObject) => {
+
+                    let identifier = prop.initializer.text;
+                    if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {
+                        identifier = `'${identifier}'`;
+                    }
+
+                    // lambda function (i.e useFactory)
+                    if (prop.initializer.body) {
+                        let params = (prop.initializer.parameters || <any>[]).map((params: NodeObject) => params.name.text);
+                        identifier = `(${params.join(', ')}) => {}`;
+                    }
+
+                    // factory deps array
+                    else if (prop.initializer.elements) {
+                        let elements = (prop.initializer.elements || []).map((n: NodeObject) => {
+
+                            if (n.kind === ts.SyntaxKind.StringLiteral) {
+                                return `'${n.text}'`;
+                            }
+
+                            return n.text;
+                        });
+                        identifier = `[${elements.join(', ')}]`;
+                    }
+
+                    _providerProps.push([
+
+                        // i.e provide
+                        prop.name.text,
+
+                        // i.e OpaqueToken or 'StringToken'
+                        identifier
+
+                    ].join(': '));
+
+                });
+
+                return `{ ${_providerProps.join(', ')} }`;
             }
 
             let parseSymbolElements = (o: NodeObject | any): string => {
-              // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
-              if (o.arguments) {
-                let className = o.expression.expression.text;
-                let functionName = o.expression.name.text;
+                // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
+                if (o.arguments) {
+                    let className = buildIdentifierName(o.expression);
 
-                // function arguments could be really complexe. There are so
-                // many use cases that we can't handle. Just print "..." to indicate
-                // that we have arguments.
-                //
-                // let functionArgs = o.arguments.map(arg => arg.text).join(',');
+                    // function arguments could be really complexe. There are so
+                    // many use cases that we can't handle. Just print "args" to indicate
+                    // that we have arguments.
 
-                let functionArgs = o.arguments.length > 0 ? 'args' : '';
-                let text = `${className}.${functionName}(${functionArgs})`;
-                return text;
-              }
+                    let functionArgs = o.arguments.length > 0 ? 'args' : '';
+                    let text = `${className}(${functionArgs})`;
+                    return text;
+                }
 
-              // parse expressions such as: Shared.Module
-              else if (o.expression) {
-                let identifier = buildIdentifierName(o);
-                return identifier;
-              }
+                // parse expressions such as: Shared.Module
+                else if (o.expression) {
+                    let identifier = buildIdentifierName(o);
+                    return identifier;
+                }
 
-              return o.text;
+                return o.text ? o.text : parseProviderConfiguration(o);
             };
 
-            let parseSymbols = (node: NodeObject) => {
+            let parseSymbols = (node: NodeObject): string[] => {
 
                 let text = node.initializer.text;
                 if (text) {
-                  return parseSymbolText(text);
+                    return parseSymbolText(text);
                 }
 
                 else if (node.initializer.expression) {
-                  let identifier = parseSymbolElements(node.initializer);
-                  return [
-                    identifier
-                  ];
-                  // if(node.initializer.expression.expression) {
-                  // }
-                  // else {
-                  //   return [
-                  //     `${node.initializer.expression.text}.${node.initializer.name.text}`
-                  //   ];
-                  // }
+                    let identifier = parseSymbolElements(node.initializer);
+                    return [
+                        identifier
+                    ];
                 }
 
                 else if (node.initializer.elements) {
-                  return node.initializer.elements.map(parseSymbolElements);
+                    return node.initializer.elements.map(parseSymbolElements);
                 }
 
             };
