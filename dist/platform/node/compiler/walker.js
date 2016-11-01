@@ -32,7 +32,7 @@ var Crawler;
                             _this.getSourceFileDecorators(file, deps);
                         }
                         catch (e) {
-                            logger_1.logger.trace(e, file);
+                            logger_1.logger.trace(e, file.fileName);
                         }
                     }
                 }
@@ -220,7 +220,15 @@ var Crawler;
                         nodeName = node.text;
                     }
                     else if (node.expression) {
-                        nodeName = node.expression.text;
+                        if (node.expression.text) {
+                            nodeName = node.expression.text;
+                        }
+                        else if (node.expression.elements) {
+                            if (node.expression.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                                nodeName = node.expression.elements.map(function (el) { return el.text; }).join(', ');
+                                nodeName = "[" + nodeName + "]";
+                            }
+                        }
                     }
                     if (node.kind === ts.SyntaxKind.SpreadElementExpression) {
                         return "..." + nodeName;
@@ -236,7 +244,7 @@ var Crawler;
                 // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
                 var _genProviderName = [];
                 var _providerProps = [];
-                o.properties.forEach(function (prop) {
+                (o.properties || []).forEach(function (prop) {
                     var identifier = prop.initializer.text;
                     if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {
                         identifier = "'" + identifier + "'";

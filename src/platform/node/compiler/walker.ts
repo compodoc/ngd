@@ -85,7 +85,7 @@ export namespace Crawler {
                             this.getSourceFileDecorators(file, deps);
                         }
                         catch (e) {
-                            logger.trace(e, file);
+                            logger.trace(e, file.fileName);
                         }
                     }
 
@@ -311,7 +311,18 @@ export namespace Crawler {
                         nodeName = node.text;
                     }
                     else if (node.expression) {
-                        nodeName = node.expression.text;
+
+                        if (node.expression.text) {
+                            nodeName = node.expression.text;
+                        }
+                        else if(node.expression.elements) {
+
+                            if (node.expression.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                                nodeName = node.expression.elements.map( el => el.text ).join(', ');
+                                nodeName = `[${nodeName}]`;
+                            }
+
+                        }
                     }
 
                     if (node.kind ===  ts.SyntaxKind.SpreadElementExpression) {
@@ -332,7 +343,7 @@ export namespace Crawler {
                 let _genProviderName: string[] = [];
                 let _providerProps: string[] = [];
 
-                o.properties.forEach((prop: NodeObject) => {
+                (o.properties || []).forEach((prop: NodeObject) => {
 
                     let identifier = prop.initializer.text;
                     if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {

@@ -2,7 +2,7 @@
 var fs = require('fs');
 var path = require('path');
 var dot_1 = require('./engines/dot');
-var dependencies_1 = require('./crawlers/dependencies');
+var walker_1 = require('./compiler/walker');
 var logger_1 = require('../../logger');
 var pkg = require('../../../package.json');
 var program = require('commander');
@@ -90,7 +90,7 @@ var Application;
         else {
             program.output = path.resolve(process.cwd(), program.output);
         }
-        var crawler = new dependencies_1.Crawler.Dependencies(files, {
+        var crawler = new walker_1.Crawler.Dependencies(files, {
             tsconfigDirectory: cwd
         });
         var deps = crawler.getDependencies();

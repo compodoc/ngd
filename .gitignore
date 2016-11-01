@@ -3,3 +3,4 @@ node_modules
 typings
 .tmp-angular2-dependencies-graph-test
 **/documentation/**
+test/src/sample-files/*.js

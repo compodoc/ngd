@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Engine } from './engines/dot';
-import { Crawler } from './crawlers/dependencies';
+import { Crawler } from './compiler/walker';
 import { logger } from '../../logger';
 
 let pkg = require('../../../package.json');
