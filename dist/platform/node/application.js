@@ -74,12 +74,9 @@ var Application;
                         });
                         return results;
                     };
-                    files = walk('.');
+                    var cwd = program.tsconfig.replace('/tsconfig.json', '');
+                    files = walk(cwd || '.');
                 }
-                // normalize paths
-                files = files.map(function (file) {
-                    return path.join(path.dirname(program.tsconfig), file);
-                });
             }
         }
         else {

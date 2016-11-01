@@ -1,0 +1,18 @@
+machine:
+  node:
+    version: 6.4
+
+dependencies:
+  pre:
+    - rm -rf node_modules
+
+deployment:
+  dev:
+    branch: /^(chore|dev|fix).*/
+    commands:
+      - git push -f git@heroku.com:${HEROKU_APP_DEV}.git ${CIRCLE_BRANCH}:master
+
+  staging:
+    branch: master
+    commands:
+      - git push -f git@heroku.com:${HEROKU_APP_STAGING}.git ${CIRCLE_BRANCH}:master

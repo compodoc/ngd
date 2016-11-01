@@ -4,11 +4,12 @@
   "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
   "main": "dist/index.js",
   "scripts": {
-    "pretest": "tsc -p test/tsconfig-test.json",
+    "pretest": "npm run compile:src && npm run compile:tests",
     "test": "mocha --opts test/mocha.opts",
-    "prepublish": "npm run tsc",
-    "deploy": "npm run tsc && npm version patch && npm publish",
-    "tsc": "tsc --newLine LF"
+    "compile:tests": "tsc -p test/tsconfig-test.json",
+    "compile:src": "tsc --newLine LF",
+    "prepublish": "npm run compile:src && npm test",
+    "deploy": "npm run compile:src && npm version patch && npm publish"
   },
   "bin": {
     "ngd": "bin/index.js"

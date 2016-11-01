@@ -90,13 +90,14 @@ export namespace Application {
             return results;
           };
 
-          files = walk('.');
+          let cwd = program.tsconfig.replace('/tsconfig.json', '');
+          files = walk( cwd || '.' );
         }
 
         // normalize paths
-        files = files.map((file) => {
-          return path.join(path.dirname(program.tsconfig), file);
-        });
+        // files = files.map((file) => {
+        //   return path.join(path.dirname(program.tsconfig), file);
+        // });
       }
 
     }

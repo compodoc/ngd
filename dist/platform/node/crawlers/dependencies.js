@@ -1,23 +1,21 @@
 "use strict";
 var path = require('path');
-var util = require('util');
 var ts = require('typescript');
+var utilities_1 = require('../../../utilities');
 var logger_1 = require('../../../logger');
 var q = require('q');
-var d = function (node) {
-    console.log(util.inspect(node, { showHidden: true, depth: 10 }));
-};
 var Crawler;
 (function (Crawler) {
     var Dependencies = (function () {
-        function Dependencies(file) {
+        function Dependencies(files) {
             this.__cache = {};
             this.__nsModule = {};
-            this.files = file;
-            this.program = ts.createProgram(this.files, {
+            this.files = files;
+            var transpileOptions = {
                 target: ts.ScriptTarget.ES5,
                 module: ts.ModuleKind.CommonJS
-            });
+            };
+            this.program = ts.createProgram(this.files, transpileOptions, utilities_1.compilerHost(transpileOptions));
         }
         Dependencies.prototype.getDependencies = function () {
             var _this = this;
@@ -26,7 +24,7 @@ var Crawler;
             sourceFiles.map(function (file) {
                 var filePath = file.fileName;
                 if (path.extname(filePath) === '.ts') {
-                    if (filePath.lastIndexOf('.d.ts') === -1) {
+                    if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
                         logger_1.logger.info('parsing', filePath);
                         try {
                             _this.getSourceFileDecorators(file, deps);

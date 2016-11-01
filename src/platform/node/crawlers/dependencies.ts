@@ -1,14 +1,9 @@
 import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
 import * as ts from 'typescript';
+import { getNewLineCharacter, compilerHost, d } from '../../../utilities';
 import { logger } from '../../../logger';
 
 let q = require('q');
-
-let d = (node) => {
-    console.log(util.inspect(node, { showHidden: true, depth: 10 }));
-};
 
 export namespace Crawler {
 
@@ -62,25 +57,26 @@ export namespace Crawler {
         private __cache: any = {};
         private __nsModule: any = {};
 
-        constructor(file: string[]) {
-            this.files = file;
-            this.program = ts.createProgram(this.files, {
-                target: ts.ScriptTarget.ES5,
+        constructor(files: string[]) {
+            this.files = files;
+            const transpileOptions = {
+                target: ts.ScriptTarget.ES5, 
                 module: ts.ModuleKind.CommonJS
-            });
+            };
+            this.program = ts.createProgram(this.files, transpileOptions, compilerHost(transpileOptions));
         }
 
         getDependencies() {
             let deps: Deps[] = [];
             let sourceFiles = this.program.getSourceFiles() || [];
 
-            sourceFiles.map((file) => {
+            sourceFiles.map((file: ts.SourceFile) => {
 
                 let filePath = file.fileName;
 
                 if (path.extname(filePath) === '.ts') {
 
-                    if (filePath.lastIndexOf('.d.ts') === -1) {
+                    if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
                         logger.info('parsing', filePath);
 
                         try {
