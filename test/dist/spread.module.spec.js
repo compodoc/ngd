@@ -9,8 +9,8 @@ describe('In the spread.module.ts file,', () => {
     before(() => {
         tmp.create();
         command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/spread.module.ts'], { cwd: tmp.name });
-        console.log(command.stdout.toString());
-        console.log(command.stderr.toString());
+        // console.log(command.stdout.toString());
+        // console.log(command.stderr.toString());
         json = helpers_1.read(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
     });
