@@ -1,10 +1,10 @@
 environment:
   matrix:
-    - nodejs_version: '6'
+    - nodejs_version: '7'
 install:
   - ps: Install-Product node $env:nodejs_version
   - set CI=true
-  - npm -g install npm@3.10.8
+  - npm -g install npm@3.10.9
   - set PATH=%APPDATA%\npm;%PATH%
   - npm install
 matrix:
