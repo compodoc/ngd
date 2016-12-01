@@ -9,7 +9,7 @@
     "compile:tests": "tsc -p test/tsconfig-test.json",
     "compile:src": "tsc --newLine LF",
     "prepublish": "npm run compile:src && npm test",
-    "deploy": "npm run compile:src && npm version patch && npm publish"
+    "deploy": "npm run compile:src && npm publish"
   },
   "bin": {
     "ngd": "bin/index.js"
