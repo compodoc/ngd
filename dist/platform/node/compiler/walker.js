@@ -311,5 +311,5 @@ var Crawler;
         };
         return Dependencies;
     }());
-    Crawler.Dependencies = Dependencies;
+    Crawler.Compiler = Dependencies;
 })(Crawler = exports.Crawler || (exports.Crawler = {}));

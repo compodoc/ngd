@@ -1,7 +1,7 @@
 {
-  "name": "@compodoc/ngd",
-  "version": "1.0.0-alpha.12",
-  "description": "A tool to generate a component dependencies graph of an Angular2 application",
+  "name": "@compodoc/ngd-generator",
+  "version": "2.0.0",
+  "description": "A set of generators for @compodoc/ngd",
   "main": "dist/index.js",
   "scripts": {
     "pretest": "npm run compile:src && npm run compile:tests",
@@ -11,11 +11,8 @@
     "prepublish": "npm run compile:src && npm test",
     "deploy": "npm run compile:src && npm publish"
   },
-  "bin": {
-    "ngd": "bin/index.js"
-  },
-  "homepage": "https://github.com/compodoc/ngd-cli",
-  "bugs": "https://github.com/compodoc/ngd-cli/issues",
+  "homepage": "https://github.com/compodoc/ngd-generator",
+  "bugs": "https://github.com/compodoc/ngd-generator/issues",
   "author": "Wassim CHEGHAM",
   "engines": {
     "node": ">= 5.4.1"
@@ -25,12 +22,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/compodoc/ngd-cli.git"
+    "url": "https://github.com/compodoc/ngd-generator.git"
   },
   "private": false,
   "license": "MIT",
   "dependencies": {
+    "@compodoc/ngd-core": "2.0.0"
   },
   "devDependencies": {
-  }
+    "@types/chai": "3.4.34",
+    "@types/mocha": "2.2.32",
+    "@types/node": "6.0.39",
+    "chai": "3.5.0",
+    "mocha": "3.1.2"
+  },
+  "types": "dist/index.d.ts"
 }

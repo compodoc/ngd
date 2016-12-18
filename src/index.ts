@@ -1,3 +1,3 @@
-import { Application } from './platform/node/application';
+import { Application } from './modules/cli/src/index';
 
 Application.run();

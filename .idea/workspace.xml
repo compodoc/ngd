@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e8c1cf81-5db4-4cca-8616-39b2846c25b3" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/spread.module.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/modules/compiler/src/compiler.ts" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/platform/node/compiler/walker.ts" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/logger.ts" afterPath="$PROJECT_DIR$/src/modules/core/src/lang/logger.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/platform/node/application.ts" afterPath="$PROJECT_DIR$/src/modules/cli/src/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/platform/node/compiler/codegen.ts" afterPath="$PROJECT_DIR$/src/modules/compiler/src/codegen.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/platform/node/engines/dot.template.ts" afterPath="$PROJECT_DIR$/src/modules/generator/src/engines/dot/dot.template.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/platform/node/engines/dot.ts" afterPath="$PROJECT_DIR$/src/modules/generator/src/engines/dot/dot.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/utilities.ts" afterPath="$PROJECT_DIR$/src/modules/core/src/lang/utilities.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/cli.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/cli.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/deep.module.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/deep.module.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/helpers.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/helpers.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/providers.module.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/providers.module.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/sample-files.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/sample-files.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/soundcloud-ngrx.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/soundcloud-ngrx.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/dist/spread.module.spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/dist/spread.module.spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/mocha.opts" afterPath="$PROJECT_DIR$/src/modules/cli/test/mocha.opts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/.editorconfig" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/.editorconfig" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/.gitignore" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/.gitignore" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/README.md" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/README.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/angular-cli.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/angular-cli.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/e2e/app.e2e-spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/e2e/app.e2e-spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/e2e/app.po.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/e2e/app.po.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/e2e/tsconfig.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/e2e/tsconfig.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/karma.conf.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/karma.conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/package.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/package.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/protractor.conf.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/protractor.conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/app.component.css" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/app.component.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/app.component.html" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/app.component.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/app.component.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/app.component.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/app.component.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/app.component.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/app.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/app.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/app/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/app/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/assets/.gitkeep" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/assets/.gitkeep" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/environments/environment.prod.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/environments/environment.prod.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/environments/environment.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/environments/environment.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/favicon.ico" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/favicon.ico" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/index.html" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/index.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/main.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/main.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/polyfills.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/polyfills.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/styles.css" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/styles.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/test.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/test.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/tsconfig.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/tsconfig.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/src/typings.d.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/src/typings.d.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/angular-cli-app/tslint.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/angular-cli-app/tslint.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/cli.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/cli.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/deep.module.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/deep.module.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/helpers.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/helpers.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/providers.module.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/providers.module.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/app.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/app.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/bar.component.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/bar.component.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/bar.directive.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/bar.directive.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/bar.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/bar.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/bar.service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/bar.service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/bar.template.html" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/bar.template.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/deep.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/deep.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/foo.component.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/foo.component.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/foo.directive.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/foo.directive.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/foo.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/foo.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/foo.service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/foo.service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/providers.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/providers.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/spread.module.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/spread.module.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/tsconfig.entry.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/tsconfig.entry.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/sample-files/tsconfig.exclude.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/sample-files/tsconfig.exclude.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/.eslintrc.yml" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/.eslintrc.yml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/.gitignore" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/.gitignore" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/CHANGELOG.md" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/CHANGELOG.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/LICENSE" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/LICENSE" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/Procfile" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/Procfile" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/README.md" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/README.md" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/circle.yml" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/circle.yml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/karma.conf.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/karma.conf.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/karma.entry.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/karma.entry.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/package.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/package.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/config/app.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/config/app.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/config/paths.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/config/paths.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/config/routes.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/config/routes.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/main.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/main.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/spec.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/spec.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/server/static/favicon.ico" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/server/static/favicon.ico" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/components/app-header.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/components/app-header.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/components/app-header.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/components/app-header.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/components/app-header.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/components/app-header.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/components/app.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/components/app.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/components/app.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/components/app.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/app/interfaces.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/app/interfaces.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/constants.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/constants.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/api/api-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/api/api-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/api/api-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/api/api-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/api/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/api/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/api/interfaces.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/api/interfaces.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/interfaces.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/interfaces.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/interfaces.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/interfaces.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/media-query-list-stub.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/media-query-list-stub.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/media-query-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/media-query-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/media-query-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/media-query-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/utils.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/utils.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/core/media-query/utils.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/core/media-query/utils.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/home/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/home/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/home/pages/home-page.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/home/pages/home-page.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/home/pages/home-page.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/home/pages/home-page.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/index.html" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/index.html" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/main.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/main.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/audio-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/audio-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/audio-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/audio-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/audio-source.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/audio-source.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player-controls.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player-controls.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player-controls.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player-controls.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player-controls.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player-controls.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/components/player.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/components/player.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/pipes/format-volume.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/pipes/format-volume.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/pipes/format-volume.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/pipes/format-volume.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-actions.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-actions.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-actions.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-actions.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-effects.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-effects.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-storage.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-storage.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/player-storage.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/player-storage.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/player-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/player-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/player-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/player-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/player-state.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/player-state.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/player-state.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/player-state.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/selectors.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/selectors.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/selectors.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/selectors.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/times-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/times-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/times-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/times-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/times-state.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/times-state.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/player/reducers/times-state.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/player/reducers/times-state.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/polyfills.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/polyfills.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/components/search-bar.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/components/search-bar.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/components/search-bar.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/components/search-bar.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/components/search-bar.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/components/search-bar.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/pages/search-page.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/pages/search-page.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/pages/search-page.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/pages/search-page.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/search-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/search-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/search-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/search-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/search-state.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/search-state.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/search-state.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/search-state.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/selectors.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/selectors.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/reducers/selectors.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/reducers/selectors.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/search-actions.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/search-actions.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/search-actions.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/search-actions.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/search-effects.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/search-effects.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/search-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/search-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/search-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/search-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/utils.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/utils.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/search/utils.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/search/utils.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/assets/icons.svg" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/assets/icons.svg" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/audio-timeline.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/audio-timeline/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/content-header/content-header.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/content-header/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/content-header/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon-button/icon-button.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon-button/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon-button/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon/icon.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon/icon.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon/icon.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon/icon.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon/icon.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon/icon.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/icon/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/icon/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/loading-indicator.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/loading-indicator.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/loading-indicator.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/components/loading-indicator/loading-indicator.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/format-integer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/format-integer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/format-integer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/format-integer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-integer/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-time/format-time.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-time/format-time.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-time/format-time.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-time/format-time.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/pipes/format-time/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/pipes/format-time/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_base.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_base.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_buttons.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_buttons.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_elements.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_elements.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_layout.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_layout.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_settings.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_settings.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/_visibility.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/_visibility.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/shared/styles/styles.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/shared/styles/styles.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/track-card.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/track-card.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/track-card.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/track-card.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/track-card.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/track-card.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-items.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-items.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-items.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-items.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-scroll-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/tracklist-scroll-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/tracklist.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/tracklist.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform-timeline.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform-timeline.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform-timeline.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform-timeline.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform.data.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform.data.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/components/waveform.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/components/waveform.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/models/track.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/models/track.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/models/track.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/models/track.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/models/tracklist.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/models/tracklist.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/models/tracklist.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/models/tracklist.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/selectors.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/selectors.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/selectors.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/selectors.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklist-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklist-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklist-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklist-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklists-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklists-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklists-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracklists-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracks-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracks-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/reducers/tracks-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/reducers/tracks-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-actions.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-actions.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-actions.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-actions.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-cursor.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-cursor.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-cursor.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-cursor.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-effects.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-effects.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/tracklist-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/tracklist-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/utils.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/utils.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/tracklists/utils.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/tracklists/utils.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/components/user-card.scss" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/components/user-card.scss" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/components/user-card.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/components/user-card.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/components/user-card.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/components/user-card.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/index.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/index.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/models/user.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/models/user.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/models/user.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/models/user.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/pages/user-page.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/pages/user-page.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/pages/user-page.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/pages/user-page.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/reducers/selectors.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/reducers/selectors.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/reducers/selectors.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/reducers/selectors.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/reducers/users-reducer.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/reducers/users-reducer.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/reducers/users-reducer.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/reducers/users-reducer.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/user-actions.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/user-actions.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/user-actions.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/user-actions.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/user-effects.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/user-effects.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/user-service.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/user-service.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/user-service.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/user-service.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/utils.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/utils.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/users/utils.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/users/utils.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/utils/local-storage.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/utils/local-storage.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/utils/local-storage.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/utils/local-storage.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/src/utils/test.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/src/utils/test.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/tsconfig.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/tsconfig.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/tslint.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/tslint.json" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/soundcloud-ngrx/webpack.config.js" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/soundcloud-ngrx/webpack.config.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/src/spread.module.spec.ts" afterPath="$PROJECT_DIR$/src/modules/cli/test/src/spread.module.spec.ts" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/test/tsconfig-test.json" afterPath="$PROJECT_DIR$/src/modules/cli/test/tsconfig-test.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/platform/node/application.js" afterPath="$PROJECT_DIR$/dist/platform/node/application.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/platform/node/compiler/walker.js" afterPath="$PROJECT_DIR$/dist/platform/node/compiler/walker.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/index.ts" afterPath="$PROJECT_DIR$/src/index.ts" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package_json" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>q</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/platform/node/compiler/codegen.ts" />
+        <option value="$PROJECT_DIR$/src/platform/node/application.ts" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/walker.ts" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/index.ts" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/compiler.ts" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/tests/src/index.ts" />
+        <option value="$PROJECT_DIR$/src/modules/core/src/index.ts" />
+        <option value="$PROJECT_DIR$/src/modules/core/tsconfig.json" />
+        <option value="$PROJECT_DIR$/src/modules/core/package.json" />
+        <option value="$PROJECT_DIR$/src/modules/core/src/lang/logger.ts" />
+        <option value="$PROJECT_DIR$/src/modules/generator/engines/dot/dot.ts" />
+        <option value="$PROJECT_DIR$/src/modules/generator/package.json" />
+        <option value="$PROJECT_DIR$/src/modules/generator/src/index.ts" />
+        <option value="$PROJECT_DIR$/src/modules/generator/src/engines/dot/dot.ts" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/tsconfig.json" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/package.json" />
+        <option value="$PROJECT_DIR$/src/modules/compiler/src/compiler.ts" />
+        <option value="$PROJECT_DIR$/src/modules/cli/node_modules/@compodoc/ngd-compiler/dist/compiler.js" />
+        <option value="$PROJECT_DIR$/src/modules/cli/src/index.ts" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/src/modules/cli/package.json" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER">
+    <package-json value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+    <handled-path value="$PROJECT_DIR$/src/modules/cli/node_modules" />
+    <handled-path value="$PROJECT_DIR$/src/modules/compiler/node_modules" />
+    <handled-path value="$PROJECT_DIR$/src/modules/core/node_modules" />
+    <handled-path value="$PROJECT_DIR$/src/modules/generator/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1920" />
+    <option name="height" value="1173" />
+  </component>
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="angular2-dependencies-graph" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bin" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="editor.config.accepted" value="true" />
+    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/node_modules/mocha" />
+    <property name="js.eslint.eslintPackage" value="" />
+    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+    <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="typescript-compiler-editor-notification" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="6.9.1" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/modules/cli" />
+      <recent name="$PROJECT_DIR$/src/modules/generator/test" />
+      <recent name="$PROJECT_DIR$/src/modules/generator" />
+      <recent name="$PROJECT_DIR$/src/modules/core" />
+      <recent name="$PROJECT_DIR$/src/modules/compiler" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/modules/cli" />
+      <recent name="$PROJECT_DIR$/src/modules/cli/src" />
+      <recent name="$PROJECT_DIR$/src/modules/generator/src" />
+      <recent name="$PROJECT_DIR$/src/modules/core/src" />
+      <recent name="$PROJECT_DIR$/src/modules/compiler/src" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <method />
+    </configuration>
+    <configuration default="true" type="DartTestRunConfigurationType" factoryName="Dart Test">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerProtractor" factoryName="Protractor">
+      <config-file value="" />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" working-dir="">
+      <method />
+    </configuration>
+    <configuration default="true" type="cucumber.js" factoryName="Cucumber.js">
+      <option name="cucumberJsArguments" value="" />
+      <option name="executablePath" />
+      <option name="filePath" />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="mocha-javascript-test-runner" factoryName="Mocha">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory />
+      <pass-parent-env>true</pass-parent-env>
+      <envs />
+      <ui />
+      <extra-mocha-options />
+      <test-kind>DIRECTORY</test-kind>
+      <test-directory />
+      <recursive>false</recursive>
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e8c1cf81-5db4-4cca-8616-39b2846c25b3" name="Default" comment="" />
+      <created>1482099469427</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1482099469427</updated>
+      <workItem from="1482099470995" duration="5686000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="5686000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1920" height="1173" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="TypeScript" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2527646" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293247" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="processedProjectFiles" value="true" />
+    <option name="configsExcludedFiles">
+      <set>
+        <option value="$PROJECT_DIR$/dist" />
+      </set>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/yarn.lock">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/src/lang/utilities.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#33#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/src/codegen.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="19" lean-forward="false" selection-start-line="0" selection-start-column="19" selection-end-line="0" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bin/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/@types/node/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="358">
+          <caret line="1902" column="15" lean-forward="false" selection-start-line="1902" selection-start-column="15" selection-end-line="1902" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/test/tsconfig-test.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="13" column="6" lean-forward="true" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/test/mocha.opts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/test/src/index.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/src/lang/logger.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="110" column="33" lean-forward="true" selection-start-line="110" selection-start-column="33" selection-end-line="110" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/dist/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/src/engines/dot/dot.template.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4253">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="29" column="33" lean-forward="false" selection-start-line="29" selection-start-column="33" selection-end-line="29" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/test/src/index.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/dist/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/dist/lang/logger.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/test/src/index.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/generator/src/engines/dot/dot.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+            <marker date="1482104132000" expanded="true" signature="6363:6632" ph="..." />
+            <marker date="1482104132000" expanded="true" signature="6375:6431" ph="{...}" />
+            <marker date="1482104132000" expanded="true" signature="6442:6520" ph="{...}" />
+            <marker date="1482104132000" expanded="true" signature="6537:6573" ph="{...}" />
+            <marker date="1482104132000" expanded="true" signature="6598:6621" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="66">
+          <caret line="3" column="31" lean-forward="false" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/tsconfig.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="4" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="3" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/core/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="521">
+          <caret line="38" column="2" lean-forward="false" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="39" column="17" lean-forward="true" selection-start-line="39" selection-start-column="17" selection-end-line="39" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/compiler/src/compiler.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="19" column="21" lean-forward="true" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/cli/node_modules/@compodoc/ngd-compiler/dist/compiler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="301" column="10" lean-forward="true" selection-start-line="301" selection-start-column="10" selection-end-line="301" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/cli/src/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="108" column="5" lean-forward="true" selection-start-line="108" selection-start-column="5" selection-end-line="108" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/modules/cli/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="35" column="25" lean-forward="true" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="31" column="19" lean-forward="false" selection-start-line="31" selection-start-column="19" selection-end-line="31" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
