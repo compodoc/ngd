@@ -1,36 +1,24 @@
 {
-  "name": "@compodoc/ngd",
-  "version": "1.0.0-alpha.12",
-  "description": "A tool to generate a component dependencies graph of an Angular2 application",
-  "main": "dist/index.js",
-  "scripts": {
-    "pretest": "npm run compile:src && npm run compile:tests",
-    "test": "mocha --opts test/mocha.opts",
-    "compile:tests": "tsc -p test/tsconfig-test.json",
-    "compile:src": "tsc --newLine LF",
-    "prepublish": "npm run compile:src && npm test",
-    "deploy": "npm run compile:src && npm publish"
-  },
-  "bin": {
-    "ngd": "bin/index.js"
-  },
-  "homepage": "https://github.com/compodoc/ngd-cli",
-  "bugs": "https://github.com/compodoc/ngd-cli/issues",
-  "author": "Wassim CHEGHAM",
-  "engines": {
-    "node": ">= 5.4.1"
-  },
-  "contributors": [
-    "vogloblinsky"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/compodoc/ngd-cli.git"
-  },
-  "private": false,
-  "license": "MIT",
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+    "name": "@compodoc/ngd",
+    "version": "2.0.0",
+    "description": "A set of tools to generate a dependencies graph of an Angular application",
+    "scripts": {
+        "test": "./tools/test-all.sh",
+        "build": "./tools/build-all.sh"
+    },
+    "homepage": "https://github.com/compodoc/ngd",
+    "bugs": "https://github.com/compodoc/ngd/issues",
+    "author": "Wassim CHEGHAM",
+    "engines": {
+        "node": ">= 5.4.1"
+    },
+    "contributors": [
+        "vogloblinsky"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/compodoc/ngd.git"
+    },
+    "private": false,
+    "license": "MIT"
 }

@@ -18,6 +18,7 @@ describe('CLI', () => {
     it(`should display correct version ${pkg.version}`, () => {
         let runVersion = shell('node', ['./bin/index.js', '-V']);
         expect(runVersion.stdout.toString()).to.contain(pkg.version);
+        console.log(runVersion.stderr.toString());
     });
 
     it(`should display help message`, () => {

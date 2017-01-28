@@ -1,7 +1,7 @@
 "use strict";
-const chai = require('chai');
+const chai = require("chai");
 const expect = chai.expect;
-const helpers_1 = require('./helpers');
+const helpers_1 = require("./helpers");
 const tmp = helpers_1.temporaryDir();
 describe('In the soundcloud-ngrx app,', () => {
     let command = null;

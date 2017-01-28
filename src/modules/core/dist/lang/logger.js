@@ -1,7 +1,7 @@
 "use strict";
 var gutil = require('gulp-util');
 var c = gutil.colors;
-var pkg = require('../../../../package.json');
+var pkg = require('../../package.json');
 var LEVEL;
 (function (LEVEL) {
     LEVEL[LEVEL["INFO"] = 0] = "INFO";

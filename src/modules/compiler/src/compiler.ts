@@ -247,6 +247,7 @@ export class Compiler {
 
   private parseDeepIndentifier(name: string): any {
     let nsModule = name.split('.');
+    console.log(nsModule);
     if (nsModule.length > 1) {
 
       // cache deps with the same namespace (i.e Shared.*)
@@ -294,7 +295,7 @@ export class Compiler {
       ];
     };
 
-    let buildIdentifierName = (node: NodeObject, name = '') => {
+    let buildIdentifierName = (node: NodeObject, name = '') => { 
 
       if (node.expression) {
         name = name ? `.${name}` : name;
@@ -321,7 +322,7 @@ export class Compiler {
           }
         }
 
-        if (node.kind ===  ts.SyntaxKind.SpreadElementExpression) {
+        if (node.kind ===  ts.SyntaxKind.SpreadElement) {
           return `...${nodeName}`;
         }
         return `${buildIdentifierName(node.expression, nodeName)}${name}`

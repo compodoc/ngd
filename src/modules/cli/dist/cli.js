@@ -1,10 +1,10 @@
 "use strict";
-var fs = require('fs');
-var path = require('path');
-var dot_1 = require('./engines/dot');
-var walker_1 = require('./compiler/walker');
-var logger_1 = require('../../logger');
-var pkg = require('../../../package.json');
+var fs = require("fs");
+var path = require("path");
+var ngd_transformer_1 = require("@compodoc/ngd-transformer");
+var ngd_compiler_1 = require("@compodoc/ngd-compiler");
+var ngd_core_1 = require("@compodoc/ngd-core");
+var pkg = require('../package.json');
 var program = require('commander');
 var cwd = process.cwd();
 var Application;
@@ -25,38 +25,38 @@ var Application;
     };
     Application.run = function () {
         if (program.silent) {
-            logger_1.logger.silent = false;
+            ngd_core_1.logger.silent = false;
         }
         var files = [];
         if (program.file) {
             if (!fs.existsSync(program.file) ||
                 !fs.existsSync(path.join(process.cwd(), program.file))) {
-                logger_1.logger.fatal("\"" + program.file + "\" file was not found");
+                ngd_core_1.logger.fatal("\"" + program.file + "\" file was not found");
                 process.exit(1);
             }
             else if (path.extname(program.file) !== '.ts') {
-                logger_1.logger.fatal("\"" + program.file + "\" is not a TypeScript file");
+                ngd_core_1.logger.fatal("\"" + program.file + "\" is not a TypeScript file");
                 process.exit(1);
             }
             else {
-                logger_1.logger.info('using entry', program.file);
+                ngd_core_1.logger.info('using entry', program.file);
                 files = [program.file];
             }
         }
         else if (program.tsconfig) {
             if (!fs.existsSync(program.tsconfig)) {
-                logger_1.logger.fatal('"tsconfig.json" file was not found in the current directory');
+                ngd_core_1.logger.fatal('"tsconfig.json" file was not found in the current directory');
                 process.exit(1);
             }
             else {
                 program.tsconfig = path.join(path.join(process.cwd(), path.dirname(program.tsconfig)), path.basename(program.tsconfig));
-                logger_1.logger.info('using tsconfig', program.tsconfig);
+                ngd_core_1.logger.info('using tsconfig', program.tsconfig);
                 files = require(program.tsconfig).files;
                 // use the current directory of tsconfig.json as a working directory
                 cwd = program.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
                 if (!files) {
                     var exclude_1 = require(program.tsconfig).exclude || [];
-                    var walk = function (dir) {
+                    var walk_1 = function (dir) {
                         var results = [];
                         var list = fs.readdirSync(dir);
                         list.forEach(function (file) {
@@ -64,20 +64,20 @@ var Application;
                                 file = path.join(dir, file);
                                 var stat = fs.statSync(file);
                                 if (stat && stat.isDirectory()) {
-                                    results = results.concat(walk(file));
+                                    results = results.concat(walk_1(file));
                                 }
                                 else if (/(spec|\.d)\.ts/.test(file)) {
-                                    logger_1.logger.debug('ignoring', file);
+                                    ngd_core_1.logger.debug('ignoring', file);
                                 }
                                 else if (path.extname(file) === '.ts') {
-                                    logger_1.logger.debug('including', file);
+                                    ngd_core_1.logger.debug('including', file);
                                     results.push(file);
                                 }
                             }
                         });
                         return results;
                     };
-                    files = walk(cwd || '.');
+                    files = walk_1(cwd || '.');
                 }
             }
         }
@@ -90,16 +90,16 @@ var Application;
         else {
             program.output = path.resolve(process.cwd(), program.output);
         }
-        var crawler = new walker_1.Crawler.Compiler(files, {
+        var compiler = new ngd_compiler_1.Compiler(files, {
             tsconfigDirectory: cwd
         });
-        var deps = crawler.getDependencies();
+        var deps = compiler.getDependencies();
         if (deps.length <= 0) {
-            logger_1.logger.warn('no deps', 'May be you should consider providing another entry file. See -h');
-            logger_1.logger.info('Done');
+            ngd_core_1.logger.warn('no deps', 'May be you should consider providing another entry file. See -h');
+            ngd_core_1.logger.info('Done');
             process.exit(0);
         }
-        var engine = new dot_1.Engine.Dot({
+        var engine = new ngd_transformer_1.DotEngine({
             output: program.output,
             displayLegend: program.displayLegend,
             outputFormats: program.outputFormats.split(',')
@@ -115,7 +115,7 @@ var Application;
             }
             */
         })
-            .catch(function (e) { return logger_1.logger.error(e); })
-            .finally(function (_) { return logger_1.logger.info('done'); });
+            .catch(function (e) { return ngd_core_1.logger.error(e); })
+            .finally(function (_) { return ngd_core_1.logger.info('done'); });
     };
 })(Application = exports.Application || (exports.Application = {}));

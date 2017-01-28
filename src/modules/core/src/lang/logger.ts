@@ -1,6 +1,6 @@
 let gutil = require('gulp-util');
 let c = gutil.colors;
-let pkg = require('../../../../package.json');
+let pkg = require('../../package.json');
 
 enum LEVEL {
 	INFO,

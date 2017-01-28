@@ -1,7 +1,7 @@
 "use strict";
-var path = require('path');
-var ts = require('typescript');
-var ngd_core_1 = require('@compodoc/ngd-core');
+var path = require("path");
+var ts = require("typescript");
+var ngd_core_1 = require("@compodoc/ngd-core");
 var Compiler = (function () {
     function Compiler(files, options) {
         this.__cache = {};
@@ -165,6 +165,7 @@ var Compiler = (function () {
     };
     Compiler.prototype.parseDeepIndentifier = function (name) {
         var nsModule = name.split('.');
+        console.log(nsModule);
         if (nsModule.length > 1) {
             // cache deps with the same namespace (i.e Shared.*)
             if (this.__nsModule[nsModule[0]]) {
@@ -226,7 +227,7 @@ var Compiler = (function () {
                         }
                     }
                 }
-                if (node.kind === ts.SyntaxKind.SpreadElementExpression) {
+                if (node.kind === ts.SyntaxKind.SpreadElement) {
                     return "..." + nodeName;
                 }
                 return "" + buildIdentifierName(node.expression, nodeName) + name;

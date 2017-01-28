@@ -20,7 +20,7 @@ let q = require('q');
 let cleanDot: boolean = false;
 let cleanSvg: boolean = false;
 
-let appName = require('../../../../../package.json').name;
+let appName = require('../../../package.json').name;
 
 // http://www.graphviz.org/Documentation/dotguide.pdf
 export class DotEngine {

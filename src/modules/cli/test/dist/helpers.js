@@ -13,7 +13,7 @@ function exists(file) {
 }
 exports.exists = exists;
 function temporaryDir() {
-    let name = '.tmp-angular2-dependencies-graph-test';
+    let name = '.tmp-ngd-test';
     let cleanUp = (name) => {
         if (exports.fs.existsSync(name)) {
             exports.fs.readdirSync(name).forEach((file) => {

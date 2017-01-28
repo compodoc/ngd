@@ -1,7 +1,7 @@
 "use strict";
-const chai = require('chai');
+const chai = require("chai");
 const expect = chai.expect;
-const helpers_1 = require('./helpers');
+const helpers_1 = require("./helpers");
 const tmp = helpers_1.temporaryDir();
 describe('CLI', () => {
     let runHelp = null;
@@ -13,6 +13,7 @@ describe('CLI', () => {
     it(`should display correct version ${helpers_1.pkg.version}`, () => {
         let runVersion = helpers_1.shell('node', ['./bin/index.js', '-V']);
         expect(runVersion.stdout.toString()).to.contain(helpers_1.pkg.version);
+        console.log(runVersion.stderr.toString());
     });
     it(`should display help message`, () => {
         expect(runHelp.stdout.toString()).to.contain('Usage: index [options]');

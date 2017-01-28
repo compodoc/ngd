@@ -6,7 +6,7 @@ var fs = require('fs-extra');
 var q = require('q');
 var cleanDot = false;
 var cleanSvg = false;
-var appName = require('../../../../../package.json').name;
+var appName = require('../../../package.json').name;
 // http://www.graphviz.org/Documentation/dotguide.pdf
 var DotEngine = (function () {
     function DotEngine(options) {
