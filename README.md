@@ -1,10 +1,27 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/wlla9cm0vcie4lur/branch/master?svg=true)](https://ci.appveyor.com/project/compodoc/ngd/branch/master)
 [![CircleCI](https://circleci.com/gh/compodoc/ngd/tree/master.svg?style=svg)](https://circleci.com/gh/compodoc/ngd/tree/master)
-[![Join the chat at https://gitter.im/compodoc/ngd](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/compodoc/ngd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![npm version](https://badge.fury.io/js/ngd.svg)](https://badge.fury.io/js/ngd)
 [![Code Climate](https://codeclimate.com/github/compodoc/ngd/badges/gpa.svg)](https://codeclimate.com/github/compodoc/ngd)
 
-ngd: Angular Dependencies Graph
+<table>
+  <tr>
+    <td align="right">CLI</td>
+    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-transformer"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-transformer.svg" alt="npm version" height="18"></a></td>
+  </tr>
+  <tr>
+    <td align="right">Core</td>
+    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-core"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-core.svg" alt="npm version" height="18"></a></td>
+  </tr>
+  <tr>
+    <td align="right">Compiler</td>
+    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-compiler"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-compiler.svg" alt="npm version" height="18"></a></td>
+  </tr>
+  <tr>
+    <td align="right">Transformer</td>
+    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-transformer"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-transformer.svg" alt="npm version" height="18"></a></td>
+  </tr>
+</table>
+
+NGD: Angular Dependencies Graph
 ====
 A tool that allows you to view your Angular application dependencies.
 
