@@ -1,52 +1,24 @@
 {
-  "name": "angular2-dependencies-graph",
-  "version": "1.0.0-alpha.12",
-  "description": "A tool to generate a component dependencies graph of an Angular2 application (written in typescript)",
-  "main": "dist/index.js",
-  "scripts": {
-    "pretest": "npm run compile:src && npm run compile:tests",
-    "test": "mocha --opts test/mocha.opts",
-    "compile:tests": "tsc -p test/tsconfig-test.json",
-    "compile:src": "tsc --newLine LF",
-    "prepublish": "npm run compile:src && npm test",
-    "deploy": "npm run compile:src && npm publish"
-  },
-  "bin": {
-    "ngd": "bin/index.js"
-  },
-  "homepage": "https://github.com/manekinekko/angular2-dependencies-graph",
-  "bugs": "https://github.com/manekinekko/angular2-dependencies-graph/issues",
-  "author": "Wassim CHEGHAM",
-  "engines": {
-    "node": ">= 5.4.1"
-  },
-  "contributors": [
-    "vogloblinsky"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/manekinekko/angular2-dependencies-graph.git"
-  },
-  "private": false,
-  "license": "MIT",
-  "dependencies": {
-    "colors": "1.1.2",
-    "commander": "2.9.0",
-    "dot": "1.0.3",
-    "fs-extra": "0.26.2",
-    "gulp-util": "3.0.7",
-    "opener": "1.4.1",
-    "q": "1.4.1",
-    "typescript": "2.0.0",
-    "viz.js": "1.3.0"
-  },
-  "devDependencies": {
-    "@types/dot": "1.0.29",
-    "@types/typescript": "0.4.29",
-    "@types/chai": "3.4.34",
-    "@types/mocha": "2.2.32",
-    "@types/node": "6.0.39",
-    "chai": "3.5.0",
-    "mocha": "3.1.2"
-  }
+    "name": "@compodoc/ngd",
+    "version": "2.0.0",
+    "description": "A set of tools to generate a dependencies graph of an Angular application",
+    "scripts": {
+        "test": "./tools/test-all.sh",
+        "build": "./tools/build-all.sh"
+    },
+    "homepage": "https://github.com/compodoc/ngd",
+    "bugs": "https://github.com/compodoc/ngd/issues",
+    "author": "Wassim CHEGHAM",
+    "engines": {
+        "node": ">= 5.4.1"
+    },
+    "contributors": [
+        "vogloblinsky"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/compodoc/ngd.git"
+    },
+    "private": false,
+    "license": "MIT"
 }

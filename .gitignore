@@ -1,6 +1,8 @@
 .DS_Store
+yarn-error.log
+npm-debug.log
 node_modules
 typings
-.tmp-angular2-dependencies-graph-test
+.tmp-ngd-test
 **/documentation/**
-test/src/sample-files/*.js
+src/modules/**/test/dist/**

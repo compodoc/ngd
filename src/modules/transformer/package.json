@@ -1,0 +1,43 @@
+{
+  "name": "@compodoc/ngd-transformer",
+  "version": "2.0.0-alpha.1",
+  "description": "A set of transformers for @compodoc/ngd",
+  "main": "dist/index.js",
+  "scripts": {
+    "prextest": "npm run compile:src && npm run compile:tests",
+    "xtest": "mocha --opts test/mocha.opts",
+    "compile:tests": "tsc -p test/tsconfig-test.json",
+    "compile:src": "tsc --newLine LF",
+    "prexpublish": "npm run compile:src && npm run xtest",
+    "deploy": "npm run compile:src && npm xpublish"
+  },
+  "homepage": "https://github.com/compodoc/ngd",
+  "bugs": "https://github.com/compodoc/ngd/issues",
+  "author": "Wassim CHEGHAM",
+  "engines": {
+    "node": ">= 5.4.1"
+  },
+  "contributors": [
+    "vogloblinsky"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/compodoc/ngd.git"
+  },
+  "private": false,
+  "license": "MIT",
+  "dependencies": {
+    "@compodoc/ngd-core": "2.0.0-alpha.1",
+    "fs-extra": "^2.0.0",
+    "q": "^1.4.1",
+    "viz.js": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.39",
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  },
+  "types": "dist/index.d.ts"
+}
