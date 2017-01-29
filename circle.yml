@@ -5,3 +5,7 @@ machine:
 test:
   override:
     - npm test
+
+dependencies:
+  pre:
+    - npm run build
