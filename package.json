@@ -3,7 +3,7 @@
     "version": "2.0.0",
     "description": "A set of tools to generate a dependencies graph of an Angular application",
     "scripts": {
-        "postinstall": "./tools/install-all.sh",
+        "postinstall": "sh ./tools/install-all.sh",
         "test": "sh ./tools/test-all.sh",
         "build": "sh ./tools/build-all.sh"
     },
