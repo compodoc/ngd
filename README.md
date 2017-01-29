@@ -1,42 +1,42 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/wlla9cm0vcie4lur/branch/master?svg=true)](https://ci.appveyor.com/project/manekinekko/angular2-dependencies-graph/branch/master)
-[![CircleCI](https://circleci.com/gh/manekinekko/angular2-dependencies-graph/tree/master.svg?style=svg)](https://circleci.com/gh/manekinekko/angular2-dependencies-graph/tree/master)
-[![Join the chat at https://gitter.im/manekinekko/angular2-dependencies-graph](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/manekinekko/angular2-dependencies-graph?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![npm version](https://badge.fury.io/js/angular2-dependencies-graph.svg)](https://badge.fury.io/js/angular2-dependencies-graph)
-[![Code Climate](https://codeclimate.com/github/manekinekko/angular2-dependencies-graph/badges/gpa.svg)](https://codeclimate.com/github/manekinekko/angular2-dependencies-graph)
+[![Build status](https://ci.appveyor.com/api/projects/status/wlla9cm0vcie4lur/branch/master?svg=true)](https://ci.appveyor.com/project/compodoc/ngd/branch/master)
+[![CircleCI](https://circleci.com/gh/compodoc/ngd/tree/master.svg?style=svg)](https://circleci.com/gh/compodoc/ngd/tree/master)
+[![Join the chat at https://gitter.im/compodoc/ngd](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/compodoc/ngd?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/ngd.svg)](https://badge.fury.io/js/ngd)
+[![Code Climate](https://codeclimate.com/github/compodoc/ngd/badges/gpa.svg)](https://codeclimate.com/github/compodoc/ngd)
 
-angular2-dependencies-graph
+ngd: Angular Dependencies Graph
 ====
-A tool that allows you to view your Angular2 application dependencies. Currently, the tool only supports apps written in TypeScript.
+A tool that allows you to view your Angular application dependencies.
 
 ## Generated Graphs (sample)
 
 #### Sample Application
-![screenshots-4](https://raw.githubusercontent.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies-4.png)
+![screenshots-4](https://raw.githubusercontent.com/compodoc/ngd/master/screenshots/dependencies-4.png)
 
 #### Angular Material 2 
-<img src="https://cdn.rawgit.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.material2.svg"/>
+<img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.material2.svg"/>
 
 #### ng-bootstrap
-<img src="https://cdn.rawgit.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.ng-bootstrap.svg"/>
+<img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.ng-bootstrap.svg"/>
 
 #### soundcloud-ngrx
-<img src="https://cdn.rawgit.com/manekinekko/angular2-dependencies-graph/master/screenshots/dependencies.soundcloud-ngrx.svg"/>
+<img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.soundcloud-ngrx.svg"/>
 
 ## Install
 
 Install from npm: 
 
 ```
-npm install -g angular2-dependencies-graph
+npm install -g ngd
 ```
 
 Install from Yarn: 
 
 ```
-yarn global add angular2-dependencies-graph
+yarn global add ngd
 ```
 
-## Usage
+## Usage the CLI
 
 ```
 $ ngd --help
@@ -60,7 +60,7 @@ Options:
 Run inside your project (where your `tsconfig.json` is located):
 
 ```bash
-$ cd my-awesome-cli-angular2-app/
+$ cd my-awesome-cli-angular-app/
 $ ngd
 $ # or
 $ ngd -p ./tsconfig.json
@@ -72,11 +72,51 @@ found, all `*.ts` files will be crawled, but not those mentioned in the `exclude
 ### 2) provide an entry file:
 
 ```bash
-$ cd my-awesome-cli-angular2-app/
+$ cd my-awesome-cli-angular-app/
 $ ngd -f src/main.ts
 ```
 
 NOTE: The file you provide should contain your root component.
+
+## Usage the API
+
+1) Import the `DotEngine` and `Compiler` from `@compodoc/ngd-transformer` and `@compodoc/ngd-compiler`:
+
+```javascript
+import { DotEngine } from '@compodoc/ngd-transformer';
+import { Compiler } from '@compodoc/ngd-compiler';
+```
+
+2) Create an instance of a compiler:
+
+```javascript
+const compiler = new Compiler(files, {
+    tsconfigDirectory: cwd
+  }
+);
+```
+
+3) Get the found dependencies:
+
+```javascript
+const deps = compiler.getDependencies();
+```
+
+4) Pass those dependencies to the transformer:
+
+```javascript
+const engine = new DotEngine({
+  output: program.output,
+  displayLegend: program.displayLegend,
+  outputFormats: program.outputFormats.split(',')
+});
+```
+
+5) Generate the graph:
+
+```javascript
+engine.generateGraph(deps).then(file => { ... });
+```
 
 ## Have a PR?
 

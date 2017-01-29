@@ -20,5 +20,8 @@
         "url": "https://github.com/compodoc/ngd.git"
     },
     "private": false,
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "typescript": "^2.0.0"
+    }
 }
