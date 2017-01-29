@@ -15,7 +15,6 @@ describe('In the spread.module.ts file,', () => {
         // console.log(command.stderr.toString());
         json = read(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
-        console.log(json[0].providers[0]);
     });
     after(() => tmp.clean());
 
