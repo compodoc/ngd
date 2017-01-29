@@ -27,13 +27,13 @@ A tool that allows you to view your Angular application dependencies.
 Install from npm: 
 
 ```
-npm install -g ngd
+npm install -g @compodoc/ngd-cli
 ```
 
 Install from Yarn: 
 
 ```
-yarn global add ngd
+yarn global add @compodoc/ngd-cli
 ```
 
 ## Usage the CLI
