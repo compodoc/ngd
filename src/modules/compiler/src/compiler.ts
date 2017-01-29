@@ -247,7 +247,6 @@ export class Compiler {
 
   private parseDeepIndentifier(name: string): any {
     let nsModule = name.split('.');
-    console.log(nsModule);
     if (nsModule.length > 1) {
 
       // cache deps with the same namespace (i.e Shared.*)

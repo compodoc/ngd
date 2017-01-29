@@ -36,8 +36,7 @@
         "@types/node": "^6.0.39",
         "@types/typescript": "^0.4.29",
         "chai": "^3.5.0",
-        "mocha": "^3.1.2",
-        "q": "^1.4.1"
+        "mocha": "^3.1.2"
     },
     "types": "dist/index.d.ts"
 }
