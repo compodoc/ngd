@@ -22,6 +22,8 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "typescript": "^2.0.0"
+        "typescript": "^2.0.0",
+        "@types/typescript": "^0.4.29",
+        "@types/node": "^6.0.39"
     }
 }
