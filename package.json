@@ -3,8 +3,9 @@
     "version": "2.0.0",
     "description": "A set of tools to generate a dependencies graph of an Angular application",
     "scripts": {
-        "test": "./tools/test-all.sh",
-        "build": "./tools/build-all.sh"
+        "postinstall": "./tools/install-all.sh",
+        "test": "sh ./tools/test-all.sh",
+        "build": "sh ./tools/build-all.sh"
     },
     "homepage": "https://github.com/compodoc/ngd",
     "bugs": "https://github.com/compodoc/ngd/issues",
