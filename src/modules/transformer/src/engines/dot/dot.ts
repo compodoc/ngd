@@ -17,6 +17,7 @@ export interface IOptions {
 
 let fs = require('fs-extra');
 let q = require('q');
+let Viz = require('viz.js');
 let cleanDot: boolean = false;
 let cleanSvg: boolean = false;
 
@@ -224,7 +225,6 @@ export class DotEngine {
   }
 
   private generateSVG() {
-    let Viz = require('viz.js');
     let vizSvg = Viz(
       fs.readFileSync(this.paths.dot).toString(), {
         format: 'svg',

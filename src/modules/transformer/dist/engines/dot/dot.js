@@ -4,6 +4,7 @@ var ngd_core_1 = require('@compodoc/ngd-core');
 var dot_template_1 = require('./dot.template');
 var fs = require('fs-extra');
 var q = require('q');
+var Viz = require('viz.js');
 var cleanDot = false;
 var cleanSvg = false;
 var appName = require('../../../package.json').name;
@@ -174,7 +175,6 @@ var DotEngine = (function () {
     };
     DotEngine.prototype.generateSVG = function () {
         var _this = this;
-        var Viz = require('viz.js');
         var vizSvg = Viz(fs.readFileSync(this.paths.dot).toString(), {
             format: 'svg',
             engine: 'dot'
