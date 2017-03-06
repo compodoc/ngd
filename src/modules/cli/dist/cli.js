@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var path = require("path");
 var ngd_transformer_1 = require("@compodoc/ngd-transformer");
@@ -90,8 +91,9 @@ var Application;
         else {
             program.output = path.resolve(process.cwd(), program.output);
         }
-        var compiler = new ngd_compiler_1.Compiler(files, {
-            tsconfigDirectory: cwd
+        var compiler = new ngd_compiler_1.NgAst(files, {
+            tsconfigDirectory: cwd,
+            tsconfig: program.tsconfig
         });
         var deps = compiler.getDependencies();
         if (deps.length <= 0) {
@@ -119,3 +121,4 @@ var Application;
             .finally(function (_) { return ngd_core_1.logger.info('done'); });
     };
 })(Application = exports.Application || (exports.Application = {}));
+//# sourceMappingURL=cli.js.map

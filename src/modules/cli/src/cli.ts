@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
 import { DotEngine } from '@compodoc/ngd-transformer';
-import { Compiler } from '@compodoc/ngd-compiler';
+import { NgAst as Compiler } from '@compodoc/ngd-compiler';
 import { logger } from '@compodoc/ngd-core';
 
 let pkg = require('../package.json');
@@ -113,7 +113,8 @@ export namespace Application {
 
     let compiler = new Compiler(
       files, {
-        tsconfigDirectory: cwd
+        tsconfigDirectory: cwd,
+        tsconfig: program.tsconfig
       }
     );
 

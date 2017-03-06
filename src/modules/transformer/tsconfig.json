@@ -1,24 +1,23 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "./dist",
-    "module": "commonjs",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es5",
-    "noImplicitAny": false,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": false,
-    "noResolve": false,
-    "typeRoots": [
-      "../node_modules/@types"
-    ],
-    "types": [
-      "node"
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": true,
+        "declarationDir": "./dist",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "noImplicitAny": false,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "noResolve": false,
+        "typeRoots": ["../node_modules/@types"],
+        "types": ["node"],
+        "lib": ["es2015", "dom"],
+        "sourceMap": true,
+        "moduleResolution": "node",
+        "stripInternal": true
+    },
+    "files": [
+        "src/index.ts"
     ]
-  },
-  "files": [
-    "src/index.ts"
-  ]
 }

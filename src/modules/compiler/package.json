@@ -27,8 +27,13 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "typescript": "^2.0.0",
-        "@compodoc/ngd-core": "2.0.0-alpha.1"
+        "@angular/compiler": "^4.0.0-rc.1",
+        "@angular/compiler-cli": "^4.0.0-rc.1",
+        "@angular/core": "^4.0.0-rc.1",
+        "@compodoc/ngd-core": "2.0.0-alpha.1",
+        "rxjs": "^5.0.1",
+        "typescript": "^2.1.5",
+        "zone.js": "^0.7.2"
     },
     "devDependencies": {
         "@types/chai": "^3.4.34",
