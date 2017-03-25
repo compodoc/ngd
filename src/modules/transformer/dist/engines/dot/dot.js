@@ -1,7 +1,7 @@
 "use strict";
-var path = require('path');
-var ngd_core_1 = require('@compodoc/ngd-core');
-var dot_template_1 = require('./dot.template');
+var path = require("path");
+var ngd_core_1 = require("@compodoc/ngd-core");
+var dot_template_1 = require("./dot.template");
 var fs = require('fs-extra');
 var q = require('q');
 var Viz = require('viz.js');
@@ -218,3 +218,4 @@ var DotEngine = (function () {
     return DotEngine;
 }());
 exports.DotEngine = DotEngine;
+//# sourceMappingURL=dot.js.map

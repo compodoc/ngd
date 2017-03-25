@@ -1,9 +1,9 @@
 "use strict";
-var ts = require('typescript');
-var fs = require('fs');
-var path = require('path');
-var util = require('util');
-var logger_1 = require('./logger');
+var ts = require("typescript");
+var fs = require("fs");
+var path = require("path");
+var util = require("util");
+var logger_1 = require("./logger");
 function d(node) {
     console.log(util.inspect(node, { showHidden: true, depth: 10 }));
 }

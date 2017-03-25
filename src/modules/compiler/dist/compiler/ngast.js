@@ -14,7 +14,7 @@ var path = require("path");
 var fs = require("fs");
 var ts = require("typescript");
 var compiler_1 = require("./compiler");
-var ngast = require('ngast');
+var ngast_1 = require("ngast");
 var NgAst = (function (_super) {
     __extends(NgAst, _super);
     function NgAst(files, options) {
@@ -41,9 +41,9 @@ var NgAst = (function (_super) {
         return _this;
     }
     NgAst.prototype.getDependencies = function () {
-        var contextSymbols = new ngast.ContextSymbols(this.program, this.resourceResolver);
+        var contextSymbols = new ngast_1.ContextSymbols(this.program, this.resourceResolver);
         // console.log('getModules::', contextSymbols.getModules().pop());
-        fs.writeFileSync('./xxxxxxxxx.json', JSON.stringify(contextSymbols.getDirectives() /*.map( d => d._symbol.name )*/, null, 2));
+        fs.writeFileSync('./xxxxxxxxx.json', JSON.stringify(contextSymbols.getContextSummary() /*.map( d => d._symbol.name )*/, null, 2));
         // @todo we should return this type
         // {
         //   name,
@@ -56,6 +56,18 @@ var NgAst = (function (_super) {
         //   __raw: props
         // };
         return [];
+    };
+    NgAst.prototype.getFileName = function (contextSymbols) {
+    };
+    NgAst.prototype.getProviders = function (contextSymbols) {
+    };
+    NgAst.prototype.getDeclarations = function (contextSymbols) {
+    };
+    NgAst.prototype.getImports = function (contextSymbols) {
+    };
+    NgAst.prototype.getExports = function (contextSymbols) {
+    };
+    NgAst.prototype.getBootstrap = function (contextSymbols) {
     };
     NgAst.prototype.normalizeOptions = function (options, configFilePath) {
         options.genDir = options.basePath = options.baseUrl;

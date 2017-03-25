@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as ts from 'typescript';
 import { logger, getNewLineCharacter, compilerHost, d } from '@compodoc/ngd-core';
 import { Compiler, Dependencies, NodeObject, SymbolDeps } from './compiler';
-const ngast = require('ngast');
+import {ContextSymbols} from 'ngast';
 
 export class NgAst extends Compiler {
   private program: ts.Program;
@@ -14,11 +14,11 @@ export class NgAst extends Compiler {
   }
 
   getDependencies(): Dependencies[] {
-    const contextSymbols = new ngast.ContextSymbols(this.program, this.resourceResolver);
+    const contextSymbols = new ContextSymbols(this.program, this.resourceResolver);
     // console.log('getModules::', contextSymbols.getModules().pop());
     fs.writeFileSync(
       './xxxxxxxxx.json', 
-      JSON.stringify(contextSymbols.getDirectives() /*.map( d => d._symbol.name )*/, null, 2)
+      JSON.stringify(contextSymbols.getContextSummary() /*.map( d => d._symbol.name )*/, null, 2)
     );
 
     // @todo we should return this type
@@ -34,6 +34,30 @@ export class NgAst extends Compiler {
     // };
 
     return [];
+  }
+
+  private getFileName(contextSymbols: ContextSymbols) {
+
+  }
+  
+  private getProviders(contextSymbols: ContextSymbols) {
+
+  }
+
+  private getDeclarations(contextSymbols: ContextSymbols) {
+
+  }
+
+  private getImports(contextSymbols: ContextSymbols) {
+
+  }
+
+  private getExports(contextSymbols: ContextSymbols) {
+
+  }
+
+  private getBootstrap(contextSymbols: ContextSymbols) {
+
   }
 
   private normalizeOptions(options: any, configFilePath: string) {

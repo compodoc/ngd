@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.shell = require('child_process').spawnSync;
 exports.shellAsync = require('child_process').spawn;
 exports.fs = require('fs');

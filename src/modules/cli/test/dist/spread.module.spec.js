@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const expect = chai.expect;
 const helpers_1 = require("./helpers");
@@ -13,7 +14,6 @@ describe('In the spread.module.ts file,', () => {
         // console.log(command.stderr.toString());
         json = helpers_1.read(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
-        console.log(json[0].providers[0]);
     });
     after(() => tmp.clean());
     it('should not fail on parsing', () => {
