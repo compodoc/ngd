@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import * as fs from 'fs';
 import * as path from 'path';
-import { DotEngine } from '@compodoc/ngd-transformer';
+import { DefaultEngine } from '@compodoc/ngd-transformer';
 import { Compiler } from '@compodoc/ngd-compiler';
 import { logger } from '@compodoc/ngd-core';
 
@@ -16,9 +16,9 @@ export namespace Application {
     .option('-f, --file <file>', 'Entry *.ts file')
     .option('-p, --tsconfig <config>', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
     .option('-o, --open', 'Open the generated HTML diagram file', false)
-    .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
+    .option('-g, --display-legend <display-legend>', '[DEPRECATED] Display the legend of graph default(true)', true)
     .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
-    .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
+    .option('-t, --output-formats <output-formats>', 'Output formats (default: html,json)', `html,json`)
     .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
     .parse(process.argv);
 
@@ -125,26 +125,22 @@ export namespace Application {
       process.exit(0);
     }
 
-    let engine = new DotEngine({
+    let engine = new DefaultEngine({
       output: program.output,
-      displayLegend: program.displayLegend,
       outputFormats: program.outputFormats.split(',')
     });
     engine
-      .generateGraph(deps)
+      .transform(deps)
       .then(file => {
-
-        /*
         if (program.open === true) {
           logger.info('openning file ', file);
           let open = require("opener");
           open(file);
         }
-        */
-
+        return file;
       })
+      .then(_ => logger.info('done'))
       .catch(e => logger.error(e))
-      .finally(_ => logger.info('done'))
 
   }
 }
