@@ -1,6 +1,9 @@
+import { Symbol } from './compiler';
 import * as path from 'path';
+import * as fs from 'fs';
 import * as ts from 'typescript';
-import {logger, getNewLineCharacter, compilerHost, d } from '@compodoc/ngd-core';
+import { logger, getNewLineCharacter, compilerHost, d } from '@compodoc/ngd-core';
+import { TemplateCompiler } from './template_compiler';
 
 
 interface NodeObject {
@@ -25,18 +28,25 @@ interface NodeObject {
   }
 }
 
-export interface Dependencies {
-  name: string;
+export interface NodeView {
+  content: string;
+  ast?: {}
+}
+
+export interface Symbol {
+  name?: string;
   selector?: string;
   label?: string;
+  attrs?: { name: string; value: string }[];
   file?: string;
   templateUrl?: string[];
+  template?: string,
   styleUrls?: string[];
-  providers?: Dependencies[];
-  imports?: Dependencies[];
-  exports?: Dependencies[];
-  declarations?: Dependencies[];
-  bootstrap?: Dependencies[];
+  providers?: Symbol[];
+  imports?: Symbol[];
+  exports?: Symbol[];
+  declarations?: Symbol[];
+  bootstrap?: Symbol[];
   __raw?: any
 }
 
@@ -50,7 +60,7 @@ export class Compiler {
   private files: string[];
   private program: ts.Program;
   private engine: any;
-  private __cache: any = {};
+  private __directivesCache: any = {};
   private __nsModule: any = {};
   private unknown = '???';
 
@@ -65,7 +75,7 @@ export class Compiler {
   }
 
   getDependencies() {
-    let deps: Dependencies[] = [];
+    let deps: Symbol[] = [];
     let sourceFiles = this.program.getSourceFiles() || [];
 
     sourceFiles.map((file: ts.SourceFile) => {
@@ -95,24 +105,25 @@ export class Compiler {
   }
 
 
-  private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Dependencies[]): void {
+  private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Symbol[]): void {
 
     ts.forEachChild(srcFile, (node: ts.Node) => {
-
 
       if (node.decorators) {
 
         let visitNode = (visitedNode, index) => {
 
           let name = this.getSymboleName(node);
-          let deps: Dependencies = <Dependencies>{};
+          let file = srcFile.fileName.split('/').splice(-3).join('/');
+          let moduleDeps: Symbol = {} as Symbol;
+          let directivesDeps: Symbol = {} as Symbol;
           let metadata = node.decorators.pop();
           let props = this.findProps(visitedNode);
 
           if (this.isModule(metadata)) {
-            deps = {
+            moduleDeps = {
               name,
-              file: srcFile.fileName.split('/').splice(-3).join('/'),
+              file,
               providers: this.getModuleProviders(props),
               declarations: this.getModuleDeclations(props),
               imports: this.getModuleImports(props),
@@ -120,29 +131,33 @@ export class Compiler {
               bootstrap: this.getModuleBootstrap(props),
               __raw: props
             };
-            outputSymbols.push(deps);
+
+            // we only push modules to output
+            outputSymbols.push(moduleDeps);
+            this.debug(moduleDeps);
+
           }
-          else if (this.isComponent(metadata)) {
-            deps = {
+          else if (this.isDirective(metadata)) {
+            directivesDeps = {
               name,
-              file: srcFile.fileName.split('/').splice(-3).join('/'),
+              file,
               selector: this.getComponentSelector(props),
               providers: this.getComponentProviders(props),
               templateUrl: this.getComponentTemplateUrl(props),
+              template: this.getComponentTemplate(props),
+              declarations: this.getComponentChildren(props, path.dirname(srcFile.fileName)),
               styleUrls: this.getComponentStyleUrls(props),
               __raw: props
             };
 
+            this.__directivesCache[name] = directivesDeps;
+            outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directivesDeps);
           }
-
-          this.debug(deps);
-
-          this.__cache[name] = deps;
         }
 
         let filterByDecorators = (node) => {
           if (node.expression && node.expression.expression) {
-            return /(NgModule|Component)/.test(node.expression.expression.text)
+            return /(NgModule|Component|Directive)/.test(node.expression.expression.text)
           }
           return false;
         };
@@ -158,7 +173,7 @@ export class Compiler {
     });
 
   }
-  private debug(deps: Dependencies) {
+  private debug(deps: Symbol) {
     logger.debug('debug', `${deps.name}:`);
 
     [
@@ -174,8 +189,9 @@ export class Compiler {
     });
   }
 
-  private isComponent(metadata) {
-    return metadata.expression.expression.text === 'Component';
+  private isDirective(metadata) {
+    const text = metadata.expression.expression.text;
+    return ['Component', 'Directive'].indexOf(text) >= 0;
   }
 
   private isModule(metadata) {
@@ -190,7 +206,7 @@ export class Compiler {
     return this.getSymbolDeps(props, 'selector').pop();
   }
 
-  private getModuleProviders(props: NodeObject[]): Dependencies[] {
+  private getModuleProviders(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'providers').map((providerName) => {
       return this.parseDeepIndentifier(providerName);
     });
@@ -200,9 +216,29 @@ export class Compiler {
     return visitedNode.expression.arguments.pop().properties;
   }
 
-  private getModuleDeclations(props: NodeObject[]): Dependencies[] {
+  private updateDirectiveDeclarationsInModules(modules: Symbol[], directiveMetadata: Symbol): Symbol[] {
+    return modules.map(module => {
+      const moduleDeclarations = module.declarations;
+      for (let index = 0; index < moduleDeclarations.length; index++) {
+        if (moduleDeclarations[index].name === directiveMetadata.name) {
+
+          // clone directiveMetadata
+          for (let prop in directiveMetadata) {
+            if (directiveMetadata.hasOwnProperty(prop)) {
+              moduleDeclarations[index][prop] = directiveMetadata[prop];
+            }
+          }
+          break;
+        }
+      }
+      module.declarations = moduleDeclarations;
+      return module;
+    });
+  }
+
+  private getModuleDeclations(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'declarations').map((name) => {
-      let component = this.findComponentSelectorByName(name);
+      let component = this.getDirectiveMetadataByName(name);
 
       if (component) {
         return component;
@@ -212,36 +248,27 @@ export class Compiler {
     });
   }
 
-  private getModuleImports(props: NodeObject[]): Dependencies[] {
+  private getModuleImports(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'imports').map((name) => {
       return this.parseDeepIndentifier(name);
     });
   }
 
-  private getModuleExports(props: NodeObject[]): Dependencies[] {
+  private getModuleExports(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'exports').map((name) => {
       return this.parseDeepIndentifier(name);
     });
   }
 
-  private getModuleBootstrap(props: NodeObject[]): Dependencies[] {
+  private getModuleBootstrap(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'bootstrap').map((name) => {
       return this.parseDeepIndentifier(name);
     });
   }
 
-  private getComponentProviders(props: NodeObject[]): Dependencies[] {
+  private getComponentProviders(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'providers').map((name) => {
       return this.parseDeepIndentifier(name);
-    });
-  }
-
-  private getComponentDirectives(props: NodeObject[]): Dependencies[] {
-    return this.getSymbolDeps(props, 'directives').map((name) => {
-      let identifier = this.parseDeepIndentifier(name);
-      identifier.selector = this.findComponentSelectorByName(name);
-      identifier.label = '';
-      return identifier;
     });
   }
 
@@ -271,6 +298,50 @@ export class Compiler {
     return this.sanitizeUrls(this.getSymbolDeps(props, 'templateUrl'));
   }
 
+  private getComponentTemplate(props: NodeObject[]): string {
+    return this.getSymbolDeps(props, 'template').pop();
+  }
+
+  private getComponentChildren(props: NodeObject[], basePath: string): Symbol[] {
+    let content = this.getComponentTemplate(props);
+
+    if (!content) {
+      content = this.getComponentTemplateUrl(props).map(templateUrl => {
+        templateUrl = path.resolve(basePath, templateUrl);
+        return fs.readFileSync(templateUrl, 'utf-8').toString();
+      }).pop();
+    }
+
+    if (content) {
+      const ast = TemplateCompiler.getTemplateAst(content);
+      const astOutput = {};
+
+      const reVisit = (ast: Symbol[], astOutput: any): Symbol[] => {
+        if (ast) {
+          return ast.map(metadata => {
+            console.log('→', metadata);
+            if (metadata && metadata.selector) {
+              console.log('→→', metadata.selector);
+              const directiveMetadata = this.getDirectiveMetadataBySelector(metadata.selector);
+              console.log('→→→', directiveMetadata);
+              if (directiveMetadata) {
+                astOutput[directiveMetadata] = directiveMetadata;
+                return reVisit(metadata.declarations, astOutput);
+              }
+            }
+            return null;
+          }).filter(node => node !== null);
+        }
+        return [];
+      }
+      reVisit(ast, astOutput);
+
+      return Object.keys(astOutput) as Symbol[];
+    }
+
+    return [];
+  }
+
   private getComponentStyleUrls(props: NodeObject[]): string[] {
     return this.sanitizeUrls(this.getSymbolDeps(props, 'styleUrls'));
   }
@@ -286,15 +357,17 @@ export class Compiler {
     });
 
     let parseSymbolText = (text: string) => {
-      if (text.indexOf('/') !== -1) {
-        text = text.split('/').pop();
+      if (type !== 'template') {
+        if (text.indexOf('/') !== -1) {
+          text = text.split('/').pop();
+        }
       }
       return [
         text
       ];
     };
 
-    let buildIdentifierName = (node: NodeObject, name = '') => { 
+    let buildIdentifierName = (node: NodeObject, name = '') => {
 
       if (node.expression) {
         name = name ? `.${name}` : name;
@@ -311,17 +384,17 @@ export class Compiler {
           if (node.expression.text) {
             nodeName = node.expression.text;
           }
-          else if(node.expression.elements) {
+          else if (node.expression.elements) {
 
             if (node.expression.kind === ts.SyntaxKind.ArrayLiteralExpression) {
-              nodeName = node.expression.elements.map( el => el.text ).join(', ');
+              nodeName = node.expression.elements.map(el => el.text).join(', ');
               nodeName = `[${nodeName}]`;
             }
 
           }
         }
 
-        if (node.kind ===  ts.SyntaxKind.SpreadElement) {
+        if (node.kind === ts.SyntaxKind.SpreadElement) {
           return `...${nodeName}`;
         }
         return `${buildIdentifierName(node.expression, nodeName)}${name}`
@@ -425,8 +498,12 @@ export class Compiler {
     return deps.map(parseSymbols).pop() || [];
   }
 
-  private findComponentSelectorByName(name: string) {
-    return this.__cache[name];
+  private getDirectiveMetadataByName(name: string) {
+    return this.__directivesCache[name];
+  }
+
+  private getDirectiveMetadataBySelector(selector: string) {
+    return Object.keys(this.__directivesCache).filter(key => this.__directivesCache[key].selector === selector).pop();
   }
 
 }

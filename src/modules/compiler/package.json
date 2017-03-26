@@ -27,8 +27,12 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
+        "@angular/compiler": "^4.0.0",
+        "@angular/core": "^4.0.0",
+        "@compodoc/ngd-core": "2.0.0-alpha.1",
+        "rxjs": "^5.2.0",
         "typescript": "^2.0.0",
-        "@compodoc/ngd-core": "2.0.0-alpha.1"
+        "zone.js": "^0.8.5"
     },
     "devDependencies": {
         "@types/chai": "^3.4.34",
@@ -36,7 +40,8 @@
         "@types/node": "^6.0.39",
         "@types/typescript": "^0.4.29",
         "chai": "^3.5.0",
-        "mocha": "^3.1.2"
+        "mocha": "^3.1.2",
+        "parse5": "^3.0.2"
     },
     "types": "dist/index.d.ts"
 }

@@ -1,10 +1,13 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
+var fs = require("fs");
 var ts = require("typescript");
 var ngd_core_1 = require("@compodoc/ngd-core");
-var Compiler = (function() {
+var template_compiler_1 = require("./template_compiler");
+var Compiler = (function () {
     function Compiler(files, options) {
-        this.__cache = {};
+        this.__directivesCache = {};
         this.__nsModule = {};
         this.unknown = '???';
         this.files = files;
@@ -15,18 +18,19 @@ var Compiler = (function() {
         };
         this.program = ts.createProgram(this.files, transpileOptions, ngd_core_1.compilerHost(transpileOptions));
     }
-    Compiler.prototype.getDependencies = function() {
+    Compiler.prototype.getDependencies = function () {
         var _this = this;
         var deps = [];
         var sourceFiles = this.program.getSourceFiles() || [];
-        sourceFiles.map(function(file) {
+        sourceFiles.map(function (file) {
             var filePath = file.fileName;
             if (path.extname(filePath) === '.ts') {
                 if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
                     ngd_core_1.logger.info('parsing', filePath);
                     try {
                         _this.getSourceFileDecorators(file, deps);
-                    } catch (e) {
+                    }
+                    catch (e) {
                         ngd_core_1.logger.trace(e, file.fileName);
                     }
                 }
@@ -35,19 +39,21 @@ var Compiler = (function() {
         });
         return deps;
     };
-    Compiler.prototype.getSourceFileDecorators = function(srcFile, outputSymbols) {
+    Compiler.prototype.getSourceFileDecorators = function (srcFile, outputSymbols) {
         var _this = this;
-        ts.forEachChild(srcFile, function(node) {
+        ts.forEachChild(srcFile, function (node) {
             if (node.decorators) {
-                var visitNode = function(visitedNode, index) {
+                var visitNode = function (visitedNode, index) {
                     var name = _this.getSymboleName(node);
-                    var deps = {};
+                    var file = srcFile.fileName.split('/').splice(-3).join('/');
+                    var moduleDeps = {};
+                    var directivesDeps = {};
                     var metadata = node.decorators.pop();
                     var props = _this.findProps(visitedNode);
                     if (_this.isModule(metadata)) {
-                        deps = {
+                        moduleDeps = {
                             name: name,
-                            file: srcFile.fileName.split('/').splice(-3).join('/'),
+                            file: file,
                             providers: _this.getModuleProviders(props),
                             declarations: _this.getModuleDeclations(props),
                             imports: _this.getModuleImports(props),
@@ -55,117 +61,136 @@ var Compiler = (function() {
                             bootstrap: _this.getModuleBootstrap(props),
                             __raw: props
                         };
-                        outputSymbols.push(deps);
-                    } else if (_this.isComponent(metadata)) {
-                        deps = {
+                        // we only push modules to output
+                        outputSymbols.push(moduleDeps);
+                        _this.debug(moduleDeps);
+                    }
+                    else if (_this.isDirective(metadata)) {
+                        directivesDeps = {
                             name: name,
-                            file: srcFile.fileName.split('/').splice(-3).join('/'),
+                            file: file,
                             selector: _this.getComponentSelector(props),
                             providers: _this.getComponentProviders(props),
                             templateUrl: _this.getComponentTemplateUrl(props),
+                            template: _this.getComponentTemplate(props),
+                            declarations: _this.getComponentChildren(props, path.dirname(srcFile.fileName)),
                             styleUrls: _this.getComponentStyleUrls(props),
                             __raw: props
                         };
+                        _this.__directivesCache[name] = directivesDeps;
+                        outputSymbols = _this.updateDirectiveDeclarationsInModules(outputSymbols, directivesDeps);
                     }
-                    _this.debug(deps);
-                    _this.__cache[name] = deps;
                 };
-                var filterByDecorators = function(node) {
+                var filterByDecorators = function (node) {
                     if (node.expression && node.expression.expression) {
-                        return /(NgModule|Component)/.test(node.expression.expression.text);
+                        return /(NgModule|Component|Directive)/.test(node.expression.expression.text);
                     }
                     return false;
                 };
                 node.decorators
                     .filter(filterByDecorators)
                     .forEach(visitNode);
-            } else {}
+            }
+            else {
+                // process.stdout.write('.');
+            }
         });
     };
-    Compiler.prototype.debug = function(deps) {
+    Compiler.prototype.debug = function (deps) {
         ngd_core_1.logger.debug('debug', deps.name + ":");
         [
             'imports', 'exports', 'declarations', 'providers', 'bootstrap'
-        ].forEach(function(symbols) {
+        ].forEach(function (symbols) {
             if (deps[symbols] && deps[symbols].length > 0) {
                 ngd_core_1.logger.debug('', "- " + symbols + ":");
-                deps[symbols].map(function(i) { return i.name; }).forEach(function(d) {
+                deps[symbols].map(function (i) { return i.name; }).forEach(function (d) {
                     ngd_core_1.logger.debug('', "\t- " + d);
                 });
             }
         });
     };
-    Compiler.prototype.isComponent = function(metadata) {
-        return metadata.expression.expression.text === 'Component';
+    Compiler.prototype.isDirective = function (metadata) {
+        var text = metadata.expression.expression.text;
+        return ['Component', 'Directive'].indexOf(text) >= 0;
     };
-    Compiler.prototype.isModule = function(metadata) {
+    Compiler.prototype.isModule = function (metadata) {
         return metadata.expression.expression.text === 'NgModule';
     };
-    Compiler.prototype.getSymboleName = function(node) {
+    Compiler.prototype.getSymboleName = function (node) {
         return node.name.text;
     };
-    Compiler.prototype.getComponentSelector = function(props) {
+    Compiler.prototype.getComponentSelector = function (props) {
         return this.getSymbolDeps(props, 'selector').pop();
     };
-    Compiler.prototype.getModuleProviders = function(props) {
+    Compiler.prototype.getModuleProviders = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'providers').map(function(providerName) {
+        return this.getSymbolDeps(props, 'providers').map(function (providerName) {
             return _this.parseDeepIndentifier(providerName);
         });
     };
-    Compiler.prototype.findProps = function(visitedNode) {
+    Compiler.prototype.findProps = function (visitedNode) {
         return visitedNode.expression.arguments.pop().properties;
     };
-    Compiler.prototype.getModuleDeclations = function(props) {
+    Compiler.prototype.updateDirectiveDeclarationsInModules = function (modules, directiveMetadata) {
+        return modules.map(function (module) {
+            var moduleDeclarations = module.declarations;
+            for (var index = 0; index < moduleDeclarations.length; index++) {
+                if (moduleDeclarations[index].name === directiveMetadata.name) {
+                    // clone directiveMetadata
+                    for (var prop in directiveMetadata) {
+                        if (directiveMetadata.hasOwnProperty(prop)) {
+                            moduleDeclarations[index][prop] = directiveMetadata[prop];
+                        }
+                    }
+                    break;
+                }
+            }
+            module.declarations = moduleDeclarations;
+            return module;
+        });
+    };
+    Compiler.prototype.getModuleDeclations = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'declarations').map(function(name) {
-            var component = _this.findComponentSelectorByName(name);
+        return this.getSymbolDeps(props, 'declarations').map(function (name) {
+            var component = _this.getDirectiveMetadataByName(name);
             if (component) {
                 return component;
             }
             return _this.parseDeepIndentifier(name);
         });
     };
-    Compiler.prototype.getModuleImports = function(props) {
+    Compiler.prototype.getModuleImports = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'imports').map(function(name) {
+        return this.getSymbolDeps(props, 'imports').map(function (name) {
             return _this.parseDeepIndentifier(name);
         });
     };
-    Compiler.prototype.getModuleExports = function(props) {
+    Compiler.prototype.getModuleExports = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'exports').map(function(name) {
+        return this.getSymbolDeps(props, 'exports').map(function (name) {
             return _this.parseDeepIndentifier(name);
         });
     };
-    Compiler.prototype.getModuleBootstrap = function(props) {
+    Compiler.prototype.getModuleBootstrap = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'bootstrap').map(function(name) {
+        return this.getSymbolDeps(props, 'bootstrap').map(function (name) {
             return _this.parseDeepIndentifier(name);
         });
     };
-    Compiler.prototype.getComponentProviders = function(props) {
+    Compiler.prototype.getComponentProviders = function (props) {
         var _this = this;
-        return this.getSymbolDeps(props, 'providers').map(function(name) {
+        return this.getSymbolDeps(props, 'providers').map(function (name) {
             return _this.parseDeepIndentifier(name);
         });
     };
-    Compiler.prototype.getComponentDirectives = function(props) {
-        var _this = this;
-        return this.getSymbolDeps(props, 'directives').map(function(name) {
-            var identifier = _this.parseDeepIndentifier(name);
-            identifier.selector = _this.findComponentSelectorByName(name);
-            identifier.label = '';
-            return identifier;
-        });
-    };
-    Compiler.prototype.parseDeepIndentifier = function(name) {
+    Compiler.prototype.parseDeepIndentifier = function (name) {
         var nsModule = name.split('.');
         if (nsModule.length > 1) {
             // cache deps with the same namespace (i.e Shared.*)
             if (this.__nsModule[nsModule[0]]) {
                 this.__nsModule[nsModule[0]].push(name);
-            } else {
+            }
+            else {
                 this.__nsModule[nsModule[0]] = [name];
             }
             return {
@@ -177,43 +202,86 @@ var Compiler = (function() {
             name: name
         };
     };
-    Compiler.prototype.getComponentTemplateUrl = function(props) {
+    Compiler.prototype.getComponentTemplateUrl = function (props) {
         return this.sanitizeUrls(this.getSymbolDeps(props, 'templateUrl'));
     };
-    Compiler.prototype.getComponentStyleUrls = function(props) {
+    Compiler.prototype.getComponentTemplate = function (props) {
+        return this.getSymbolDeps(props, 'template').pop();
+    };
+    Compiler.prototype.getComponentChildren = function (props, basePath) {
+        var _this = this;
+        var content = this.getComponentTemplate(props);
+        if (!content) {
+            content = this.getComponentTemplateUrl(props).map(function (templateUrl) {
+                templateUrl = path.resolve(basePath, templateUrl);
+                return fs.readFileSync(templateUrl, 'utf-8').toString();
+            }).pop();
+        }
+        if (content) {
+            var ast = template_compiler_1.TemplateCompiler.getTemplateAst(content);
+            var astOutput = {};
+            var reVisit_1 = function (ast, astOutput) {
+                if (ast) {
+                    return ast.map(function (metadata) {
+                        console.log('→', metadata);
+                        if (metadata && metadata.selector) {
+                            console.log('→→', metadata.selector);
+                            var directiveMetadata = _this.getDirectiveMetadataBySelector(metadata.selector);
+                            console.log('→→→', directiveMetadata);
+                            if (directiveMetadata) {
+                                astOutput[directiveMetadata] = directiveMetadata;
+                                return reVisit_1(metadata.declarations, astOutput);
+                            }
+                        }
+                        return null;
+                    }).filter(function (node) { return node !== null; });
+                }
+                return [];
+            };
+            reVisit_1(ast, astOutput);
+            return Object.keys(astOutput);
+        }
+        return [];
+    };
+    Compiler.prototype.getComponentStyleUrls = function (props) {
         return this.sanitizeUrls(this.getSymbolDeps(props, 'styleUrls'));
     };
-    Compiler.prototype.sanitizeUrls = function(urls) {
-        return urls.map(function(url) { return url.replace('./', ''); });
+    Compiler.prototype.sanitizeUrls = function (urls) {
+        return urls.map(function (url) { return url.replace('./', ''); });
     };
-    Compiler.prototype.getSymbolDeps = function(props, type) {
+    Compiler.prototype.getSymbolDeps = function (props, type) {
         var _this = this;
-        var deps = props.filter(function(node) {
+        var deps = props.filter(function (node) {
             return node.name.text === type;
         });
-        var parseSymbolText = function(text) {
-            if (text.indexOf('/') !== -1) {
-                text = text.split('/').pop();
+        var parseSymbolText = function (text) {
+            if (type !== 'template') {
+                if (text.indexOf('/') !== -1) {
+                    text = text.split('/').pop();
+                }
             }
             return [
                 text
             ];
         };
-        var buildIdentifierName = function(node, name) {
+        var buildIdentifierName = function (node, name) {
             if (name === void 0) { name = ''; }
             if (node.expression) {
                 name = name ? "." + name : name;
                 var nodeName = _this.unknown;
                 if (node.name) {
                     nodeName = node.name.text;
-                } else if (node.text) {
+                }
+                else if (node.text) {
                     nodeName = node.text;
-                } else if (node.expression) {
+                }
+                else if (node.expression) {
                     if (node.expression.text) {
                         nodeName = node.expression.text;
-                    } else if (node.expression.elements) {
+                    }
+                    else if (node.expression.elements) {
                         if (node.expression.kind === ts.SyntaxKind.ArrayLiteralExpression) {
-                            nodeName = node.expression.elements.map(function(el) { return el.text; }).join(', ');
+                            nodeName = node.expression.elements.map(function (el) { return el.text; }).join(', ');
                             nodeName = "[" + nodeName + "]";
                         }
                     }
@@ -225,24 +293,25 @@ var Compiler = (function() {
             }
             return node.text + "." + name;
         };
-        var parseProviderConfiguration = function(o) {
+        var parseProviderConfiguration = function (o) {
             // parse expressions such as:
             // { provide: APP_BASE_HREF, useValue: '/' },
             // or
             // { provide: 'Date', useFactory: (d1, d2) => new Date(), deps: ['d1', 'd2'] }
             var _genProviderName = [];
             var _providerProps = [];
-            (o.properties || []).forEach(function(prop) {
+            (o.properties || []).forEach(function (prop) {
                 var identifier = prop.initializer.text;
                 if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {
                     identifier = "'" + identifier + "'";
                 }
                 // lambda function (i.e useFactory)
                 if (prop.initializer.body) {
-                    var params = (prop.initializer.parameters || []).map(function(params) { return params.name.text; });
+                    var params = (prop.initializer.parameters || []).map(function (params) { return params.name.text; });
                     identifier = "(" + params.join(', ') + ") => {}";
-                } else if (prop.initializer.elements) {
-                    var elements = (prop.initializer.elements || []).map(function(n) {
+                }
+                else if (prop.initializer.elements) {
+                    var elements = (prop.initializer.elements || []).map(function (n) {
                         if (n.kind === ts.SyntaxKind.StringLiteral) {
                             return "'" + n.text + "'";
                         }
@@ -259,7 +328,7 @@ var Compiler = (function() {
             });
             return "{ " + _providerProps.join(', ') + " }";
         };
-        var parseSymbolElements = function(o) {
+        var parseSymbolElements = function (o) {
             // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
             if (o.arguments) {
                 var className = buildIdentifierName(o.expression);
@@ -269,29 +338,36 @@ var Compiler = (function() {
                 var functionArgs = o.arguments.length > 0 ? 'args' : '';
                 var text = className + "(" + functionArgs + ")";
                 return text;
-            } else if (o.expression) {
+            }
+            else if (o.expression) {
                 var identifier = buildIdentifierName(o);
                 return identifier;
             }
             return o.text ? o.text : parseProviderConfiguration(o);
         };
-        var parseSymbols = function(node) {
+        var parseSymbols = function (node) {
             var text = node.initializer.text;
             if (text) {
                 return parseSymbolText(text);
-            } else if (node.initializer.expression) {
+            }
+            else if (node.initializer.expression) {
                 var identifier = parseSymbolElements(node.initializer);
                 return [
                     identifier
                 ];
-            } else if (node.initializer.elements) {
+            }
+            else if (node.initializer.elements) {
                 return node.initializer.elements.map(parseSymbolElements);
             }
         };
         return deps.map(parseSymbols).pop() || [];
     };
-    Compiler.prototype.findComponentSelectorByName = function(name) {
-        return this.__cache[name];
+    Compiler.prototype.getDirectiveMetadataByName = function (name) {
+        return this.__directivesCache[name];
+    };
+    Compiler.prototype.getDirectiveMetadataBySelector = function (selector) {
+        var _this = this;
+        return Object.keys(this.__directivesCache).filter(function (key) { return _this.__directivesCache[key].selector === selector; }).pop();
     };
     return Compiler;
 }());
