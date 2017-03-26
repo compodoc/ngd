@@ -12,6 +12,7 @@ export interface Symbol {
         value: string;
     }[];
     file?: string;
+    srcFile?: string;
     templateUrl?: string[];
     template?: string;
     styleUrls?: string[];
@@ -31,7 +32,8 @@ export declare class Compiler {
     private unknown;
     constructor(files: string[], options: any);
     getDependencies(): Symbol[];
-    private getSourceFileDecorators(srcFile, outputSymbols);
+    private visitAll(srcFile, outputSymbols);
+    private updateDeclarations(outputSymbols);
     private debug(deps);
     private isDirective(metadata);
     private isModule(metadata);
@@ -48,10 +50,10 @@ export declare class Compiler {
     private parseDeepIndentifier(name);
     private getComponentTemplateUrl(props);
     private getComponentTemplate(props);
-    private getComponentChildren(props, basePath);
+    private getComponentChildren(metadata);
     private getComponentStyleUrls(props);
     private sanitizeUrls(urls);
     private getSymbolDeps(props, type);
     private getDirectiveMetadataByName(name);
-    private getDirectiveMetadataBySelector(selector);
+    private getDirectiveNameBySelector(selector);
 }

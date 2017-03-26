@@ -28,7 +28,7 @@ var Compiler = (function () {
                 if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
                     ngd_core_1.logger.info('parsing', filePath);
                     try {
-                        _this.getSourceFileDecorators(file, deps);
+                        _this.visitAll(file, deps);
                     }
                     catch (e) {
                         ngd_core_1.logger.trace(e, file.fileName);
@@ -37,9 +37,11 @@ var Compiler = (function () {
             }
             return deps;
         });
+        // do one last pass to update all declarations definition
+        deps = this.updateDeclarations(deps);
         return deps;
     };
-    Compiler.prototype.getSourceFileDecorators = function (srcFile, outputSymbols) {
+    Compiler.prototype.visitAll = function (srcFile, outputSymbols) {
         var _this = this;
         ts.forEachChild(srcFile, function (node) {
             if (node.decorators) {
@@ -54,6 +56,7 @@ var Compiler = (function () {
                         moduleDeps = {
                             name: name,
                             file: file,
+                            srcFile: srcFile.fileName,
                             providers: _this.getModuleProviders(props),
                             declarations: _this.getModuleDeclations(props),
                             imports: _this.getModuleImports(props),
@@ -69,16 +72,16 @@ var Compiler = (function () {
                         directivesDeps = {
                             name: name,
                             file: file,
+                            srcFile: srcFile.fileName,
                             selector: _this.getComponentSelector(props),
                             providers: _this.getComponentProviders(props),
                             templateUrl: _this.getComponentTemplateUrl(props),
                             template: _this.getComponentTemplate(props),
-                            declarations: _this.getComponentChildren(props, path.dirname(srcFile.fileName)),
+                            declarations: [],
                             styleUrls: _this.getComponentStyleUrls(props),
                             __raw: props
                         };
                         _this.__directivesCache[name] = directivesDeps;
-                        outputSymbols = _this.updateDirectiveDeclarationsInModules(outputSymbols, directivesDeps);
                     }
                 };
                 var filterByDecorators = function (node) {
@@ -95,6 +98,19 @@ var Compiler = (function () {
                 // process.stdout.write('.');
             }
         });
+    };
+    Compiler.prototype.updateDeclarations = function (outputSymbols) {
+        var _this = this;
+        for (var directiveName in this.__directivesCache) {
+            var directives = this.__directivesCache[directiveName];
+            outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directives);
+        }
+        outputSymbols.map(function (moduleSymbol) {
+            return moduleSymbol.declarations.map(function (directiveSymbol) {
+                return directiveSymbol.declarations = _this.getComponentChildren(directiveSymbol);
+            });
+        });
+        return outputSymbols;
     };
     Compiler.prototype.debug = function (deps) {
         ngd_core_1.logger.debug('debug', deps.name + ":");
@@ -208,38 +224,37 @@ var Compiler = (function () {
     Compiler.prototype.getComponentTemplate = function (props) {
         return this.getSymbolDeps(props, 'template').pop();
     };
-    Compiler.prototype.getComponentChildren = function (props, basePath) {
+    Compiler.prototype.getComponentChildren = function (metadata) {
         var _this = this;
-        var content = this.getComponentTemplate(props);
-        if (!content) {
-            content = this.getComponentTemplateUrl(props).map(function (templateUrl) {
-                templateUrl = path.resolve(basePath, templateUrl);
+        var content = metadata.template;
+        if (content === undefined) {
+            var dirname_1 = path.dirname(metadata.srcFile);
+            content = metadata.templateUrl.map(function (templateUrl) {
+                templateUrl = path.resolve(dirname_1, templateUrl);
                 return fs.readFileSync(templateUrl, 'utf-8').toString();
             }).pop();
         }
         if (content) {
             var ast = template_compiler_1.TemplateCompiler.getTemplateAst(content);
-            var astOutput = {};
+            var astOutput = new Map();
             var reVisit_1 = function (ast, astOutput) {
                 if (ast) {
-                    return ast.map(function (metadata) {
-                        console.log('→', metadata);
+                    ast.map(function (metadata) {
                         if (metadata && metadata.selector) {
-                            console.log('→→', metadata.selector);
-                            var directiveMetadata = _this.getDirectiveMetadataBySelector(metadata.selector);
-                            console.log('→→→', directiveMetadata);
-                            if (directiveMetadata) {
-                                astOutput[directiveMetadata] = directiveMetadata;
-                                return reVisit_1(metadata.declarations, astOutput);
+                            var directiveName = _this.getDirectiveNameBySelector(metadata.selector);
+                            if (directiveName) {
+                                astOutput.set(directiveName, {
+                                    name: directiveName
+                                });
                             }
+                            return reVisit_1(metadata.declarations, astOutput);
                         }
-                        return null;
+                        return metadata;
                     }).filter(function (node) { return node !== null; });
                 }
-                return [];
             };
             reVisit_1(ast, astOutput);
-            return Object.keys(astOutput);
+            return Array.from(astOutput.keys());
         }
         return [];
     };
@@ -365,7 +380,7 @@ var Compiler = (function () {
     Compiler.prototype.getDirectiveMetadataByName = function (name) {
         return this.__directivesCache[name];
     };
-    Compiler.prototype.getDirectiveMetadataBySelector = function (selector) {
+    Compiler.prototype.getDirectiveNameBySelector = function (selector) {
         var _this = this;
         return Object.keys(this.__directivesCache).filter(function (key) { return _this.__directivesCache[key].selector === selector; }).pop();
     };

@@ -39,6 +39,7 @@ export interface Symbol {
   label?: string;
   attrs?: { name: string; value: string }[];
   file?: string;
+  srcFile?: string;
   templateUrl?: string[];
   template?: string,
   styleUrls?: string[];
@@ -88,7 +89,7 @@ export class Compiler {
           logger.info('parsing', filePath);
 
           try {
-            this.getSourceFileDecorators(file, deps);
+            this.visitAll(file, deps);
           }
           catch (e) {
             logger.trace(e, file.fileName);
@@ -101,11 +102,13 @@ export class Compiler {
 
     });
 
+    // do one last pass to update all declarations definition
+    deps = this.updateDeclarations(deps);
     return deps;
   }
 
 
-  private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Symbol[]): void {
+  private visitAll(srcFile: ts.SourceFile, outputSymbols: Symbol[]): void {
 
     ts.forEachChild(srcFile, (node: ts.Node) => {
 
@@ -124,6 +127,7 @@ export class Compiler {
             moduleDeps = {
               name,
               file,
+              srcFile: srcFile.fileName,
               providers: this.getModuleProviders(props),
               declarations: this.getModuleDeclations(props),
               imports: this.getModuleImports(props),
@@ -141,17 +145,17 @@ export class Compiler {
             directivesDeps = {
               name,
               file,
+              srcFile: srcFile.fileName,
               selector: this.getComponentSelector(props),
               providers: this.getComponentProviders(props),
               templateUrl: this.getComponentTemplateUrl(props),
               template: this.getComponentTemplate(props),
-              declarations: this.getComponentChildren(props, path.dirname(srcFile.fileName)),
+              declarations: [ /* see updateDeclaration() */ ],
               styleUrls: this.getComponentStyleUrls(props),
               __raw: props
             };
 
             this.__directivesCache[name] = directivesDeps;
-            outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directivesDeps);
           }
         }
 
@@ -173,6 +177,21 @@ export class Compiler {
     });
 
   }
+
+  private updateDeclarations(outputSymbols: Symbol[]) {
+    for (let directiveName in this.__directivesCache) {
+      const directives = this.__directivesCache[directiveName];
+      outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directives);
+    }
+
+    outputSymbols.map( moduleSymbol =>  {
+      return moduleSymbol.declarations.map( directiveSymbol => {
+        return directiveSymbol.declarations = this.getComponentChildren(directiveSymbol);
+      })
+    })
+    return outputSymbols;
+  }
+
   private debug(deps: Symbol) {
     logger.debug('debug', `${deps.name}:`);
 
@@ -302,41 +321,39 @@ export class Compiler {
     return this.getSymbolDeps(props, 'template').pop();
   }
 
-  private getComponentChildren(props: NodeObject[], basePath: string): Symbol[] {
-    let content = this.getComponentTemplate(props);
-
-    if (!content) {
-      content = this.getComponentTemplateUrl(props).map(templateUrl => {
-        templateUrl = path.resolve(basePath, templateUrl);
+  private getComponentChildren(metadata: Symbol): Symbol[] {
+    let content =  metadata.template;
+    if (content === undefined) {
+      const dirname = path.dirname(metadata.srcFile);
+      content = metadata.templateUrl.map(templateUrl => {
+        templateUrl = path.resolve(dirname, templateUrl);
         return fs.readFileSync(templateUrl, 'utf-8').toString();
       }).pop();
     }
 
     if (content) {
       const ast = TemplateCompiler.getTemplateAst(content);
-      const astOutput = {};
+      const astOutput = new Map<string, Symbol>();
 
-      const reVisit = (ast: Symbol[], astOutput: any): Symbol[] => {
+      const reVisit = (ast: Symbol[], astOutput: Map<string, Symbol>): void => {
         if (ast) {
-          return ast.map(metadata => {
-            console.log('→', metadata);
+          ast.map(metadata => {
             if (metadata && metadata.selector) {
-              console.log('→→', metadata.selector);
-              const directiveMetadata = this.getDirectiveMetadataBySelector(metadata.selector);
-              console.log('→→→', directiveMetadata);
-              if (directiveMetadata) {
-                astOutput[directiveMetadata] = directiveMetadata;
-                return reVisit(metadata.declarations, astOutput);
+              const directiveName = this.getDirectiveNameBySelector(metadata.selector);
+              if (directiveName) {
+                astOutput.set(directiveName, {
+                  name: directiveName
+                });
               }
+              return reVisit(metadata.declarations, astOutput);
             }
-            return null;
+            return metadata;
           }).filter(node => node !== null);
         }
-        return [];
       }
+    
       reVisit(ast, astOutput);
-
-      return Object.keys(astOutput) as Symbol[];
+      return Array.from(astOutput.keys());
     }
 
     return [];
@@ -502,7 +519,7 @@ export class Compiler {
     return this.__directivesCache[name];
   }
 
-  private getDirectiveMetadataBySelector(selector: string) {
+  private getDirectiveNameBySelector(selector: string) {
     return Object.keys(this.__directivesCache).filter(key => this.__directivesCache[key].selector === selector).pop();
   }
 

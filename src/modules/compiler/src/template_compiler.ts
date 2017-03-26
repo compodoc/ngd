@@ -4,7 +4,7 @@ import * as html from '@angular/compiler';
 
 export class TemplateCompiler {
 
-  static getTemplateAst(htmlTemplate: string): Symbol[] /*ParseTreeResult*/ {
+  static getTemplateAst(htmlTemplate: string): Symbol[] {
     const parser = new HtmlParser();
     const ast = parser.parse(htmlTemplate, '');
     return jsonifyNodes(ast.rootNodes);
