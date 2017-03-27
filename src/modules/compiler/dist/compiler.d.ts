@@ -21,6 +21,8 @@ export interface Symbol {
     exports?: Symbol[];
     declarations?: Symbol[];
     bootstrap?: Symbol[];
+    __level?: number;
+    __id?: string;
     __raw?: any;
 }
 export declare class Compiler {
@@ -30,9 +32,11 @@ export declare class Compiler {
     private __directivesCache;
     private __nsModule;
     private unknown;
+    private depth;
     constructor(files: string[], options: any);
     getDependencies(): Symbol[];
     private visitAll(srcFile, outputSymbols);
+    private uuid();
     private updateDeclarations(outputSymbols);
     private debug(deps);
     private isDirective(metadata);

@@ -10,6 +10,7 @@ var Compiler = (function () {
         this.__directivesCache = {};
         this.__nsModule = {};
         this.unknown = '???';
+        this.depth = 1;
         this.files = files;
         var transpileOptions = {
             target: ts.ScriptTarget.ES5,
@@ -21,6 +22,7 @@ var Compiler = (function () {
     Compiler.prototype.getDependencies = function () {
         var _this = this;
         var deps = [];
+        this.depth = 1;
         var sourceFiles = this.program.getSourceFiles() || [];
         sourceFiles.map(function (file) {
             var filePath = file.fileName;
@@ -62,6 +64,8 @@ var Compiler = (function () {
                             imports: _this.getModuleImports(props),
                             exports: _this.getModuleExports(props),
                             bootstrap: _this.getModuleBootstrap(props),
+                            __level: _this.depth - 1,
+                            __id: _this.uuid(),
                             __raw: props
                         };
                         // we only push modules to output
@@ -79,10 +83,13 @@ var Compiler = (function () {
                             template: _this.getComponentTemplate(props),
                             declarations: [],
                             styleUrls: _this.getComponentStyleUrls(props),
+                            __level: _this.depth,
+                            __id: _this.uuid(),
                             __raw: props
                         };
                         _this.__directivesCache[name] = directivesDeps;
                     }
+                    _this.depth++;
                 };
                 var filterByDecorators = function (node) {
                     if (node.expression && node.expression.expression) {
@@ -98,6 +105,17 @@ var Compiler = (function () {
                 // process.stdout.write('.');
             }
         });
+    };
+    Compiler.prototype.uuid = function () {
+        var uuid = '', i, random;
+        for (i = 0; i < 32; i++) {
+            random = Math.random() * 16 | 0;
+            if (i == 8 || i == 12 || i == 16 || i == 20) {
+                uuid += '-';
+            }
+            uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+        }
+        return uuid;
     };
     Compiler.prototype.updateDeclarations = function (outputSymbols) {
         var _this = this;
@@ -211,11 +229,15 @@ var Compiler = (function () {
             }
             return {
                 ns: nsModule[0],
-                name: name
+                name: name,
+                __id: this.uuid(),
+                __level: this.depth
             };
         }
         return {
-            name: name
+            name: name,
+            __id: this.uuid(),
+            __level: this.depth
         };
     };
     Compiler.prototype.getComponentTemplateUrl = function (props) {
@@ -228,11 +250,14 @@ var Compiler = (function () {
         var _this = this;
         var content = metadata.template;
         if (content === undefined) {
-            var dirname_1 = path.dirname(metadata.srcFile);
-            content = metadata.templateUrl.map(function (templateUrl) {
-                templateUrl = path.resolve(dirname_1, templateUrl);
-                return fs.readFileSync(templateUrl, 'utf-8').toString();
-            }).pop();
+            // handle Pipes
+            if (metadata.srcFile) {
+                var dirname_1 = path.dirname(metadata.srcFile);
+                content = metadata.templateUrl.map(function (templateUrl) {
+                    templateUrl = path.resolve(dirname_1, templateUrl);
+                    return fs.readFileSync(templateUrl, 'utf-8').toString();
+                }).pop();
+            }
         }
         if (content) {
             var ast = template_compiler_1.TemplateCompiler.getTemplateAst(content);
@@ -241,10 +266,11 @@ var Compiler = (function () {
                 if (ast) {
                     ast.map(function (metadata) {
                         if (metadata && metadata.selector) {
-                            var directiveName = _this.getDirectiveNameBySelector(metadata.selector);
-                            if (directiveName) {
-                                astOutput.set(directiveName, {
-                                    name: directiveName
+                            var directiveMetadata = _this.getDirectiveNameBySelector(metadata.selector);
+                            if (directiveMetadata) {
+                                astOutput.set(directiveMetadata.name, {
+                                    __id: directiveMetadata.__id,
+                                    __level: _this.depth + 1
                                 });
                             }
                             return reVisit_1(metadata.declarations, astOutput);
@@ -254,7 +280,7 @@ var Compiler = (function () {
                 }
             };
             reVisit_1(ast, astOutput);
-            return Array.from(astOutput.keys());
+            return Array.from(astOutput.values());
         }
         return [];
     };
@@ -382,7 +408,8 @@ var Compiler = (function () {
     };
     Compiler.prototype.getDirectiveNameBySelector = function (selector) {
         var _this = this;
-        return Object.keys(this.__directivesCache).filter(function (key) { return _this.__directivesCache[key].selector === selector; }).pop();
+        var key = Object.keys(this.__directivesCache).filter(function (key) { return _this.__directivesCache[key].selector === selector; }).pop();
+        return this.__directivesCache[key];
     };
     return Compiler;
 }());

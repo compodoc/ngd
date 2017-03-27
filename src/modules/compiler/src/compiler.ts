@@ -48,6 +48,8 @@ export interface Symbol {
   exports?: Symbol[];
   declarations?: Symbol[];
   bootstrap?: Symbol[];
+  __level?: number;
+  __id?: string;
   __raw?: any
 }
 
@@ -64,6 +66,7 @@ export class Compiler {
   private __directivesCache: any = {};
   private __nsModule: any = {};
   private unknown = '???';
+  private depth = 1;
 
   constructor(files: string[], options: any) {
     this.files = files;
@@ -77,6 +80,7 @@ export class Compiler {
 
   getDependencies() {
     let deps: Symbol[] = [];
+    this.depth = 1;
     let sourceFiles = this.program.getSourceFiles() || [];
 
     sourceFiles.map((file: ts.SourceFile) => {
@@ -133,6 +137,8 @@ export class Compiler {
               imports: this.getModuleImports(props),
               exports: this.getModuleExports(props),
               bootstrap: this.getModuleBootstrap(props),
+              __level: this.depth - 1,
+              __id: this.uuid(),
               __raw: props
             };
 
@@ -150,13 +156,16 @@ export class Compiler {
               providers: this.getComponentProviders(props),
               templateUrl: this.getComponentTemplateUrl(props),
               template: this.getComponentTemplate(props),
-              declarations: [ /* see updateDeclaration() */ ],
+              declarations: [ /* see updateDeclaration() */],
               styleUrls: this.getComponentStyleUrls(props),
+              __level: this.depth,
+              __id: this.uuid(),
               __raw: props
             };
 
             this.__directivesCache[name] = directivesDeps;
           }
+          this.depth++;
         }
 
         let filterByDecorators = (node) => {
@@ -177,6 +186,18 @@ export class Compiler {
     });
 
   }
+  
+  private uuid(): string {
+    let uuid = '', i, random;
+    for (i = 0; i < 32; i++) {
+      random = Math.random() * 16 | 0;
+      if (i == 8 || i == 12 || i == 16 || i == 20) {
+        uuid += '-';
+      }
+      uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+    }
+    return uuid;
+  }
 
   private updateDeclarations(outputSymbols: Symbol[]) {
     for (let directiveName in this.__directivesCache) {
@@ -184,8 +205,8 @@ export class Compiler {
       outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directives);
     }
 
-    outputSymbols.map( moduleSymbol =>  {
-      return moduleSymbol.declarations.map( directiveSymbol => {
+    outputSymbols.map(moduleSymbol => {
+      return moduleSymbol.declarations.map(directiveSymbol => {
         return directiveSymbol.declarations = this.getComponentChildren(directiveSymbol);
       })
     })
@@ -305,11 +326,15 @@ export class Compiler {
 
       return {
         ns: nsModule[0],
-        name
+        name,
+        __id: this.uuid(),
+        __level:this.depth
       }
     }
     return {
-      name
+      name,
+      __id: this.uuid(),
+      __level:this.depth
     };
   }
 
@@ -322,13 +347,17 @@ export class Compiler {
   }
 
   private getComponentChildren(metadata: Symbol): Symbol[] {
-    let content =  metadata.template;
+    let content = metadata.template;
     if (content === undefined) {
-      const dirname = path.dirname(metadata.srcFile);
-      content = metadata.templateUrl.map(templateUrl => {
-        templateUrl = path.resolve(dirname, templateUrl);
-        return fs.readFileSync(templateUrl, 'utf-8').toString();
-      }).pop();
+
+      // handle Pipes
+      if (metadata.srcFile) {
+        const dirname = path.dirname(metadata.srcFile);
+        content = metadata.templateUrl.map(templateUrl => {
+          templateUrl = path.resolve(dirname, templateUrl);
+          return fs.readFileSync(templateUrl, 'utf-8').toString();
+        }).pop();
+      }
     }
 
     if (content) {
@@ -339,10 +368,11 @@ export class Compiler {
         if (ast) {
           ast.map(metadata => {
             if (metadata && metadata.selector) {
-              const directiveName = this.getDirectiveNameBySelector(metadata.selector);
-              if (directiveName) {
-                astOutput.set(directiveName, {
-                  name: directiveName
+              const directiveMetadata = this.getDirectiveNameBySelector(metadata.selector);
+              if (directiveMetadata) {
+                astOutput.set(directiveMetadata.name, {
+                  __id: directiveMetadata.__id,
+                  __level: this.depth + 1
                 });
               }
               return reVisit(metadata.declarations, astOutput);
@@ -351,9 +381,9 @@ export class Compiler {
           }).filter(node => node !== null);
         }
       }
-    
+
       reVisit(ast, astOutput);
-      return Array.from(astOutput.keys());
+      return Array.from(astOutput.values());
     }
 
     return [];
@@ -519,8 +549,9 @@ export class Compiler {
     return this.__directivesCache[name];
   }
 
-  private getDirectiveNameBySelector(selector: string) {
-    return Object.keys(this.__directivesCache).filter(key => this.__directivesCache[key].selector === selector).pop();
+  private getDirectiveNameBySelector(selector: string): Symbol {
+    const key = Object.keys(this.__directivesCache).filter(key => this.__directivesCache[key].selector === selector).pop();
+    return this.__directivesCache[key];
   }
 
 }

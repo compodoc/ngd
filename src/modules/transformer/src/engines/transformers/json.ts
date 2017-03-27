@@ -18,10 +18,10 @@ export class JsonTransformer implements Transformer {
           if (error) {
             reject(error);
           }
-          logger.info('creating JSON', file);
+          logger.info('output JSON', file);
           resolve(file);
         }
       );
-    })
+    });
   }
 }

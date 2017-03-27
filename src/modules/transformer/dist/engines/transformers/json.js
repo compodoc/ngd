@@ -14,7 +14,7 @@ var JsonTransformer = (function () {
                 if (error) {
                     reject(error);
                 }
-                ngd_core_1.logger.info('creating JSON', file);
+                ngd_core_1.logger.info('output JSON', file);
                 resolve(file);
             });
         });
