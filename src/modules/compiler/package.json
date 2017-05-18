@@ -27,8 +27,6 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "@angular/compiler": "^4.0.0",
-        "@angular/core": "^4.0.0",
         "@compodoc/ngd-core": "2.0.0-alpha.1",
         "rxjs": "^5.2.0",
         "typescript": "^2.0.0",

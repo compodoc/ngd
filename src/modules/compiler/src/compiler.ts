@@ -37,9 +37,10 @@ export interface Symbol {
   name?: string;
   selector?: string;
   label?: string;
+  type?: string;
   attrs?: { name: string; value: string }[];
   file?: string;
-  srcFile?: string;
+  fileName?: string;
   templateUrl?: string[];
   template?: string,
   styleUrls?: string[];
@@ -48,8 +49,8 @@ export interface Symbol {
   exports?: Symbol[];
   declarations?: Symbol[];
   bootstrap?: Symbol[];
+  id?: string;
   __level?: number;
-  __id?: string;
   __raw?: any
 }
 
@@ -63,10 +64,15 @@ export class Compiler {
   private files: string[];
   private program: ts.Program;
   private engine: any;
-  private __directivesCache: any = {};
-  private __nsModule: any = {};
-  private unknown = '???';
+  private cachedSymboles: Map<string, Symbol> = new Map();
+  private nsModule: any = {};
   private depth = 1;
+  private includeRawProps = false;
+
+  private UNKNWON_PARAMS = '???';
+  private ANALYZED_DECORATORS = /(NgModule|Component|Directive|Pipe)/;
+  private DIRECTIVE_DECORATORS = ['Component', 'Directive'];
+  private MODULE_DECORATOR = 'NgModule';
 
   constructor(files: string[], options: any) {
     this.files = files;
@@ -122,25 +128,46 @@ export class Compiler {
 
           let name = this.getSymboleName(node);
           let file = srcFile.fileName.split('/').splice(-3).join('/');
+          let fileName = srcFile.fileName;
+          let id = this.uuid();
           let moduleDeps: Symbol = {} as Symbol;
           let directivesDeps: Symbol = {} as Symbol;
           let metadata = node.decorators.pop();
           let props = this.findProps(visitedNode);
+          let type = this.getSymbolType(metadata);
+          let __level = this.depth;
+
+          // pre-cache
+          if (!this.cachedSymboles.has(name)) {
+            this.cachedSymboles.set(name, {
+              name,
+              id,
+              type
+            });
+          }
 
           if (this.isModule(metadata)) {
+
             moduleDeps = {
               name,
+              id,
               file,
-              srcFile: srcFile.fileName,
+              type,
+              fileName,
+              __level,
               providers: this.getModuleProviders(props),
               declarations: this.getModuleDeclations(props),
               imports: this.getModuleImports(props),
               exports: this.getModuleExports(props),
               bootstrap: this.getModuleBootstrap(props),
-              __level: this.depth - 1,
-              __id: this.uuid(),
-              __raw: props
             };
+
+            if (this.includeRawProps) {
+              moduleDeps.__raw = props;
+            }
+
+            // post-cache
+            this.cachedSymboles.set(name, moduleDeps);
 
             // we only push modules to output
             outputSymbols.push(moduleDeps);
@@ -148,29 +175,36 @@ export class Compiler {
 
           }
           else if (this.isDirective(metadata)) {
+
             directivesDeps = {
               name,
+              id,
               file,
-              srcFile: srcFile.fileName,
+              type,
+              fileName,
+              __level,
               selector: this.getComponentSelector(props),
               providers: this.getComponentProviders(props),
               templateUrl: this.getComponentTemplateUrl(props),
               template: this.getComponentTemplate(props),
               declarations: [ /* see updateDeclaration() */],
               styleUrls: this.getComponentStyleUrls(props),
-              __level: this.depth,
-              __id: this.uuid(),
-              __raw: props
             };
 
-            this.__directivesCache[name] = directivesDeps;
+            if (this.includeRawProps) {
+              directivesDeps.__raw = props;
+            }
+
+            // post-cache
+            this.cachedSymboles.set(name, directivesDeps);
+
           }
           this.depth++;
         }
 
         let filterByDecorators = (node) => {
           if (node.expression && node.expression.expression) {
-            return /(NgModule|Component|Directive)/.test(node.expression.expression.text)
+            return this.ANALYZED_DECORATORS.test(node.expression.expression.text)
           }
           return false;
         };
@@ -180,13 +214,13 @@ export class Compiler {
           .forEach(visitNode);
       }
       else {
-        // process.stdout.write('.');
+        // logger.debug('skip', `non-metadata`);
       }
 
     });
 
   }
-  
+
   private uuid(): string {
     let uuid = '', i, random;
     for (i = 0; i < 32; i++) {
@@ -200,10 +234,13 @@ export class Compiler {
   }
 
   private updateDeclarations(outputSymbols: Symbol[]) {
-    for (let directiveName in this.__directivesCache) {
-      const directives = this.__directivesCache[directiveName];
-      outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directives);
-    }
+
+    Array.from(this.cachedSymboles.keys()).map(directiveName => {
+      const directive = this.cachedSymboles.get(directiveName);
+      if (directive.type === 'component') {
+        outputSymbols = this.updateDirectiveDeclarationsInModules(outputSymbols, directive);
+      }
+    });
 
     outputSymbols.map(moduleSymbol => {
       return moduleSymbol.declarations.map(directiveSymbol => {
@@ -231,11 +268,15 @@ export class Compiler {
 
   private isDirective(metadata) {
     const text = metadata.expression.expression.text;
-    return ['Component', 'Directive'].indexOf(text) >= 0;
+    return this.DIRECTIVE_DECORATORS.indexOf(text) >= 0;
+  }
+
+  private getSymbolType(metadata): string {
+    return metadata.expression.expression.text.toLowerCase();
   }
 
   private isModule(metadata) {
-    return metadata.expression.expression.text === 'NgModule';
+    return metadata.expression.expression.text === this.MODULE_DECORATOR;
   }
 
   private getSymboleName(node): string {
@@ -248,7 +289,9 @@ export class Compiler {
 
   private getModuleProviders(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'providers').map((providerName) => {
-      return this.parseDeepIndentifier(providerName);
+      const symbol = this.parseDeepIndentifier(providerName) as Symbol;
+      symbol.type = 'provider';
+      return symbol;
     });
   }
 
@@ -284,13 +327,21 @@ export class Compiler {
         return component;
       }
 
-      return this.parseDeepIndentifier(name);
+      const symbol = this.parseDeepIndentifier(name) as Symbol;
+      let type = 'pipe';
+      if (this.getComponentTemplate(props) || this.getComponentTemplateUrl(props)) {
+        type = 'component';
+      }
+      symbol.type = type;
+      return symbol;
     });
   }
 
   private getModuleImports(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'imports').map((name) => {
-      return this.parseDeepIndentifier(name);
+      const symbol = this.parseDeepIndentifier(name) as Symbol;
+      symbol.type = 'module';
+      return symbol;
     });
   }
 
@@ -308,7 +359,9 @@ export class Compiler {
 
   private getComponentProviders(props: NodeObject[]): Symbol[] {
     return this.getSymbolDeps(props, 'providers').map((name) => {
-      return this.parseDeepIndentifier(name);
+      const symbol = this.parseDeepIndentifier(name) as Symbol;
+      symbol.type = 'provider';
+      return symbol;
     });
   }
 
@@ -317,24 +370,32 @@ export class Compiler {
     if (nsModule.length > 1) {
 
       // cache deps with the same namespace (i.e Shared.*)
-      if (this.__nsModule[nsModule[0]]) {
-        this.__nsModule[nsModule[0]].push(name)
+      if (this.nsModule[nsModule[0]]) {
+        this.nsModule[nsModule[0]].push(name)
       }
       else {
-        this.__nsModule[nsModule[0]] = [name];
+        this.nsModule[nsModule[0]] = [name];
       }
 
       return {
         ns: nsModule[0],
         name,
-        __id: this.uuid(),
-        __level:this.depth
+        id: this.uuid(),
+        __level: this.depth
       }
     }
+
+    let id = this.uuid();
+    if (this.cachedSymboles.has(name)) {
+      // don't generate a new "id"
+      // get "id" from previously stored module
+      id = this.cachedSymboles.get(name).id;
+    }
+
     return {
       name,
-      __id: this.uuid(),
-      __level:this.depth
+      id,
+      __level: this.depth
     };
   }
 
@@ -351,8 +412,8 @@ export class Compiler {
     if (content === undefined) {
 
       // handle Pipes
-      if (metadata.srcFile) {
-        const dirname = path.dirname(metadata.srcFile);
+      if (metadata.fileName) {
+        const dirname = path.dirname(metadata.fileName);
         content = metadata.templateUrl.map(templateUrl => {
           templateUrl = path.resolve(dirname, templateUrl);
           return fs.readFileSync(templateUrl, 'utf-8').toString();
@@ -368,12 +429,10 @@ export class Compiler {
         if (ast) {
           ast.map(metadata => {
             if (metadata && metadata.selector) {
-              const directiveMetadata = this.getDirectiveNameBySelector(metadata.selector);
+              const directiveMetadata = this.getDirectiveMetadataBySelector(metadata.selector);
               if (directiveMetadata) {
-                astOutput.set(directiveMetadata.name, {
-                  __id: directiveMetadata.__id,
-                  __level: this.depth + 1
-                });
+                directiveMetadata.__level = this.depth + 1;
+                astOutput.set(directiveMetadata.name, directiveMetadata);
               }
               return reVisit(metadata.declarations, astOutput);
             }
@@ -419,7 +478,7 @@ export class Compiler {
       if (node.expression) {
         name = name ? `.${name}` : name;
 
-        let nodeName = this.unknown;
+        let nodeName = this.UNKNWON_PARAMS;
         if (node.name) {
           nodeName = node.name.text;
         }
@@ -546,12 +605,11 @@ export class Compiler {
   }
 
   private getDirectiveMetadataByName(name: string) {
-    return this.__directivesCache[name];
+    return this.cachedSymboles.get(name);
   }
 
-  private getDirectiveNameBySelector(selector: string): Symbol {
-    const key = Object.keys(this.__directivesCache).filter(key => this.__directivesCache[key].selector === selector).pop();
-    return this.__directivesCache[key];
+  private getDirectiveMetadataBySelector(selector: string): Symbol {
+    return Array.from(this.cachedSymboles.values()).filter(s => s.selector === selector).pop();
   }
 
 }

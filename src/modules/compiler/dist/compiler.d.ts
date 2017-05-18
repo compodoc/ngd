@@ -7,12 +7,13 @@ export interface Symbol {
     name?: string;
     selector?: string;
     label?: string;
+    type?: string;
     attrs?: {
         name: string;
         value: string;
     }[];
     file?: string;
-    srcFile?: string;
+    fileName?: string;
     templateUrl?: string[];
     template?: string;
     styleUrls?: string[];
@@ -21,18 +22,22 @@ export interface Symbol {
     exports?: Symbol[];
     declarations?: Symbol[];
     bootstrap?: Symbol[];
+    id?: string;
     __level?: number;
-    __id?: string;
     __raw?: any;
 }
 export declare class Compiler {
     private files;
     private program;
     private engine;
-    private __directivesCache;
-    private __nsModule;
-    private unknown;
+    private cachedSymboles;
+    private nsModule;
     private depth;
+    private includeRawProps;
+    private UNKNWON_PARAMS;
+    private ANALYZED_DECORATORS;
+    private DIRECTIVE_DECORATORS;
+    private MODULE_DECORATOR;
     constructor(files: string[], options: any);
     getDependencies(): Symbol[];
     private visitAll(srcFile, outputSymbols);
@@ -40,6 +45,7 @@ export declare class Compiler {
     private updateDeclarations(outputSymbols);
     private debug(deps);
     private isDirective(metadata);
+    private getSymbolType(metadata);
     private isModule(metadata);
     private getSymboleName(node);
     private getComponentSelector(props);
@@ -59,5 +65,5 @@ export declare class Compiler {
     private sanitizeUrls(urls);
     private getSymbolDeps(props, type);
     private getDirectiveMetadataByName(name);
-    private getDirectiveNameBySelector(selector);
+    private getDirectiveMetadataBySelector(selector);
 }
