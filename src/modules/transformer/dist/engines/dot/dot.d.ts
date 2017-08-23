@@ -3,6 +3,7 @@ export interface IOptions {
     output?: string;
     displayLegend?: boolean;
     outputFormats?: string;
+    silent?: boolean;
     dot?: {
         shapeModules: string;
         shapeProviders: string;
@@ -25,7 +26,8 @@ export declare class DotEngine {
     };
     options: IOptions;
     constructor(options: IOptions);
-    generateGraph(deps: any): any;
+    updateOutput(output: string): void;
+    generateGraph(deps: any): Promise<any[]>;
     private cleanGeneratedFiles();
     private preprocessTemplates(options?);
     private generateJSON(deps);

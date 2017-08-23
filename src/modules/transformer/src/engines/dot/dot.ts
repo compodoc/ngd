@@ -7,6 +7,7 @@ export interface IOptions {
 	output?: string;
 	displayLegend?: boolean;
 	outputFormats?: string;
+    silent?: boolean;
 	dot?: {
 		shapeModules: string
 		shapeProviders: string
@@ -16,7 +17,6 @@ export interface IOptions {
 }
 
 let fs = require('fs-extra');
-let q = require('q');
 let Viz = require('viz.js');
 let cleanDot: boolean = false;
 let cleanSvg: boolean = false;
@@ -79,6 +79,20 @@ export class DotEngine {
       png: path.join(this.options.output, '/dependencies.png'),
       html: path.join(this.options.output, '/dependencies.html')
     };
+
+    if (typeof options.silent !== 'undefined') {
+        logger.silent = options.silent;
+    }
+  }
+
+  updateOutput(output: string) {
+      this.paths = {
+        dot: path.join(output, '/dependencies.dot'),
+        json: path.join(output, '/dependencies.json'),
+        svg: path.join(output, '/dependencies.svg'),
+        png: path.join(output, '/dependencies.png'),
+        html: path.join(output, '/dependencies.html')
+      };
   }
 
   generateGraph(deps) {
@@ -120,21 +134,20 @@ export class DotEngine {
      }
      */
 
-    return q.all(generators).then(_ => this.cleanGeneratedFiles());
+    return Promise.all(generators).then(_ => this.cleanGeneratedFiles());
   }
 
   private cleanGeneratedFiles() {
-    let d = q.defer();
     let removeFile = (path) => {
-      let p = q.defer();
-      fs.unlink(path, (error) => {
-        if (error) {
-          p.reject(error);
-        } else {
-          p.resolve();
-        }
-      });
-      return p.promise;
+        return new Promise((resolve, reject) => {
+            fs.unlink(path, (error) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve();
+              }
+            });
+        });
     };
     let cleaners = [];
     if (cleanDot) {
@@ -143,7 +156,7 @@ export class DotEngine {
     if (cleanSvg) {
       cleaners.push(removeFile(this.paths.svg));
     }
-    return q.all(cleaners);
+    return Promise.all(cleaners);
   }
 
   private preprocessTemplates(options?) {
@@ -158,19 +171,19 @@ export class DotEngine {
   }
 
   private generateJSON(deps) {
-    let d = q.defer();
-    fs.outputFile(
-      this.paths.json,
-      JSON.stringify(deps, null, 2),
-      (error) => {
-        if (error) {
-          d.reject(error);
-        }
-        logger.info('creating JSON', this.paths.json);
-        d.resolve(this.paths.json);
-      }
-    );
-    return d.promise;
+    return new Promise((resolve, reject) => {
+        fs.outputFile(
+          this.paths.json,
+          JSON.stringify(deps, null, 2),
+          (error) => {
+            if (error) {
+              reject(error);
+            }
+            logger.info('creating JSON', this.paths.json);
+            resolve(this.paths.json);
+          }
+        );
+    });
   }
 
   // @not-used
@@ -202,26 +215,25 @@ export class DotEngine {
     // todo(wch)
     //deps = this.escape(deps);
 
-    let d = q.defer();
-    fs.outputFile(
-      this.paths.dot,
-      template({
-        modules: deps
-      }),
-      (error) => {
-        if (error) {
-          d.reject(error);
-        }
+    return new Promise((resolve, reject) => {
+        fs.outputFile(
+          this.paths.dot,
+          template({
+            modules: deps
+          }),
+          (error) => {
+            if (error) {
+              reject(error);
+            }
 
-        if (cleanDot === false) {
-          logger.info('creating DOT', this.paths.dot);
-        }
+            if (cleanDot === false) {
+              logger.info('creating DOT', this.paths.dot);
+            }
 
-        d.resolve(this.paths.dot);
-      }
-    );
-
-    return d.promise;
+            resolve(this.paths.dot);
+          }
+        );
+    });
   }
 
   private generateSVG() {
@@ -229,25 +241,25 @@ export class DotEngine {
       fs.readFileSync(this.paths.dot).toString(), {
         format: 'svg',
         engine: 'dot'
-      });
+      }, { totalMemory: 32 * 1024 * 1024 });
 
-    let d = q.defer();
-    fs.outputFile(
-      this.paths.svg,
-      vizSvg,
-      (error) => {
-        if (error) {
-          d.reject(error);
-        }
+    return new Promise((resolve, reject) => {
+        fs.outputFile(
+          this.paths.svg,
+          vizSvg,
+          (error) => {
+            if (error) {
+              reject(error);
+            }
 
-        if (cleanSvg === false) {
-          logger.info('creating SVG', this.paths.svg);
-        }
+            if (cleanSvg === false) {
+              logger.info('creating SVG', this.paths.svg);
+            }
 
-        d.resolve(this.paths.svg);
-      }
-    );
-    return d.promise;
+            resolve(this.paths.svg);
+          }
+        );
+    });
   }
 
   private generateHTML() {
@@ -272,32 +284,32 @@ export class DotEngine {
     let htmlContent = `
 				${svgContent}
 			`;
-    let d = q.defer();
-    fs.outputFile(
-      this.paths.html,
-      htmlContent,
-      (error) => {
-        if (error) {
-          d.reject(error);
-        }
-        logger.info('creating HTML', this.paths.html);
-        d.resolve(this.paths.html);
-      }
-    );
-    return d.promise;
+    return new Promise((resolve, reject) => {
+        fs.outputFile(
+          this.paths.html,
+          htmlContent,
+          (error) => {
+            if (error) {
+              reject(error);
+            }
+            logger.info('creating HTML', this.paths.html);
+            resolve(this.paths.html);
+          }
+        );
+    });
   }
 
   private generatePNG() {
     let svgToPng = require('svg-to-png');
-    let d = q.defer();
-    svgToPng.convert(
-      this.paths.svg,
-      this.paths.png
-    ).then(function () {
-      logger.info('creating PNG', this.paths.png);
-      d.resolve(this.paths.image);
+    return new Promise((resolve, reject) => {
+        svgToPng.convert(
+          this.paths.svg,
+          this.paths.png
+        ).then(function () {
+          logger.info('creating PNG', this.paths.png);
+          resolve(this.paths.image);
+        });
     });
-    return d.promise;
   }
 
 }
