@@ -1,6 +1,6 @@
 {
     "name": "@compodoc/ngd-compiler",
-    "version": "2.0.0-alpha.1",
+    "version": "2.0.0-alpha.2",
     "description": "A compiler for @compodoc/ngd",
     "main": "dist/index.js",
     "scripts": {
@@ -15,7 +15,7 @@
     "bugs": "https://github.com/compodoc/ngd-compiler/issues",
     "author": "Wassim CHEGHAM",
     "engines": {
-        "node": ">= 5.4.1"
+        "node": ">= 6.11.2"
     },
     "contributors": [
         "vogloblinsky"
@@ -27,15 +27,14 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "typescript": "^2.0.0",
-        "@compodoc/ngd-core": "2.0.0-alpha.1"
+        "typescript": "^2.4.2",
+        "@compodoc/ngd-core": "2.0.0-alpha.2"
     },
     "devDependencies": {
-        "@types/chai": "^3.4.34",
+        "@types/chai": "^4.0.4",
         "@types/mocha": "^2.2.32",
-        "@types/node": "^6.0.39",
-        "@types/typescript": "^0.4.29",
-        "chai": "^3.5.0",
+        "@types/node": "^8.0.24",
+        "chai": "^4.1.1",
         "mocha": "^3.1.2"
     },
     "types": "dist/index.d.ts"
