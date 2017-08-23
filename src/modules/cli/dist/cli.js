@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var path = require("path");
 var ngd_transformer_1 = require("@compodoc/ngd-transformer");
@@ -116,6 +117,6 @@ var Application;
             */
         })
             .catch(function (e) { return ngd_core_1.logger.error(e); })
-            .finally(function (_) { return ngd_core_1.logger.info('done'); });
+            .then(function (_) { return ngd_core_1.logger.info('done'); });
     };
 })(Application = exports.Application || (exports.Application = {}));

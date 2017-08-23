@@ -144,7 +144,7 @@ export namespace Application {
 
       })
       .catch(e => logger.error(e))
-      .finally(_ => logger.info('done'))
+      .then(_ => logger.info('done'))
 
   }
 }
