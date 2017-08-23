@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var gutil = require('gulp-util');
 var c = gutil.colors;
 var pkg = require('../../package.json');
@@ -20,7 +21,7 @@ var Logger = (function () {
     Logger.prototype.title = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
@@ -29,7 +30,7 @@ var Logger = (function () {
     Logger.prototype.info = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
@@ -38,7 +39,7 @@ var Logger = (function () {
     Logger.prototype.warn = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
@@ -47,7 +48,7 @@ var Logger = (function () {
     Logger.prototype.error = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
@@ -56,7 +57,7 @@ var Logger = (function () {
     Logger.prototype.fatal = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
@@ -65,7 +66,7 @@ var Logger = (function () {
     Logger.prototype.debug = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         if (!this.silent)
             return;
