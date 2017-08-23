@@ -11,7 +11,7 @@
     "bugs": "https://github.com/compodoc/ngd/issues",
     "author": "Wassim CHEGHAM",
     "engines": {
-        "node": ">= 5.4.1"
+        "node": ">= 6.11.2"
     },
     "contributors": [
         "vogloblinsky"
