@@ -5,7 +5,7 @@ export interface Options {
 }
 export interface Transformer {
     type: string;
-    transform(deps: any, options: Options): Promise<string>;
+    transform(deps: any, options: Options): any;
 }
 export declare class Engine {
     cwd: string;
@@ -15,7 +15,7 @@ export declare class Engine {
     transformers: Transformer[];
     options: Options;
     constructor(options: Options);
-    registerTransformers(transformer: Transformer | Transformer[]): void;
+    registerTransformers(transformer: any): void;
     transform(deps: any): Promise<string[]>;
 }
 export declare class DefaultEngine extends Engine {

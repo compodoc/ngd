@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var gutil = require('gulp-util');
 var c = gutil.colors;
 var pkg = require('../../package.json');
