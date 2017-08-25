@@ -1,6 +1,6 @@
 {
     "name": "@compodoc/ngd-cli",
-    "version": "2.0.0-alpha.4",
+    "version": "2.0.0-alpha.5",
     "description": "A CLI tool for @compodoc/ngd",
     "main": "dist/index.js",
     "bin": {
@@ -18,7 +18,7 @@
     "bugs": "https://github.com/compodoc/ngd/issues",
     "author": "Wassim CHEGHAM",
     "engines": {
-        "node": ">= 6.11.2"
+        "node": ">= 6.0.0"
     },
     "contributors": [
         "vogloblinsky"
@@ -30,9 +30,9 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "@compodoc/ngd-core": "2.0.0-alpha.2",
-        "@compodoc/ngd-compiler": "2.0.0-alpha.2",
-        "@compodoc/ngd-transformer": "2.0.0-alpha.4",
+        "@compodoc/ngd-core": "2.0.0-alpha.3",
+        "@compodoc/ngd-compiler": "2.0.0-alpha.3",
+        "@compodoc/ngd-transformer": "2.0.0-alpha.5",
         "colors": "^1.1.2",
         "commander": "^2.11.0",
         "dot": "^1.1.2",

@@ -1,6 +1,6 @@
 {
     "name": "@compodoc/ngd-compiler",
-    "version": "2.0.0-alpha.2",
+    "version": "2.0.0-alpha.3",
     "description": "A compiler for @compodoc/ngd",
     "main": "dist/index.js",
     "scripts": {
@@ -15,7 +15,7 @@
     "bugs": "https://github.com/compodoc/ngd-compiler/issues",
     "author": "Wassim CHEGHAM",
     "engines": {
-        "node": ">= 6.11.2"
+        "node": ">= 6.0.0"
     },
     "contributors": [
         "vogloblinsky"
