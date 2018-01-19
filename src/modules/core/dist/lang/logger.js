@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var gutil = require('gulp-util');
-var c = gutil.colors;
+var c = require('ansi-colors');
 var pkg = require('../../package.json');
 var LEVEL;
 (function (LEVEL) {
@@ -15,7 +14,7 @@ var Logger = (function () {
     function Logger() {
         this.name = pkg.name;
         this.version = pkg.version;
-        this.logger = gutil.log;
+        this.logger = require('fancy-log');
         this.silent = true;
     }
     Logger.prototype.title = function () {
