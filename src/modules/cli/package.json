@@ -30,9 +30,9 @@
     "private": false,
     "license": "MIT",
     "dependencies": {
-        "@compodoc/ngd-core": "2.0.0-alpha.3",
-        "@compodoc/ngd-compiler": "2.0.0-alpha.3",
-        "@compodoc/ngd-transformer": "2.0.0-alpha.5",
+        "@compodoc/ngd-core": "~2.0.0",
+        "@compodoc/ngd-compiler": "~2.0.0",
+        "@compodoc/ngd-transformer": "~2.0.0",
         "colors": "^1.1.2",
         "commander": "^2.11.0",
         "dot": "^1.1.2",
