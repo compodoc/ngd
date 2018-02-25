@@ -9,7 +9,7 @@ var cleanDot = false;
 var cleanSvg = false;
 var appName = require('../../../package.json').name;
 // http://www.graphviz.org/Documentation/dotguide.pdf
-var DotEngine = (function () {
+var DotEngine = /** @class */ (function () {
     function DotEngine(options) {
         // http://www.graphviz.org/doc/info/shapes.html
         this.template = dot_template_1.DOT_TEMPLATE;
