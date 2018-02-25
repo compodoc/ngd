@@ -28,7 +28,7 @@
     "license": "MIT",
     "dependencies": {
         "typescript": "^2.4.2",
-        "@compodoc/ngd-core": "2.0.0-alpha.2"
+        "@compodoc/ngd-core": "~2.0.0"
     },
     "devDependencies": {
         "@types/chai": "^4.0.4",
