@@ -1,5 +1,4 @@
-let gutil = require('gulp-util');
-let c = gutil.colors;
+let c = require('ansi-colors');
 let pkg = require('../../package.json');
 
 enum LEVEL {
@@ -19,7 +18,7 @@ export class Logger {
 	constructor() {
 		this.name = pkg.name;
 		this.version = pkg.version;
-		this.logger = gutil.log;
+		this.logger = require('fancy-log');
 		this.silent = true;
 	}
 
