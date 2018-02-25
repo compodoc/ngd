@@ -17,21 +17,20 @@ export namespace Application {
     .option('-p, --tsconfig <config>', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
     .option('-o, --open', 'Open the generated HTML diagram file', false)
     .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
-    .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
+    .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', true)
     .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
     .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
     .parse(process.argv);
 
   let outputHelp = () => {
     program.outputHelp();
-    process.exit(1);
+    process.exit(0);
   };
 
   export let run = () => {
 
-    if (program.silent) {
-      logger.silent = false;
-    }
+    program.silent = program.silent || false;
+    logger.setVerbose(program.silent);
 
     let files = [];
     if (program.file) {
@@ -113,7 +112,8 @@ export namespace Application {
 
     let compiler = new Compiler(
       files, {
-        tsconfigDirectory: cwd
+        tsconfigDirectory: cwd,
+        silent: program.silent
       }
     );
 

@@ -16,18 +16,17 @@ var Application;
         .option('-p, --tsconfig <config>', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
         .option('-o, --open', 'Open the generated HTML diagram file', false)
         .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
-        .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', false)
+        .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', true)
         .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', "html,svg,dot,json")
         .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', "./documentation/")
         .parse(process.argv);
     var outputHelp = function () {
         program.outputHelp();
-        process.exit(1);
+        process.exit(0);
     };
     Application.run = function () {
-        if (program.silent) {
-            ngd_core_1.logger.silent = false;
-        }
+        program.silent = program.silent || false;
+        ngd_core_1.logger.setVerbose(program.silent);
         var files = [];
         if (program.file) {
             if (!fs.existsSync(program.file) ||
@@ -92,7 +91,8 @@ var Application;
             program.output = path.resolve(process.cwd(), program.output);
         }
         var compiler = new ngd_compiler_1.Compiler(files, {
-            tsconfigDirectory: cwd
+            tsconfigDirectory: cwd,
+            silent: program.silent
         });
         var deps = compiler.getDependencies();
         if (deps.length <= 0) {
