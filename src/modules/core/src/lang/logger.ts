@@ -1,5 +1,6 @@
 let c = require('ansi-colors');
 let pkg = require('../../package.json');
+const fancyLog = require('fancy-log');
 
 enum LEVEL {
 	INFO,
@@ -18,48 +19,58 @@ export class Logger {
 	constructor() {
 		this.name = pkg.name;
 		this.version = pkg.version;
-		this.logger = require('fancy-log');
-		this.silent = true;
-	}
+		this.logger = fancyLog;
+		this.silent = false;
+  }
+  
+  setVerbose(level: boolean) {
+    this.silent = level;
+  }
 
 	title(...args) {
-		if(!this.silent) return;
-		this.logger(
-			c.cyan(...args)
-		);
+    if(this.silent == false) {
+      this.logger(
+        c.cyan(...args)
+      );
+    }
 	}
 
 	info(...args) {
-		if(!this.silent) return;
-		this.logger(
-			this.format(LEVEL.INFO, ...args)
-		);
+    if(this.silent == false) {
+      this.logger(
+        this.format(LEVEL.INFO, ...args)
+      );
+    }
 	}
 
 	warn(...args) {
-		if(!this.silent) return;
-		this.logger(
-			this.format(LEVEL.WARN, ...args)
-		);
+    if(this.silent == false) {
+      this.logger(
+        this.format(LEVEL.WARN, ...args)
+      );
+    }
 	}
 
 	error(...args) {
-		if(!this.silent) return;
-		this.logger(
-			this.format(LEVEL.FATAL, ...args)
-		);
+    if(this.silent == false) {
+      this.logger(
+        this.format(LEVEL.FATAL, ...args)
+      );
+    }
 	}
 
 	fatal(...args) {
-		if(!this.silent) return;
-		this.error(...args);
-	}
-
+    if(this.silent == false) {
+      this.error(...args);
+    }
+    
+  }
 	debug(...args) {
-		if(!this.silent) return;
-		this.logger(
-			this.format(LEVEL.DEBUG, ...args)
-		);
+    if(this.silent == false) {
+      this.logger(
+        this.format(LEVEL.DEBUG, ...args)
+      );
+    }
 	}
 
 	trace(error, file) {

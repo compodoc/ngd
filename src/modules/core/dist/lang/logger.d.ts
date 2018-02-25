@@ -4,6 +4,7 @@ export declare class Logger {
     version: any;
     silent: any;
     constructor();
+    setVerbose(level: boolean): void;
     title(...args: any[]): void;
     info(...args: any[]): void;
     warn(...args: any[]): void;

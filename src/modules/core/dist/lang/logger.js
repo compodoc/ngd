@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var c = require('ansi-colors');
 var pkg = require('../../package.json');
+var fancyLog = require('fancy-log');
 var LEVEL;
 (function (LEVEL) {
     LEVEL[LEVEL["INFO"] = 0] = "INFO";
@@ -10,66 +11,69 @@ var LEVEL;
     LEVEL[LEVEL["FATAL"] = 3] = "FATAL";
     LEVEL[LEVEL["ERROR"] = 4] = "ERROR";
 })(LEVEL || (LEVEL = {}));
-var Logger = (function () {
+var Logger = /** @class */ (function () {
     function Logger() {
         this.name = pkg.name;
         this.version = pkg.version;
-        this.logger = require('fancy-log');
-        this.silent = true;
+        this.logger = fancyLog;
+        this.silent = false;
     }
+    Logger.prototype.setVerbose = function (level) {
+        this.silent = level;
+    };
     Logger.prototype.title = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.logger(c.cyan.apply(c, args));
+        if (this.silent == false) {
+            this.logger(c.cyan.apply(c, args));
+        }
     };
     Logger.prototype.info = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.logger(this.format.apply(this, [LEVEL.INFO].concat(args)));
+        if (this.silent == false) {
+            this.logger(this.format.apply(this, [LEVEL.INFO].concat(args)));
+        }
     };
     Logger.prototype.warn = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.logger(this.format.apply(this, [LEVEL.WARN].concat(args)));
+        if (this.silent == false) {
+            this.logger(this.format.apply(this, [LEVEL.WARN].concat(args)));
+        }
     };
     Logger.prototype.error = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.logger(this.format.apply(this, [LEVEL.FATAL].concat(args)));
+        if (this.silent == false) {
+            this.logger(this.format.apply(this, [LEVEL.FATAL].concat(args)));
+        }
     };
     Logger.prototype.fatal = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.error.apply(this, args);
+        if (this.silent == false) {
+            this.error.apply(this, args);
+        }
     };
     Logger.prototype.debug = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        if (!this.silent)
-            return;
-        this.logger(this.format.apply(this, [LEVEL.DEBUG].concat(args)));
+        if (this.silent == false) {
+            this.logger(this.format.apply(this, [LEVEL.DEBUG].concat(args)));
+        }
     };
     Logger.prototype.trace = function (error, file) {
         this.fatal('Ouch', file);
