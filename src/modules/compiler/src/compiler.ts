@@ -62,6 +62,9 @@ export class Compiler {
       tsconfigDirectory: options.tsconfigDirectory
     };
     this.program = ts.createProgram(this.files, transpileOptions, compilerHost(transpileOptions));
+
+    // silent this instance of the logger
+    logger.setVerbose(options.silent);
   }
 
   getDependencies() {
@@ -106,7 +109,7 @@ export class Compiler {
 
           let name = this.getSymboleName(node);
           let deps: Dependencies = <Dependencies>{};
-          let metadata = node.decorators.pop();
+          let metadata = node.decorators[ node.decorators.length-1 ];
           let props = this.findProps(visitedNode);
 
           if (this.isModule(metadata)) {

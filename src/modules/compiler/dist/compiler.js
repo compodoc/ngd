@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var path = require("path");
 var ts = require("typescript");
 var ngd_core_1 = require("@compodoc/ngd-core");
-var Compiler = (function () {
+var Compiler = /** @class */ (function () {
     function Compiler(files, options) {
         this.__cache = {};
         this.__nsModule = {};
@@ -15,6 +15,8 @@ var Compiler = (function () {
             tsconfigDirectory: options.tsconfigDirectory
         };
         this.program = ts.createProgram(this.files, transpileOptions, ngd_core_1.compilerHost(transpileOptions));
+        // silent this instance of the logger
+        ngd_core_1.logger.setVerbose(options.silent);
     }
     Compiler.prototype.getDependencies = function () {
         var _this = this;
@@ -44,7 +46,7 @@ var Compiler = (function () {
                 var visitNode = function (visitedNode, index) {
                     var name = _this.getSymboleName(node);
                     var deps = {};
-                    var metadata = node.decorators.pop();
+                    var metadata = node.decorators[node.decorators.length - 1];
                     var props = _this.findProps(visitedNode);
                     if (_this.isModule(metadata)) {
                         deps = {
