@@ -5,7 +5,7 @@
 <table>
   <tr>
     <td align="right">CLI</td>
-    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-transformer"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-transformer.svg" alt="npm version" height="18"></a></td>
+    <td><a href="https://badge.fury.io/js/%40compodoc%2Fngd-cli"><img src="https://badge.fury.io/js/%40compodoc%2Fngd-cli.svg" alt="npm version" height="18"></a></td>
   </tr>
   <tr>
     <td align="right">Core</td>
@@ -21,33 +21,37 @@
   </tr>
 </table>
 
-NGD: Angular Dependencies Graph
-====
+# NGD: Angular Dependencies Graph
+
 A tool that allows you to view your Angular application dependencies.
 
 ## Generated Graphs (sample)
 
 #### Sample Application
+
 ![screenshots-4](https://raw.githubusercontent.com/compodoc/ngd/master/screenshots/dependencies-4.png)
 
-#### Angular Material 2 
+#### Angular Material 2
+
 <img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.material2.svg"/>
 
 #### ng-bootstrap
+
 <img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.ng-bootstrap.svg"/>
 
 #### soundcloud-ngrx
+
 <img src="https://cdn.rawgit.com/compodoc/ngd/master/screenshots/dependencies.soundcloud-ngrx.svg"/>
 
 ## Install
 
-Install from npm: 
+Install from npm:
 
 ```
 npm install -g @compodoc/ngd-cli
 ```
 
-Install from Yarn: 
+Install from Yarn:
 
 ```
 yarn global add @compodoc/ngd-cli
@@ -74,6 +78,7 @@ Options:
 ```
 
 ### 1) use a `tsconfig.json`:
+
 Run inside your project (where your `tsconfig.json` is located):
 
 ```bash
@@ -97,29 +102,28 @@ NOTE: The file you provide should contain your root component.
 
 ## Usage the API
 
-1) Import the `DotEngine` and `Compiler` from `@compodoc/ngd-transformer` and `@compodoc/ngd-compiler`:
+1. Import the `DotEngine` and `Compiler` from `@compodoc/ngd-transformer` and `@compodoc/ngd-compiler`:
 
 ```javascript
 import { DotEngine } from '@compodoc/ngd-transformer';
 import { Compiler } from '@compodoc/ngd-compiler';
 ```
 
-2) Create an instance of a compiler:
+2. Create an instance of a compiler:
 
 ```javascript
 const compiler = new Compiler(files, {
-    tsconfigDirectory: cwd
-  }
-);
+  tsconfigDirectory: cwd
+});
 ```
 
-3) Get the found dependencies:
+3. Get the found dependencies:
 
 ```javascript
 const deps = compiler.getDependencies();
 ```
 
-4) Pass those dependencies to the transformer:
+4. Pass those dependencies to the transformer:
 
 ```javascript
 const engine = new DotEngine({
@@ -129,7 +133,7 @@ const engine = new DotEngine({
 });
 ```
 
-5) Generate the graph:
+5. Generate the graph:
 
 ```javascript
 engine.generateGraph(deps).then(file => { ... });
