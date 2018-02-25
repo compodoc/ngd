@@ -29,6 +29,7 @@ export interface Dependencies {
   name: string;
   selector?: string;
   label?: string;
+  type?: string;
   file?: string;
   templateUrl?: string[];
   styleUrls?: string[];
