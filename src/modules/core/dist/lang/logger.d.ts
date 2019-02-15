@@ -12,6 +12,6 @@ export declare class Logger {
     fatal(...args: any[]): void;
     debug(...args: any[]): void;
     trace(error: any, file: any): void;
-    private format(level, ...args);
+    private format;
 }
 export declare let logger: Logger;

@@ -254,6 +254,7 @@ var Compiler = /** @class */ (function () {
                     var params = (prop.initializer.parameters || []).map(function (params) { return params.name.text; });
                     identifier = "(" + params.join(', ') + ") => {}";
                 }
+                // factory deps array
                 else if (prop.initializer.elements) {
                     var elements = (prop.initializer.elements || []).map(function (n) {
                         if (n.kind === ts.SyntaxKind.StringLiteral) {
@@ -283,6 +284,7 @@ var Compiler = /** @class */ (function () {
                 var text = className + "(" + functionArgs + ")";
                 return text;
             }
+            // parse expressions such as: Shared.Module
             else if (o.expression) {
                 var identifier = buildIdentifierName(o);
                 return identifier;
