@@ -240,8 +240,9 @@ export class DotEngine {
     let vizSvg = Viz(
       fs.readFileSync(this.paths.dot).toString(), {
         format: 'svg',
-        engine: 'dot'
-      }, { totalMemory: 32 * 1024 * 1024 });
+        engine: 'dot',
+        totalMemory: 64 * 1024 * 1024
+      });
 
     return new Promise((resolve, reject) => {
         fs.outputFile(
