@@ -3,4 +3,4 @@
 --colors
 --harmony 
 --timeout 10000
-test/dist/soundcloud-ngrx.spec.js
+test/dist/*.spec.js
