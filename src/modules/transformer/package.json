@@ -29,15 +29,15 @@
   "dependencies": {
     "@compodoc/ngd-core": "~2.0.0",
     "dot": "^1.1.2",
-    "fs-extra": "^7.0.1",
-    "viz.js": "^1.8.2"
+    "fs-extra": "^8.1.0",
+    "viz.js": "^2.1.2"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
-    "@types/mocha": "^5.2.6",
-    "@types/node": "^11.9.4",
+    "@types/chai": "4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.1",
     "chai": "^4.2.0",
-    "mocha": "^5.2.0"
+    "mocha": "^6.2.0"
   },
   "types": "dist/index.d.ts"
 }

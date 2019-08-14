@@ -188,8 +188,9 @@ var DotEngine = /** @class */ (function () {
         var _this = this;
         var vizSvg = Viz(fs.readFileSync(this.paths.dot).toString(), {
             format: 'svg',
-            engine: 'dot'
-        }, { totalMemory: 32 * 1024 * 1024 });
+            engine: 'dot',
+            totalMemory: 64 * 1024 * 1024
+        });
         return new Promise(function (resolve, reject) {
             fs.outputFile(_this.paths.svg, vizSvg, function (error) {
                 if (error) {
