@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/wlla9cm0vcie4lur/branch/master?svg=true)](https://ci.appveyor.com/project/compodoc/ngd/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/45ou8frsi43v7j8r?svg=true)](https://ci.appveyor.com/project/vogloblinsky/ngd/branch/master)
 [![CircleCI](https://circleci.com/gh/compodoc/ngd/tree/master.svg?style=svg)](https://circleci.com/gh/compodoc/ngd/tree/master)
 [![Code Climate](https://codeclimate.com/github/compodoc/ngd/badges/gpa.svg)](https://codeclimate.com/github/compodoc/ngd)
 
