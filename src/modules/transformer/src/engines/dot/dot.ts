@@ -18,6 +18,7 @@ export interface IOptions {
 
 let fs = require('fs-extra');
 let Viz = require('viz.js');
+let { Module: VizModule, render: VizRender } = require('viz.js/full.render.js');
 let cleanDot: boolean = false;
 let cleanSvg: boolean = false;
 
@@ -236,13 +237,17 @@ export class DotEngine {
     });
   }
 
-  private generateSVG() {
-    let vizSvg = Viz(
-      fs.readFileSync(this.paths.dot).toString(), {
+  private async generateSVG() {
+    const vizInstance = new Viz({ Module: VizModule, render: VizRender });
+    let vizSvg: string;
+    await vizInstance.renderString(
+      fs.readFileSync(this.paths.dot).toString(),
+      {
         format: 'svg',
         engine: 'dot',
         totalMemory: 64 * 1024 * 1024
-      });
+      }
+    ).then((value: string): void => vizSvg = value);
 
     return new Promise((resolve, reject) => {
         fs.outputFile(
