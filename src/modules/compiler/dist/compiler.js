@@ -28,7 +28,22 @@ var Compiler = /** @class */ (function () {
                 if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
                     ngd_core_1.logger.info('parsing', filePath);
                     try {
-                        _this.getSourceFileDecorators(file, deps);
+                        _this.getSourceFileDecorators(file, deps, 'Component');
+                    }
+                    catch (e) {
+                        ngd_core_1.logger.trace(e, file.fileName);
+                    }
+                }
+            }
+            return deps;
+        });
+        sourceFiles.map(function (file) {
+            var filePath = file.fileName;
+            if (path.extname(filePath) === '.ts') {
+                if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
+                    ngd_core_1.logger.info('parsing', filePath);
+                    try {
+                        _this.getSourceFileDecorators(file, deps, ', NgModule');
                     }
                     catch (e) {
                         ngd_core_1.logger.trace(e, file.fileName);
@@ -39,7 +54,7 @@ var Compiler = /** @class */ (function () {
         });
         return deps;
     };
-    Compiler.prototype.getSourceFileDecorators = function (srcFile, outputSymbols) {
+    Compiler.prototype.getSourceFileDecorators = function (srcFile, outputSymbols, parseType) {
         var _this = this;
         ts.forEachChild(srcFile, function (node) {
             if (node.decorators) {
@@ -77,7 +92,7 @@ var Compiler = /** @class */ (function () {
                 };
                 var filterByDecorators = function (node) {
                     if (node.expression && node.expression.expression) {
-                        return /(NgModule|Component)/.test(node.expression.expression.text);
+                        return new RegExp('(' + parseType + ')').test(node.expression.expression.text);
                     }
                     return false;
                 };
