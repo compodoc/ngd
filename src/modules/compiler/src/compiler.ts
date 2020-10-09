@@ -61,7 +61,7 @@ export class Compiler {
       module: ts.ModuleKind.CommonJS,
       tsconfigDirectory: options.tsconfigDirectory
     };
-    this.program = ts.createProgram(this.files, transpileOptions, compilerHost(transpileOptions));
+    this.program = ts.createProgram(this.files, transpileOptions, <any>compilerHost(transpileOptions));
 
     // silent this instance of the logger
     logger.setVerbose(options.silent);
@@ -81,7 +81,29 @@ export class Compiler {
           logger.info('parsing', filePath);
 
           try {
-            this.getSourceFileDecorators(file, deps);
+            this.getSourceFileDecorators(file, deps, 'Component');
+          }
+          catch (e) {
+            logger.trace(e, file.fileName);
+          }
+        }
+
+      }
+
+      return deps;
+
+    });
+	sourceFiles.map((file: ts.SourceFile) => {
+
+      let filePath = file.fileName;
+
+      if (path.extname(filePath) === '.ts') {
+
+        if (filePath.lastIndexOf('.d.ts') === -1 && filePath.lastIndexOf('spec.ts') === -1) {
+          logger.info('parsing', filePath);
+
+          try {
+            this.getSourceFileDecorators(file, deps, ', NgModule');
           }
           catch (e) {
             logger.trace(e, file.fileName);
@@ -98,7 +120,7 @@ export class Compiler {
   }
 
 
-  private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Dependencies[]): void {
+  private getSourceFileDecorators(srcFile: ts.SourceFile, outputSymbols: Dependencies[], parseType): void {
 
     ts.forEachChild(srcFile, (node: ts.Node) => {
 
@@ -145,7 +167,7 @@ export class Compiler {
 
         let filterByDecorators = (node) => {
           if (node.expression && node.expression.expression) {
-            return /(NgModule|Component)/.test(node.expression.expression.text)
+            return new RegExp('(' + parseType + ')').test(node.expression.expression.text);
           }
           return false;
         };
