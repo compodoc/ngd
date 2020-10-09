@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Compiler = void 0;
 var path = require("path");
 var ts = require("typescript");
 var ngd_core_1 = require("@compodoc/ngd-core");

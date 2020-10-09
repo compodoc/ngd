@@ -28,12 +28,12 @@ export declare class DotEngine {
     constructor(options: IOptions);
     updateOutput(output: string): void;
     generateGraph(deps: any): Promise<any[]>;
-    private cleanGeneratedFiles();
-    private preprocessTemplates(options?);
-    private generateJSON(deps);
-    private escape(deps);
-    private generateDot(template, deps);
-    private generateSVG();
-    private generateHTML();
-    private generatePNG();
+    private cleanGeneratedFiles;
+    private preprocessTemplates;
+    private generateJSON;
+    private escape;
+    private generateDot;
+    private generateSVG;
+    private generateHTML;
+    private generatePNG;
 }

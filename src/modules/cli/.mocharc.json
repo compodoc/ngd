@@ -1,0 +1,6 @@
+{
+    "reporter": "spec",
+    "ui": "bdd",
+    "colors": true,
+    "timeout": 10000
+}

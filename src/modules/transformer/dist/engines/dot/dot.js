@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DotEngine = void 0;
 var path = require("path");
 var ngd_core_1 = require("@compodoc/ngd-core");
 var dot_template_1 = require("./dot.template");
 var fs = require('fs-extra');
-var Viz = require('viz.js');
 var cleanDot = false;
 var cleanSvg = false;
 var appName = require('../../../package.json').name;
@@ -15,14 +15,14 @@ var DotEngine = /** @class */ (function () {
         this.template = dot_template_1.DOT_TEMPLATE;
         this.cwd = process.cwd();
         this.files = {
-            component: null
+            component: null,
         };
         this.paths = {
             dot: null,
             json: null,
             png: null,
             svg: null,
-            html: null
+            html: null,
         };
         this.options = {};
         var baseDir = "./" + appName + "/";
@@ -36,8 +36,8 @@ var DotEngine = /** @class */ (function () {
                 shapeProviders: 'ellipse',
                 shapeDirectives: 'cds',
                 //http://www.graphviz.org/doc/info/colors.html
-                colorScheme: 'set312'
-            }
+                colorScheme: 'set312',
+            },
         };
         if (options.output) {
             if (typeof this.options.output !== 'string') {
@@ -50,7 +50,7 @@ var DotEngine = /** @class */ (function () {
             json: path.join(this.options.output, '/dependencies.json'),
             svg: path.join(this.options.output, '/dependencies.svg'),
             png: path.join(this.options.output, '/dependencies.png'),
-            html: path.join(this.options.output, '/dependencies.html')
+            html: path.join(this.options.output, '/dependencies.html'),
         };
         if (typeof options.silent !== 'undefined') {
             ngd_core_1.logger.silent = options.silent;
@@ -62,7 +62,7 @@ var DotEngine = /** @class */ (function () {
             json: path.join(output, '/dependencies.json'),
             svg: path.join(output, '/dependencies.svg'),
             png: path.join(output, '/dependencies.png'),
-            html: path.join(output, '/dependencies.html')
+            html: path.join(output, '/dependencies.html'),
         };
     };
     DotEngine.prototype.generateGraph = function (deps) {
@@ -70,7 +70,9 @@ var DotEngine = /** @class */ (function () {
         var template = this.preprocessTemplates(this.options);
         var generators = [];
         // Handle svg dependency with dot, and html with svg
-        if (this.options.outputFormats.indexOf('dot') > -1 && this.options.outputFormats.indexOf('svg') === -1 && this.options.outputFormats.indexOf('html') === -1) {
+        if (this.options.outputFormats.indexOf('dot') > -1 &&
+            this.options.outputFormats.indexOf('svg') === -1 &&
+            this.options.outputFormats.indexOf('html') === -1) {
             generators.push(this.generateDot(template, deps));
         }
         if (this.options.outputFormats.indexOf('svg') > -1 && this.options.outputFormats.indexOf('html') === -1) {
@@ -83,7 +85,9 @@ var DotEngine = /** @class */ (function () {
             generators.push(this.generateJSON(deps));
         }
         if (this.options.outputFormats.indexOf('html') > -1) {
-            generators.push(this.generateDot(template, deps).then(function (_) { return _this.generateSVG(); }).then(function (_) { return _this.generateHTML(); }));
+            generators.push(this.generateDot(template, deps)
+                .then(function (_) { return _this.generateSVG(); })
+                .then(function (_) { return _this.generateHTML(); }));
             if (this.options.outputFormats.indexOf('html') > -1 && this.options.outputFormats.indexOf('svg') === -1) {
                 cleanSvg = true;
             }
@@ -93,10 +97,10 @@ var DotEngine = /** @class */ (function () {
         }
         // todo(WCH): disable PNG creation due to some errors with phantomjs
         /*
-         if (this.options.outputFormats.indexOf('png') > -1) {
-         generators.push(this.generatePNG());
-         }
-         */
+     if (this.options.outputFormats.indexOf('png') > -1) {
+     generators.push(this.generatePNG());
+     }
+     */
         return Promise.all(generators).then(function (_) { return _this.cleanGeneratedFiles(); });
     };
     DotEngine.prototype.cleanGeneratedFiles = function () {
@@ -156,10 +160,10 @@ var DotEngine = /** @class */ (function () {
                         return _this.escape(a);
                     }
                     else if (typeof a === 'string') {
-                        a = a.replace(/"/g, '\"');
-                        a = a.replace(/'/g, "\'");
-                        a = a.replace(/\{/g, "\{");
-                        a = a.replace(/\)/g, "\)");
+                        a = a.replace(/"/g, '"');
+                        a = a.replace(/'/g, "'");
+                        a = a.replace(/\{/g, '{');
+                        a = a.replace(/\)/g, ')');
                     }
                 }
             }
@@ -172,7 +176,7 @@ var DotEngine = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             fs.outputFile(_this.paths.dot, template({
-                modules: deps
+                modules: deps,
             }), function (error) {
                 if (error) {
                     reject(error);
@@ -186,11 +190,8 @@ var DotEngine = /** @class */ (function () {
     };
     DotEngine.prototype.generateSVG = function () {
         var _this = this;
-        var vizSvg = Viz(fs.readFileSync(this.paths.dot).toString(), {
-            format: 'svg',
-            engine: 'dot',
-            totalMemory: 64 * 1024 * 1024
-        });
+        var vizRenderStringSync = require('@aduh95/viz.js/sync');
+        var vizSvg = vizRenderStringSync(fs.readFileSync(this.paths.dot).toString());
         return new Promise(function (resolve, reject) {
             fs.outputFile(_this.paths.svg, vizSvg, function (error) {
                 if (error) {

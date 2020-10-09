@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Application = void 0;
 var fs = require("fs");
 var path = require("path");
 var ngd_transformer_1 = require("@compodoc/ngd-transformer");
@@ -16,7 +17,7 @@ var Application;
         .option('-p, --tsconfig <config>', 'A tsconfig.json (default: ./tsconfig.json)', './tsconfig.json')
         .option('-o, --open', 'Open the generated HTML diagram file', false)
         .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
-        .option('-s, --silent', 'In silent mode, log messages aren\'t logged in the console', true)
+        .option('-s, --silent', "In silent mode, log messages aren't logged in the console", false)
         .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', "html,svg,dot,json")
         .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', "./documentation/")
         .parse(process.argv);
@@ -29,8 +30,7 @@ var Application;
         ngd_core_1.logger.setVerbose(program.silent);
         var files = [];
         if (program.file) {
-            if (!fs.existsSync(program.file) ||
-                !fs.existsSync(path.join(process.cwd(), program.file))) {
+            if (!fs.existsSync(program.file) || !fs.existsSync(path.join(process.cwd(), program.file))) {
                 ngd_core_1.logger.fatal("\"" + program.file + "\" file was not found");
                 process.exit(1);
             }
@@ -92,7 +92,7 @@ var Application;
         }
         var compiler = new ngd_compiler_1.Compiler(files, {
             tsconfigDirectory: cwd,
-            silent: program.silent
+            silent: program.silent,
         });
         var deps = compiler.getDependencies();
         if (deps.length <= 0) {
@@ -103,18 +103,18 @@ var Application;
         var engine = new ngd_transformer_1.DotEngine({
             output: program.output,
             displayLegend: program.displayLegend,
-            outputFormats: program.outputFormats.split(',')
+            outputFormats: program.outputFormats.split(','),
         });
         engine
             .generateGraph(deps)
             .then(function (file) {
             /*
-            if (program.open === true) {
-              logger.info('openning file ', file);
-              let open = require("opener");
-              open(file);
-            }
-            */
+    if (program.open === true) {
+      logger.info('openning file ', file);
+      let open = require("opener");
+      open(file);
+    }
+    */
         })
             .catch(function (e) { return ngd_core_1.logger.error(e); })
             .then(function (_) { return ngd_core_1.logger.info('done'); });

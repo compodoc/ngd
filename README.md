@@ -70,7 +70,7 @@ Options:
   -V, --version                 Output the version number
   -f, --file [file]             Entry *.ts file
   -p, --tsconfig [config]       A tsconfig.json
-  -l, --files [list]            A list of *.ts files
+  -o, --open                    Open the generated HTML diagram file
   -g, --display-legend          Display the legend in the generated graph (default: true)
   -s, --silent                  In silent mode, log messages aren't logged in the console
   -t, --output-formats [formats] Output formats (default: html,svg,dot,json)
@@ -113,7 +113,7 @@ import { Compiler } from '@compodoc/ngd-compiler';
 
 ```javascript
 const compiler = new Compiler(files, {
-  tsconfigDirectory: cwd
+    tsconfigDirectory: cwd,
 });
 ```
 
@@ -127,9 +127,9 @@ const deps = compiler.getDependencies();
 
 ```javascript
 const engine = new DotEngine({
-  output: program.output,
-  displayLegend: program.displayLegend,
-  outputFormats: program.outputFormats.split(',')
+    output: program.output,
+    displayLegend: program.displayLegend,
+    outputFormats: program.outputFormats.split(','),
 });
 ```
 

@@ -1,5 +1,13 @@
 "use strict";
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.logger = exports.Logger = void 0;
 var c = require('ansi-colors');
 var pkg = require('../../package.json');
 var fancyLog = require('fancy-log');
@@ -36,7 +44,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, [LEVEL.INFO].concat(args)));
+            this.logger(this.format.apply(this, __spreadArrays([LEVEL.INFO], args)));
         }
     };
     Logger.prototype.warn = function () {
@@ -45,7 +53,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, [LEVEL.WARN].concat(args)));
+            this.logger(this.format.apply(this, __spreadArrays([LEVEL.WARN], args)));
         }
     };
     Logger.prototype.error = function () {
@@ -54,7 +62,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, [LEVEL.FATAL].concat(args)));
+            this.logger(this.format.apply(this, __spreadArrays([LEVEL.FATAL], args)));
         }
     };
     Logger.prototype.fatal = function () {
@@ -72,7 +80,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, [LEVEL.DEBUG].concat(args)));
+            this.logger(this.format.apply(this, __spreadArrays([LEVEL.DEBUG], args)));
         }
     };
     Logger.prototype.trace = function (error, file) {

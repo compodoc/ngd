@@ -1,10 +1,13 @@
 #! /bin/bash
 
 rm -rf src/modules/transformer/node_modules/@compodoc/ngd-core
+rm -rf src/modules/transformer/node_modules/typescript
 cd src/modules/transformer/node_modules/@compodoc/
 ln -s ../../../core ngd-core
+cd ../
+ln -s ../../core/node_modules/typescript typescript
 
-cd ../../../../../
+cd ../../../../
 
 rm -rf src/modules/compiler/node_modules/@compodoc/ngd-core
 cd src/modules/compiler/node_modules/@compodoc/

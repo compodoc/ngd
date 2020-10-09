@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.compilerHost = exports.getNewLineCharacter = exports.d = void 0;
 var ts = require("typescript");
 var fs = require("fs");
 var path = require("path");

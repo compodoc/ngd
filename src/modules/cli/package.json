@@ -1,52 +1,52 @@
 {
-  "name": "@compodoc/ngd-cli",
-  "version": "2.0.0",
-  "description": "A CLI tool for @compodoc/ngd",
-  "main": "dist/index.js",
-  "bin": {
-    "ngd": "bin/index.js"
-  },
-  "scripts": {
-    "prextest": "npm run compile:src && npm run compile:tests",
-    "xtest": "mocha --opts test/mocha.opts",
-    "compile:tests": "tsc -p test/tsconfig-test.json",
-    "compile:src": "tsc --newLine LF",
-    "prexpublish": "npm run compile:src && npm run xtest",
-    "deploy": "npm run compile:src && npm xpublish"
-  },
-  "homepage": "https://github.com/compodoc/ngd",
-  "bugs": "https://github.com/compodoc/ngd/issues",
-  "author": "Wassim CHEGHAM",
-  "engines": {
-    "node": ">= 6.0.0"
-  },
-  "contributors": [
-    "vogloblinsky"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/compodoc/ngd.git"
-  },
-  "private": false,
-  "license": "MIT",
-  "dependencies": {
-    "@compodoc/ngd-core": "~2.0.0",
-    "@compodoc/ngd-compiler": "~2.0.0",
-    "@compodoc/ngd-transformer": "~2.0.0",
-    "colors": "^1.3.3",
-    "commander": "2.20.0",
-    "dot": "^1.1.2",
-    "fs-extra": "^8.1.0",
-    "opener": "^1.5.1",
-    "typescript": "^3.5.3"
-  },
-  "devDependencies": {
-    "@types/dot": "^1.1.3",
-    "@types/chai": "4.1.7",
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^12.7.1",
-    "chai": "^4.2.0",
-    "mocha": "^6.2.0"
-  },
-  "types": "dist/index.d.ts"
+    "name": "@compodoc/ngd-cli",
+    "version": "2.1.0",
+    "description": "A CLI tool for @compodoc/ngd",
+    "main": "dist/index.js",
+    "bin": {
+        "ngd": "bin/index.js"
+    },
+    "scripts": {
+        "prextest": "npm run compile:src && npm run compile:tests",
+        "xtest": "mocha test/dist/*.spec.js",
+        "compile:tests": "tsc -p test/tsconfig-test.json",
+        "compile:src": "tsc --newLine LF",
+        "prexpublish": "npm run compile:src && npm run xtest",
+        "deploy": "npm run compile:src && npm xpublish"
+    },
+    "homepage": "https://github.com/compodoc/ngd",
+    "bugs": "https://github.com/compodoc/ngd/issues",
+    "author": "Wassim CHEGHAM",
+    "engines": {
+        "node": ">= 10.0.0"
+    },
+    "contributors": [
+        "vogloblinsky"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/compodoc/ngd.git"
+    },
+    "private": false,
+    "license": "MIT",
+    "dependencies": {
+        "@compodoc/ngd-core": "~2.1.0",
+        "@compodoc/ngd-compiler": "~2.1.0",
+        "@compodoc/ngd-transformer": "~2.1.0",
+        "colors": "^1.3.3",
+        "commander": "6.1.0",
+        "dot": "^1.1.2",
+        "fs-extra": "^9.0.1",
+        "opener": "^1.5.1",
+        "typescript": "^4.0.3"
+    },
+    "devDependencies": {
+        "@types/dot": "^1.1.4",
+        "@types/chai": "4.2.13",
+        "@types/mocha": "^8.0.3",
+        "@types/node": "^14.11.8",
+        "chai": "^4.2.0",
+        "mocha": "^8.1.3"
+    },
+    "types": "dist/index.d.ts"
 }
