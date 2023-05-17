@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const expect = chai.expect;
 const helpers_1 = require("./helpers");
-const tmp = helpers_1.temporaryDir();
+const tmp = (0, helpers_1.temporaryDir)();
 describe('In the deep.module.ts file,', () => {
     let command = null;
     let json = null;
     before(() => {
         tmp.create();
-        command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/deep.module.ts'], { cwd: tmp.name });
-        json = helpers_1.read(`${tmp.name}/documentation/dependencies.json`);
+        command = (0, helpers_1.shell)('node', ['../bin/index.js', '-f', '../test/src/sample-files/deep.module.ts'], { cwd: tmp.name });
+        json = (0, helpers_1.read)(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
     });
     after(() => tmp.clean());

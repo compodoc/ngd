@@ -1,10 +1,12 @@
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logger = exports.Logger = void 0;
@@ -44,7 +46,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, __spreadArrays([LEVEL.INFO], args)));
+            this.logger(this.format.apply(this, __spreadArray([LEVEL.INFO], args, false)));
         }
     };
     Logger.prototype.warn = function () {
@@ -53,7 +55,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, __spreadArrays([LEVEL.WARN], args)));
+            this.logger(this.format.apply(this, __spreadArray([LEVEL.WARN], args, false)));
         }
     };
     Logger.prototype.error = function () {
@@ -62,7 +64,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, __spreadArrays([LEVEL.FATAL], args)));
+            this.logger(this.format.apply(this, __spreadArray([LEVEL.FATAL], args, false)));
         }
     };
     Logger.prototype.fatal = function () {
@@ -80,7 +82,7 @@ var Logger = /** @class */ (function () {
             args[_i] = arguments[_i];
         }
         if (this.silent == false) {
-            this.logger(this.format.apply(this, __spreadArrays([LEVEL.DEBUG], args)));
+            this.logger(this.format.apply(this, __spreadArray([LEVEL.DEBUG], args, false)));
         }
     };
     Logger.prototype.trace = function (error, file) {
@@ -101,7 +103,7 @@ var Logger = /** @class */ (function () {
         };
         var msg = args.join(' ');
         if (args.length > 1) {
-            msg = pad(args.shift(), 13, ' ') + ": " + args.join(' ');
+            msg = "".concat(pad(args.shift(), 13, ' '), ": ").concat(args.join(' '));
         }
         switch (level) {
             case LEVEL.INFO:

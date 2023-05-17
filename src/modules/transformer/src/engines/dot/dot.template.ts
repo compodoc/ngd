@@ -49,10 +49,10 @@ export const LEGEND = `<
 >`;
 
 const loopBlock = (symbols, attrs, edge = '') => {
-  let str = '';
+    let str = '';
 
-  if (edge === '->') {
-    str = `
+    if (edge === '->') {
+        str = `
     {{~mod.${symbols} :_symbol}}
 
       {{?_symbol.alias}}
@@ -63,9 +63,8 @@ const loopBlock = (symbols, attrs, edge = '') => {
 
     {{~}}
     `;
-  }
-  else {
-    str = `
+    } else {
+        str = `
     {{~mod.${symbols} :_symbol}}
 
       {{?_symbol.alias}}
@@ -75,10 +74,10 @@ const loopBlock = (symbols, attrs, edge = '') => {
       {{?}}
 
     {{~}}`;
-  }
+    }
 
-  return str;
-}
+    return str;
+};
 
 export const DOT_TEMPLATE = `
 digraph dependencies {
@@ -96,7 +95,7 @@ digraph dependencies {
   label=###legend###;
 
   ratio=compress;
-  fontname="sans-serif";
+  fontname="Times-12";
 
   {{~it.modules :mod}}
   subgraph "cluster_{{=mod.name}}" {
@@ -138,21 +137,10 @@ digraph dependencies {
       style="solid";
       node [style="filled", fillcolor=1, shape="rect"];
 
-      ${
-  loopBlock(
-    'imports',
-    'shape="folder"'
-  )
-  }
+      ${loopBlock('imports', 'shape="folder"')}
     }
 
-    ${
-  loopBlock(
-    'imports',
-    'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_imports"',
-    '->'
-  )
-  }
+    ${loopBlock('imports', 'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_imports"', '->')}
 
     /* imports:end */
 
@@ -194,21 +182,10 @@ digraph dependencies {
       style="solid";
       node [style="filled", fillcolor=6, shape="rect"];
 
-      ${
-  loopBlock(
-    'providers',
-    'shape="oval"'
-  )
-  }
+      ${loopBlock('providers', 'shape="oval"')}
     }
 
-    ${
-  loopBlock(
-    'providers',
-    'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_providers"',
-    '->'
-  )
-  }
+    ${loopBlock('providers', 'lhead="cluster_{{=mod.name}}", ltail="cluster_{{=mod.name}}_providers"', '->')}
 
     /* providers:end */
   }

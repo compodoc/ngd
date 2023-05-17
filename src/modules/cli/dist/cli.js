@@ -28,34 +28,36 @@ var Application;
     Application.run = function () {
         program.silent = program.silent || false;
         ngd_core_1.logger.setVerbose(program.silent);
+        var options = program.opts();
+        var output = '';
         var files = [];
-        if (program.file) {
-            if (!fs.existsSync(program.file) || !fs.existsSync(path.join(process.cwd(), program.file))) {
-                ngd_core_1.logger.fatal("\"" + program.file + "\" file was not found");
+        if (options.file) {
+            if (!fs.existsSync(options.file) || !fs.existsSync(path.join(process.cwd(), options.file))) {
+                ngd_core_1.logger.fatal("\"".concat(options.file, "\" file was not found"));
                 process.exit(1);
             }
-            else if (path.extname(program.file) !== '.ts') {
-                ngd_core_1.logger.fatal("\"" + program.file + "\" is not a TypeScript file");
+            else if (path.extname(options.file) !== '.ts') {
+                ngd_core_1.logger.fatal("\"".concat(options.file, "\" is not a TypeScript file"));
                 process.exit(1);
             }
             else {
-                ngd_core_1.logger.info('using entry', program.file);
-                files = [program.file];
+                ngd_core_1.logger.info('using entry', options.file);
+                files = [options.file];
             }
         }
-        else if (program.tsconfig) {
-            if (!fs.existsSync(program.tsconfig)) {
+        else if (options.tsconfig) {
+            if (!fs.existsSync(options.tsconfig)) {
                 ngd_core_1.logger.fatal('"tsconfig.json" file was not found in the current directory');
                 process.exit(1);
             }
             else {
-                program.tsconfig = path.join(path.join(process.cwd(), path.dirname(program.tsconfig)), path.basename(program.tsconfig));
-                ngd_core_1.logger.info('using tsconfig', program.tsconfig);
-                files = require(program.tsconfig).files;
+                options.tsconfig = path.join(path.join(process.cwd(), path.dirname(options.tsconfig)), path.basename(options.tsconfig));
+                ngd_core_1.logger.info('using tsconfig', options.tsconfig);
+                files = require(options.tsconfig).files;
                 // use the current directory of tsconfig.json as a working directory
-                cwd = program.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
+                cwd = options.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
                 if (!files) {
-                    var exclude_1 = require(program.tsconfig).exclude || [];
+                    var exclude_1 = require(options.tsconfig).exclude || [];
                     var walk_1 = function (dir) {
                         var results = [];
                         var list = fs.readdirSync(dir);
@@ -84,11 +86,11 @@ var Application;
         else {
             outputHelp();
         }
-        if (path.isAbsolute(program.output)) {
-            program.output = program.output;
+        if (path.isAbsolute(options.output)) {
+            output = options.output;
         }
         else {
-            program.output = path.resolve(process.cwd(), program.output);
+            output = path.resolve(process.cwd(), options.output);
         }
         var compiler = new ngd_compiler_1.Compiler(files, {
             tsconfigDirectory: cwd,
@@ -101,15 +103,15 @@ var Application;
             process.exit(0);
         }
         var engine = new ngd_transformer_1.DotEngine({
-            output: program.output,
-            displayLegend: program.displayLegend,
-            outputFormats: program.outputFormats.split(','),
+            output: output,
+            displayLegend: options.displayLegend,
+            outputFormats: options.outputFormats.split(','),
         });
         engine
             .generateGraph(deps)
             .then(function (file) {
             /*
-    if (program.open === true) {
+    if (options.open === true) {
       logger.info('openning file ', file);
       let open = require("opener");
       open(file);

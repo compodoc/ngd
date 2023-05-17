@@ -7,6 +7,13 @@
 -   transformer : core
 -   core : -
 
+## Main dependencies by module
+
+-   core : ansi-colors, fancy-log, typescript
+-   transformer : @compodoc/ngd-core, dot, fs-extra, @aduh95/viz.js
+-   compiler : typescript, @compodoc/ngd-core
+-   cli : @compodoc/ngd-core, @compodoc/ngd-compiler, @compodoc/ngd-transformer, colors, commander, dot, fs-extra, opener, typescript
+
 ## Order publish on npm
 
 -   core

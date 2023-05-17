@@ -25,9 +25,9 @@ var DotEngine = /** @class */ (function () {
             html: null,
         };
         this.options = {};
-        var baseDir = "./" + appName + "/";
+        var baseDir = "./".concat(appName, "/");
         this.options = {
-            name: "" + appName,
+            name: "".concat(appName),
             output: options.output,
             displayLegend: options.displayLegend,
             outputFormats: options.outputFormats,
@@ -111,7 +111,7 @@ var DotEngine = /** @class */ (function () {
                         reject(error);
                     }
                     else {
-                        resolve();
+                        resolve(true);
                     }
                 });
             });
@@ -208,7 +208,7 @@ var DotEngine = /** @class */ (function () {
         var _this = this;
         var svgContent = fs.readFileSync(this.paths.svg).toString();
         var cssContent = "\n\t\t\t<style>\n\t\t\t\t.edge {\n\t\t\t\t\ttransition: opacity 0.5s;\n\t\t\t\t\topacity:0.2;\n\t\t\t\t}\n\t\t\t\t.node {\n\t\t\t\t\ttransition: transform 0.1s;\n\t\t\t\t\ttransform-origin: center center;\n\t\t\t\t}\n\t\t\t\t.node:hover {\n\t\t\t\t\ttransform: scale(1.03);\n\t\t\t\t}\n\t\t\t\t.node:hover + .edge {\n\t\t\t\t\topacity:1;\n\t\t\t\t}\n\t\t\t</style>";
-        var htmlContent = "\n\t\t\t\t" + svgContent + "\n\t\t\t";
+        var htmlContent = "\n\t\t\t\t".concat(svgContent, "\n\t\t\t");
         return new Promise(function (resolve, reject) {
             fs.outputFile(_this.paths.html, htmlContent, function (error) {
                 if (error) {

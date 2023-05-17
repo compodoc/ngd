@@ -4,6 +4,7 @@ exports.Compiler = void 0;
 var path = require("path");
 var ts = require("typescript");
 var ngd_core_1 = require("@compodoc/ngd-core");
+var utils_1 = require("./utils");
 var Compiler = /** @class */ (function () {
     function Compiler(files, options) {
         this.__cache = {};
@@ -13,9 +14,9 @@ var Compiler = /** @class */ (function () {
         var transpileOptions = {
             target: ts.ScriptTarget.ES5,
             module: ts.ModuleKind.CommonJS,
-            tsconfigDirectory: options.tsconfigDirectory
+            tsconfigDirectory: options.tsconfigDirectory,
         };
-        this.program = ts.createProgram(this.files, transpileOptions, ngd_core_1.compilerHost(transpileOptions));
+        this.program = ts.createProgram(this.files, transpileOptions, (0, ngd_core_1.compilerHost)(transpileOptions));
         // silent this instance of the logger
         ngd_core_1.logger.setVerbose(options.silent);
     }
@@ -43,11 +44,13 @@ var Compiler = /** @class */ (function () {
     Compiler.prototype.getSourceFileDecorators = function (srcFile, outputSymbols) {
         var _this = this;
         ts.forEachChild(srcFile, function (node) {
-            if (node.decorators) {
+            (0, utils_1.getNodeDecorators)(node);
+            var decorators = (0, utils_1.getNodeDecorators)(node) || [];
+            if ((0, utils_1.nodeHasDecorator)(node)) {
                 var visitNode = function (visitedNode, index) {
                     var name = _this.getSymboleName(node);
                     var deps = {};
-                    var metadata = node.decorators[node.decorators.length - 1];
+                    var metadata = decorators[decorators.length - 1];
                     var props = _this.findProps(visitedNode);
                     if (_this.isModule(metadata)) {
                         deps = {
@@ -58,7 +61,7 @@ var Compiler = /** @class */ (function () {
                             imports: _this.getModuleImports(props),
                             exports: _this.getModuleExports(props),
                             bootstrap: _this.getModuleBootstrap(props),
-                            __raw: props
+                            __raw: props,
                         };
                         outputSymbols.push(deps);
                     }
@@ -70,7 +73,7 @@ var Compiler = /** @class */ (function () {
                             providers: _this.getComponentProviders(props),
                             templateUrl: _this.getComponentTemplateUrl(props),
                             styleUrls: _this.getComponentStyleUrls(props),
-                            __raw: props
+                            __raw: props,
                         };
                     }
                     _this.debug(deps);
@@ -82,9 +85,7 @@ var Compiler = /** @class */ (function () {
                     }
                     return false;
                 };
-                node.decorators
-                    .filter(filterByDecorators)
-                    .forEach(visitNode);
+                decorators.filter(filterByDecorators).forEach(visitNode);
             }
             else {
                 // process.stdout.write('.');
@@ -92,14 +93,14 @@ var Compiler = /** @class */ (function () {
         });
     };
     Compiler.prototype.debug = function (deps) {
-        ngd_core_1.logger.debug('debug', deps.name + ":");
-        [
-            'imports', 'exports', 'declarations', 'providers', 'bootstrap'
-        ].forEach(function (symbols) {
+        ngd_core_1.logger.debug('debug', "".concat(deps.name, ":"));
+        ['imports', 'exports', 'declarations', 'providers', 'bootstrap'].forEach(function (symbols) {
             if (deps[symbols] && deps[symbols].length > 0) {
-                ngd_core_1.logger.debug('', "- " + symbols + ":");
-                deps[symbols].map(function (i) { return i.name; }).forEach(function (d) {
-                    ngd_core_1.logger.debug('', "\t- " + d);
+                ngd_core_1.logger.debug('', "- ".concat(symbols, ":"));
+                deps[symbols]
+                    .map(function (i) { return i.name; })
+                    .forEach(function (d) {
+                    ngd_core_1.logger.debug('', "\t- ".concat(d));
                 });
             }
         });
@@ -180,11 +181,11 @@ var Compiler = /** @class */ (function () {
             }
             return {
                 ns: nsModule[0],
-                name: name
+                name: name,
             };
         }
         return {
-            name: name
+            name: name,
         };
     };
     Compiler.prototype.getComponentTemplateUrl = function (props) {
@@ -205,14 +206,12 @@ var Compiler = /** @class */ (function () {
             if (text.indexOf('/') !== -1) {
                 text = text.split('/').pop();
             }
-            return [
-                text
-            ];
+            return [text];
         };
         var buildIdentifierName = function (node, name) {
             if (name === void 0) { name = ''; }
             if (node.expression) {
-                name = name ? "." + name : name;
+                name = name ? ".".concat(name) : name;
                 var nodeName = _this.unknown;
                 if (node.name) {
                     nodeName = node.name.text;
@@ -227,16 +226,16 @@ var Compiler = /** @class */ (function () {
                     else if (node.expression.elements) {
                         if (node.expression.kind === ts.SyntaxKind.ArrayLiteralExpression) {
                             nodeName = node.expression.elements.map(function (el) { return el.text; }).join(', ');
-                            nodeName = "[" + nodeName + "]";
+                            nodeName = "[".concat(nodeName, "]");
                         }
                     }
                 }
                 if (node.kind === ts.SyntaxKind.SpreadElement) {
-                    return "..." + nodeName;
+                    return "...".concat(nodeName);
                 }
-                return "" + buildIdentifierName(node.expression, nodeName) + name;
+                return "".concat(buildIdentifierName(node.expression, nodeName)).concat(name);
             }
-            return node.text + "." + name;
+            return "".concat(node.text, ".").concat(name);
         };
         var parseProviderConfiguration = function (o) {
             // parse expressions such as:
@@ -248,31 +247,31 @@ var Compiler = /** @class */ (function () {
             (o.properties || []).forEach(function (prop) {
                 var identifier = prop.initializer.text;
                 if (prop.initializer.kind === ts.SyntaxKind.StringLiteral) {
-                    identifier = "'" + identifier + "'";
+                    identifier = "'".concat(identifier, "'");
                 }
                 // lambda function (i.e useFactory)
                 if (prop.initializer.body) {
                     var params = (prop.initializer.parameters || []).map(function (params) { return params.name.text; });
-                    identifier = "(" + params.join(', ') + ") => {}";
+                    identifier = "(".concat(params.join(', '), ") => {}");
                 }
                 // factory deps array
                 else if (prop.initializer.elements) {
                     var elements = (prop.initializer.elements || []).map(function (n) {
                         if (n.kind === ts.SyntaxKind.StringLiteral) {
-                            return "'" + n.text + "'";
+                            return "'".concat(n.text, "'");
                         }
                         return n.text;
                     });
-                    identifier = "[" + elements.join(', ') + "]";
+                    identifier = "[".concat(elements.join(', '), "]");
                 }
                 _providerProps.push([
                     // i.e provide
                     prop.name.text,
                     // i.e OpaqueToken or 'StringToken'
-                    identifier
+                    identifier,
                 ].join(': '));
             });
-            return "{ " + _providerProps.join(', ') + " }";
+            return "{ ".concat(_providerProps.join(', '), " }");
         };
         var parseSymbolElements = function (o) {
             // parse expressions such as: AngularFireModule.initializeApp(firebaseConfig)
@@ -282,7 +281,7 @@ var Compiler = /** @class */ (function () {
                 // many use cases that we can't handle. Just print "args" to indicate
                 // that we have arguments.
                 var functionArgs = o.arguments.length > 0 ? 'args' : '';
-                var text = className + "(" + functionArgs + ")";
+                var text = "".concat(className, "(").concat(functionArgs, ")");
                 return text;
             }
             // parse expressions such as: Shared.Module
@@ -299,9 +298,7 @@ var Compiler = /** @class */ (function () {
             }
             else if (node.initializer.expression) {
                 var identifier = parseSymbolElements(node.initializer);
-                return [
-                    identifier
-                ];
+                return [identifier];
             }
             else if (node.initializer.elements) {
                 return node.initializer.elements.map(parseSymbolElements);

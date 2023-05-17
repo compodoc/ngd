@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const expect = chai.expect;
 const helpers_1 = require("./helpers");
-const tmp = helpers_1.temporaryDir();
+const tmp = (0, helpers_1.temporaryDir)();
 describe('In the providers.module.ts file,', () => {
     let command = null;
     let json = null;
     before(() => {
         tmp.create();
-        command = helpers_1.shell('node', ['../bin/index.js', '-f', '../test/src/sample-files/providers.module.ts'], { cwd: tmp.name });
+        command = (0, helpers_1.shell)('node', ['../bin/index.js', '-f', '../test/src/sample-files/providers.module.ts'], { cwd: tmp.name });
         // console.log(command.stdout.toString());
         // console.log(command.stderr.toString());
-        json = helpers_1.read(`${tmp.name}/documentation/dependencies.json`);
+        json = (0, helpers_1.read)(`${tmp.name}/documentation/dependencies.json`);
         json = JSON.parse(json);
     });
     after(() => tmp.clean());

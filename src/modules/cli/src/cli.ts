@@ -17,16 +17,8 @@ export namespace Application {
         .option('-o, --open', 'Open the generated HTML diagram file', false)
         .option('-g, --display-legend <display-legend>', 'Display the legend of graph default(true)', true)
         .option('-s, --silent', "In silent mode, log messages aren't logged in the console", false)
-        .option(
-            '-t, --output-formats <output-formats>',
-            'Output formats (default: html,svg,dot,json)',
-            `html,svg,dot,json`
-        )
-        .option(
-            '-d, --output <folder>',
-            'Where to store the generated files (default: ./documentation)',
-            `./documentation/`
-        )
+        .option('-t, --output-formats <output-formats>', 'Output formats (default: html,svg,dot,json)', `html,svg,dot,json`)
+        .option('-d, --output <folder>', 'Where to store the generated files (default: ./documentation)', `./documentation/`)
         .parse(process.argv);
 
     let outputHelp = () => {
@@ -38,36 +30,37 @@ export namespace Application {
         program.silent = program.silent || false;
         logger.setVerbose(program.silent);
 
+        const options = program.opts();
+
+        let output = '';
+
         let files = [];
-        if (program.file) {
-            if (!fs.existsSync(program.file) || !fs.existsSync(path.join(process.cwd(), program.file))) {
-                logger.fatal(`"${program.file}" file was not found`);
+        if (options.file) {
+            if (!fs.existsSync(options.file) || !fs.existsSync(path.join(process.cwd(), options.file))) {
+                logger.fatal(`"${options.file}" file was not found`);
                 process.exit(1);
-            } else if (path.extname(program.file) !== '.ts') {
-                logger.fatal(`"${program.file}" is not a TypeScript file`);
+            } else if (path.extname(options.file) !== '.ts') {
+                logger.fatal(`"${options.file}" is not a TypeScript file`);
                 process.exit(1);
             } else {
-                logger.info('using entry', program.file);
+                logger.info('using entry', options.file);
 
-                files = [program.file];
+                files = [options.file];
             }
-        } else if (program.tsconfig) {
-            if (!fs.existsSync(program.tsconfig)) {
+        } else if (options.tsconfig) {
+            if (!fs.existsSync(options.tsconfig)) {
                 logger.fatal('"tsconfig.json" file was not found in the current directory');
                 process.exit(1);
             } else {
-                program.tsconfig = path.join(
-                    path.join(process.cwd(), path.dirname(program.tsconfig)),
-                    path.basename(program.tsconfig)
-                );
-                logger.info('using tsconfig', program.tsconfig);
-                files = require(program.tsconfig).files;
+                options.tsconfig = path.join(path.join(process.cwd(), path.dirname(options.tsconfig)), path.basename(options.tsconfig));
+                logger.info('using tsconfig', options.tsconfig);
+                files = require(options.tsconfig).files;
 
                 // use the current directory of tsconfig.json as a working directory
-                cwd = program.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
+                cwd = options.tsconfig.split(path.sep).slice(0, -1).join(path.sep);
 
                 if (!files) {
-                    let exclude = require(program.tsconfig).exclude || [];
+                    let exclude = require(options.tsconfig).exclude || [];
 
                     const walk = (dir) => {
                         let results = [];
@@ -96,10 +89,10 @@ export namespace Application {
             outputHelp();
         }
 
-        if (path.isAbsolute(program.output)) {
-            program.output = program.output;
+        if (path.isAbsolute(options.output)) {
+            output = options.output;
         } else {
-            program.output = path.resolve(process.cwd(), program.output);
+            output = path.resolve(process.cwd(), options.output);
         }
 
         let compiler = new Compiler(files, {
@@ -116,15 +109,15 @@ export namespace Application {
         }
 
         let engine = new DotEngine({
-            output: program.output,
-            displayLegend: program.displayLegend,
-            outputFormats: program.outputFormats.split(','),
+            output: output,
+            displayLegend: options.displayLegend,
+            outputFormats: options.outputFormats.split(','),
         });
         engine
             .generateGraph(deps)
             .then((file) => {
                 /*
-        if (program.open === true) {
+        if (options.open === true) {
           logger.info('openning file ', file);
           let open = require("opener");
           open(file);

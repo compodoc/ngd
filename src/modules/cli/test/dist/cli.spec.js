@@ -3,16 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const expect = chai.expect;
 const helpers_1 = require("./helpers");
-const tmp = helpers_1.temporaryDir();
+const tmp = (0, helpers_1.temporaryDir)();
 describe('CLI', () => {
     let runHelp = null;
     before(() => {
         tmp.create();
-        runHelp = helpers_1.shell('node', ['./bin/index.js', '-h']);
+        runHelp = (0, helpers_1.shell)('node', ['./bin/index.js', '-h']);
     });
     after(() => tmp.clean());
     it(`should display correct version ${helpers_1.pkg.version}`, () => {
-        let runVersion = helpers_1.shell('node', ['./bin/index.js', '-V']);
+        let runVersion = (0, helpers_1.shell)('node', ['./bin/index.js', '-V']);
         expect(runVersion.stdout.toString()).to.contain(helpers_1.pkg.version);
         console.log(runVersion.stderr.toString());
     });

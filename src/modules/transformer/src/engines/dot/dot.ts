@@ -147,7 +147,7 @@ export class DotEngine {
                     if (error) {
                         reject(error);
                     } else {
-                        resolve();
+                        resolve(true);
                     }
                 });
             });
