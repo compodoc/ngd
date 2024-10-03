@@ -99,7 +99,14 @@ export class Compiler {
                 let visitNode = (visitedNode, index) => {
                     let name = this.getSymboleName(node);
                     let deps: Dependencies = <Dependencies>{};
-                    let metadata = decorators[decorators.length - 1];
+                    // could be more than one decorator. let's filter to one we need
+                    let metadata;
+                    if (decorators.length === 1) {
+                        metadata = decorators[0]
+                    } else {
+                        const filteredDecorators = decorators.filter(d => /(NgModule|Component)/.test(node.expression?.expression?.text));
+                        metadata = filteredDecorators[filteredDecorators.length - 1];
+                    }
                     let props = this.findProps(visitedNode);
 
                     if (this.isModule(metadata)) {
