@@ -6,7 +6,8 @@
     "scripts": {
         "compile:src": "tsc --newLine LF",
         "prexpublish": "npm run compile:src",
-        "deploy": "npm run compile:src && npm xpublish"
+        "deploy": "npm run compile:src && npm xpublish",
+        "xtest": "echo 'no xtests'"
     },
     "homepage": "https://github.com/compodoc/ngd-compiler",
     "bugs": "https://github.com/compodoc/ngd-compiler/issues",
